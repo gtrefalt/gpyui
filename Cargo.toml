@@ -1,0 +1,24 @@
+[package]
+name = "gpyui"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "_core"
+# "cdylib" is necessary to produce a shared library for Python to import from.
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "=0.28.2", features = ["extension-module", "abi3-py312"] }
+gpui-kit = { git = "https://github.com/longbridge/gpui-kit", rev = "3a142844d3661159964dce9e5512ca9a40286160" }
+async-channel = "=2.5.0"
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.149"
+
+[profile.dev]
+debug = 0
+incremental = false
+
+[profile.test]
+debug = 0
+incremental = false

@@ -1,0 +1,24 @@
+{
+  "zed": {
+    "repository": "https://github.com/zed-industries/zed",
+    "revision": "1a28cff4b409169bac058bca40dfbfeb7621d19b"
+  },
+  "gpui-kit": {
+    "repository": "https://github.com/longbridge/gpui-kit",
+    "revision": "3a142844d3661159964dce9e5512ca9a40286160"
+  },
+  "nicegui": {
+    "repository": "https://github.com/zauberzeug/nicegui",
+    "revision": "d0323a34fd87c51323e4fda60f6805d6fe8e329d"
+  },
+  "flet": {
+    "repository": "https://github.com/flet-dev/flet",
+    "revision": "0ec63ca849386be77831241f21b82a0cc8c13942"
+  },
+  "gpui-snapshot": {
+    "package": "gpui-pre",
+    "version": "0.3.7",
+    "zed_revision": "1a28cff4b409169bac058bca40dfbfeb7621d19b",
+    "provenance": "[package.metadata.gpui-pre] in downloaded gpui-pre-0.3.7/Cargo.toml.orig"
+  }
+}
