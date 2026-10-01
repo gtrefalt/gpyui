@@ -1,0 +1,35 @@
+[project]
+name = "gpyui"
+version = "0.1.0"
+description = "Native Python UI controls powered by GPUI and GPUI Kit"
+readme = "README.md"
+authors = [
+    { name = "Polina Gregor", email = "polyxeni.gregor@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.maturin]
+module-name = "gpyui._core"
+python-packages = ["gpyui"]
+python-source = "src"
+
+[tool.uv]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.rs" }, { file = "src/gpyui/**/*.py" }, { file = "src/gpyui/**/*.pyi" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }, { file = "rust-toolchain.toml" }]
+
+[build-system]
+requires = ["maturin==1.12.6"]
+build-backend = "maturin"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.12,<1", "python-xlib>=0.33,<1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["native: real desktop interaction (requires DISPLAY and GPYUI_NATIVE_TESTS=1)"]
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]
