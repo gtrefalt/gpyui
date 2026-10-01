@@ -1,7 +1,57 @@
-# First milestone validation
+# Validation
 
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
+
+
+## Expanded catalog validation
+
+The optimized extension was rebuilt successfully with `uv sync --locked` after
+adding the component catalog. This incremental release build took **29.02s**;
+upstream Kit/GPUI revisions remain unchanged. `cargo check --locked`,
+`cargo clippy --locked -- -D warnings`, `cargo fmt --check`, Ruff lint and Ruff
+format checks all passed.
+
+`uv run --locked pytest -q`: **108 passed, 10 skipped**. The skipped tests require
+an actual display. `scripts/test-native.sh -x`: **10 passed, 108 deselected in
+13.48s**, using the installed optimized extension, Xvfb and Mesa Lavapipe.
+
+The new Python/bridge tests validate all 67 additional control schemas through
+the real Rust bridge, typed binding, collection copies, layout ownership,
+constructor failure, immutable native constraints, invalid-update atomicity,
+RGB/RGBA values, duplicate tree IDs and per-window overlay limits. They establish
+the basic wrapper contracts; they do not test every upstream builder option.
+
+Four additional native scenarios extend the original six below:
+
+1. **Light workspace:** real mouse activation invokes the async Python handler;
+   native snapshots contain `Filled: Buy 10 NVDA` and the appended order row.
+2. **Dark workspace:** the same behavior with native dark appearance.
+3. **Component gallery:** constructs and renders native inputs, selection,
+   table, date/color controls, carousel, overlays and five chart families, with
+   no reported application error. This checks mounting/rendering; it does not
+   establish exhaustive interaction coverage for every control.
+4. **Native overlays:** mouse activation opens the Kit dialog and sheet;
+   Escape dismisses each, with native close mirrored to Python values.
+
+All scenarios also verify successful native shutdown and an empty error list.
+The original text editing/undo, ordered activation, async cancellation and error
+scenarios still pass. Actual captured windows were visually inspected and copied
+without image editing into [docs/screenshots](screenshots) for README display:
+[dark workspace](screenshots/workspace-dark.png),
+[light workspace](screenshots/workspace-light.png), and
+[gallery](screenshots/gallery-light.png). Rerunning the native script regenerates
+local captures and snapshots under the gitignored `artifacts/` directory.
+
+The measured scope is Linux/X11 software Vulkan, a fixed tree and one window.
+Complete Kit APIs, macOS/Windows/Wayland, portable wheels and large-data
+performance remain unverified. See [component coverage](component-coverage.md)
+for the implemented contracts and remaining Kit families.
+
+## Original first-milestone evidence
+
+The results below record the original four-control implementation; the expanded
+catalog results above supersede its test counts and scope.
 
 ## Upstream compatibility
 

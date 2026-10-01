@@ -2855,6 +2855,7 @@ name = "gpyui"
 version = "0.1.0"
 dependencies = [
  "async-channel",
+ "chrono",
  "gpui-kit",
  "pyo3",
  "serde",

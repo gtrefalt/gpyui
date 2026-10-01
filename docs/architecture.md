@@ -114,10 +114,10 @@ sequenceDiagram
    Close normally and during an awaiting callback. Keep evidence and limitations
    in `validation.md`; never substitute mocked rendering for a native run.
 
-## Deliberate limits and follow-on work
+## Original first-milestone scope
 
-The first milestone supports a static column tree with mutable labels, input
-values/placeholders, button text/disabled state. No dynamic topology, multiwindow,
+The original first milestone supported a static column tree with mutable labels, input
+values/placeholders, button text/disabled state. It deferred dynamic topology, multiwindow,
 arbitrary styling, timers API, async `run()` embedded in another main-thread loop,
 Python render callbacks, or packaging claim. Python `.value` is the last received
 native mirror; click events include current Rust input snapshots to make the
@@ -135,3 +135,67 @@ Linux/X11 is the validation target here. macOS and Windows use the upstream
 platform backends but remain unverified until native CI is available. Upstream
 native libraries, GPU/display drivers, assets, and dependency licenses require
 review before distributing wheels. Name availability remains unchecked.
+
+## Expanded Kit catalog: verified implementation
+
+The second pass expands the same bridge to 71 controls. It keeps the pinned Kit
+and GPUI revisions; no alternate widget implementation or second GPUI version
+was introduced. [Component coverage](component-coverage.md) is the complete
+implemented inventory and remaining catalog work.
+
+The following upstream contracts were inspected before writing their wrappers:
+
+* [SliderState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/slider.rs),
+  [SelectState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/select.rs)
+  and [ComboboxState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/combobox.rs)
+  are retained entities with native event subscriptions. The wrappers mount each
+  entity once, read it for snapshots and render builders referencing it.
+* [TableState and TableDelegate](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/table/data_table.rs)
+  retain native selection and scrolling. Python supplies string columns/rows;
+  Rust owns the delegate. Assigning rows refreshes the native table.
+* [TreeState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/tree.rs),
+  [ResizableState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/resizable.rs)
+  and native input/calendar/color entities follow that same ownership rule.
+  Tree selection maps to stable Python item IDs; resize events carry native sizes.
+* [WindowExt](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/window_ext.rs)
+  provides dialog, sheet and notification operations through the installed Root.
+  Python open/close commands execute on the foreground task; native dismissal
+  emits a change event back to Python. Overlay content is the existing Python
+  control tree rendered in Rust, with one dialog and one sheet per window.
+* [TextView](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/text/compat.rs)
+  renders Markdown/HTML natively. Editor keeps an InputState editing buffer.
+  Python never supplies a per-frame render callback.
+* [Chart builders](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/chart/mod.rs)
+  consume Rust-owned point data. Python can replace datasets through the same
+  coalesced property queue. Plot rendering and hover behavior stay native.
+
+A Kit node extends the original typed tree with a whitelisted component kind,
+validated property map, children and style. Both Python and Rust check contracts;
+Rust validates an entire update batch before enqueuing it. Component parameters
+that define native construction (for example slider range, select items and OTP
+length) are immutable after construction. Collection properties are copied on
+assignment/read to avoid mutations that bypass the queue.
+
+Lightweight controlled builders immediately update Rust state on interaction and
+notify the view, then queue their Python event. Stateful builders update their
+retained native entities. Event snapshots now include all value-bearing controls,
+so the existing activation-order guarantee also applies to the broader catalog.
+Python updates mirrors/bindings before starting a callback, yields to start it,
+and only then processes subsequent queued events. Async callbacks remain tracked
+by the original owned worker loop and cancellation lifecycle.
+
+Layout styles use pixel dimensions and Kit semantic theme colors. Layout styles
+are applied to the layout node itself, so gaps/alignment affect its children.
+Leaf styles wrap the actual Kit component. Explicit sizes do not shrink, while
+flexible panes can shrink within the window. The theme is chosen at startup.
+
+The [workspace](../examples/workspace.py) and [gallery](../examples/gallery.py)
+are public Python API examples, not Rust-specific demos. The workspace simplifies
+the reference trading terminal to a watchlist, one chart, an order form and a
+paper-order table. A native button invokes an async Python handler that appends
+an order, updates status and shows a Kit notification. It makes no network trades.
+
+Current limits: single window, static mounted topology, initial theme only and
+basic builder options. Menus/commands, virtualized list delegates, typed forms,
+docking, multiwindow and additional plot families remain explicit implementation
+work. Acceptance gates for these next steps are recorded in the coverage guide.

@@ -21,7 +21,7 @@ chmod 700 "$XDG_RUNTIME_DIR"
 if [[ -z "${DISPLAY:-}" ]]; then
     # -displayfd asks Xvfb to select a free display, avoiding fixed-port collisions.
     rm -f artifacts/display
-    Xvfb -displayfd 3 -screen 0 1024x768x24 -nolisten tcp 3>artifacts/display >artifacts/xvfb.log 2>&1 &
+    Xvfb -displayfd 3 -screen 0 1600x1100x24 -nolisten tcp 3>artifacts/display >artifacts/xvfb.log 2>&1 &
     gpyui_xvfb_pid=$!
     trap 'kill "$gpyui_xvfb_pid" 2>/dev/null || true' EXIT
     for _ in {1..100}; do
@@ -36,4 +36,4 @@ if [[ -z "${DISPLAY:-}" ]]; then
     export DISPLAY=":$gpyui_display_number"
 fi
 export GPYUI_NATIVE_TESTS=1
-.venv/bin/python -m pytest -q tests/test_native.py "$@"
+.venv/bin/python -m pytest -q -m native tests "$@"

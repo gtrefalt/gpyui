@@ -1,14 +1,19 @@
 # gpyui
 
-A native Python UI library powered by GPUI and Longbridge's GPUI Kit, with a
+A native Python UI library powered by [GPUI](https://www.gpui.rs/)
+([source](https://github.com/zed-industries/zed/tree/main/crates/gpui)) and
+Longbridge's [GPUI Kit](https://gpui-kit.com/)
+([source](https://github.com/longbridge/gpui-kit)), with a
 PyO3/maturin extension. Rust owns windows, rendering, focus and text editing;
 Python owns composition, application state and callbacks.
 
 The goal is a reusable desktop UI toolkit: write complete applications in Python,
 as you would with Tkinter, using GPUI Kit components through Python controls.
-Application authors should not need to write Rust. The current column, label,
-text input and button are the first milestone; broader component coverage and
-application features will build on this foundation.
+Application authors should not need to write Rust. There are now **71 Python
+controls**, including native Kit inputs, navigation, tables, charts, overlays,
+rich text and feedback components. These are initial wrappers for the catalog;
+[component coverage](docs/component-coverage.md) records the supported properties
+and the specialized Kit APIs still to expose.
 
 `gpyui` is a working name. Package-name availability has not been checked.
 
@@ -28,6 +33,53 @@ app.run()
 Explicit composition also works: `Application(Column([Label("Hello"), ...]))`.
 See [examples/async_binding.py](examples/async_binding.py) for `State`, two-way
 input binding and an async callback.
+
+## Native screenshots
+
+The [paper-trading workspace](examples/workspace.py) is a simpler desktop example
+inspired by a multi-pane trading terminal. Its native button runs an async Python
+callback and appends a simulated order to the native table. The
+[component gallery](examples/gallery.py) demonstrates the reusable controls.
+These are captures of the actual GPUI windows, rendered on Linux with Xvfb and
+Mesa Lavapipe.
+
+![Paper-trading workspace in dark appearance](docs/screenshots/workspace-dark.png)
+
+<details>
+<summary>Light appearance and component gallery</summary>
+
+![Paper-trading workspace in light appearance](docs/screenshots/workspace-light.png)
+
+![Native component gallery](docs/screenshots/gallery-light.png)
+
+</details>
+
+```bash
+uv run python examples/workspace.py --theme dark
+uv run python examples/workspace.py --theme light
+uv run python examples/gallery.py
+```
+
+## Compose and bind Kit controls
+
+```python
+from gpyui import Application, Checkbox, Column, Label, Slider, State
+
+enabled = State(True)
+app = Application(title="Settings", theme="dark")
+with app, Column().style(gap=16):
+    Checkbox("Enable notifications").bind_value(enabled)
+    Label().bind_text(enabled, lambda value: "Enabled" if value else "Disabled")
+    volume = Slider(35, on_change=lambda event: print(event.value))
+app.run()
+```
+
+Use `with Row():`, `GroupBox("Title")`, `Scroll()` and `Resizable(children=[...])`
+for composition. `.style(...)` accepts pixel dimensions and spacing plus semantic
+theme colors, such as `color="muted_foreground"`. `Application(theme="light")`
+and `Application(theme="dark")` choose the initial native theme. Mutable collection
+properties, such as `Table.rows` and `LineChart.data`, update through assignment;
+their getters return copies. See [the coverage and API guide](docs/component-coverage.md).
 
 ## Build and run
 
@@ -75,8 +127,8 @@ uv run python examples/hello.py  # requires an actual display
   flushes immediately; neither is a rollback transaction.
 * `await app.snapshot()` flushes and returns applied native properties, indexed
   by control ID. This is a command barrier, not a GPU presentation fence.
-* Rust edits update Python `TextInput.value` and any bound `State` before
-  `on_change`. Button activation carries a current input snapshot, so a handler
+* Rust interactions update Python control `.value` and any bound `State` before
+  `on_change`. Button activation carries a current value snapshot, so a handler
   reading `name.value` sees the input at activation. Native edits never pass
   through Rust `set_value`, preserving native cursor/selection/undo.
 * Assigning `TextInput.value` deliberately replaces the editing buffer and clears
@@ -84,13 +136,16 @@ uv run python examples/hello.py  # requires an actual display
   change callback. `.value` elsewhere is an asynchronously received mirror;
   use a snapshot when authoritative native state is needed.
 * `State` uses explicit observers and equality guards. `Label.bind_text(state)`
-  binds one way; `TextInput.bind_value(state)` binds both ways. `unbind()` removes
+  binds one way; input/selection controls' `.bind_value(state)` binds both ways. `unbind()` removes
   subscriptions. Mutate bound state on the callback loop while running.
 * `app.close()` requests shutdown. Native window close cancels awaiting handlers,
   gathers tasks, closes the asyncio loop, joins its worker, and unbinds controls.
   Cooperative cancellation cannot terminate an indefinitely blocking sync handler.
 * Callback exceptions go to `on_error(exception)` or asyncio's exception handler
   and remain available in `app.errors`. Queue overload is explicit, not silent.
+* `Dialog` and `Sheet` own Python-composed contents; `.open()` and `.close()`
+  queue native overlay operations. One of each per window is currently supported.
+  `app.notify(message, title="...", variant="success")` shows a native Kit toast.
 
 ## Validation
 
@@ -107,7 +162,8 @@ For actual native-window interaction tests, install Xvfb, xdotool and optionally
 ImageMagick, then run `scripts/test-native.sh`. The script uses a free virtual
 display and the local Mesa driver in this workspace. It tests native text input,
 pointer and keyboard button activation, Python label updates, async binding,
-exceptions and close/cancellation. Logs, screenshots and native snapshots go to
+exceptions, close/cancellation, catalog rendering, light/dark workspaces, paper
+orders and native dialog/sheet dismissal. Logs, screenshots and native snapshots go to
 `artifacts/` (gitignored). Tests otherwise skip explicitly when native testing
 is not enabled.
 
@@ -118,4 +174,4 @@ NiceGUI/Flet comparison, design decisions and implementation plan,
 
 Linux/X11 is the initial test target. macOS, Windows, Wayland, multiwindow,
 dynamic topology, large control sets and distributed wheels remain follow-on
-work. This milestone does not claim a production-ready general UI framework.
+work. This prototype does not claim complete Kit API coverage or production readiness.

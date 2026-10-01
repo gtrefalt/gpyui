@@ -85,6 +85,17 @@ impl Bridge {
     fn snapshot(&self, token: u64) -> PyResult<()> {
         self.send(Command::Snapshot(token))
     }
+    #[pyo3(signature = (message, title="", variant="info"))]
+    fn notify(&self, message: &str, title: &str, variant: &str) -> PyResult<()> {
+        if !matches!(variant, "info" | "success" | "warning" | "danger") {
+            return Err(PyValueError::new_err("invalid notification variant"));
+        }
+        self.send(Command::Notify {
+            message: message.into(),
+            title: title.into(),
+            variant: variant.into(),
+        })
+    }
     fn close(&self) -> PyResult<()> {
         if self.transport.finished.load(Ordering::Acquire) {
             return Ok(());
@@ -109,7 +120,20 @@ impl Bridge {
             serde_json::to_string(&events).map_err(|e| PyRuntimeError::new_err(e.to_string()))
         })
     }
-    fn run(&self, py: Python<'_>, title: String, width: f32, height: f32) -> PyResult<()> {
+    #[pyo3(signature = (title, width, height, theme="light"))]
+    fn run(
+        &self,
+        py: Python<'_>,
+        title: String,
+        width: f32,
+        height: f32,
+        theme: &str,
+    ) -> PyResult<()> {
+        let dark = match theme {
+            "light" => false,
+            "dark" => true,
+            _ => return Err(PyValueError::new_err("theme requires light or dark")),
+        };
         let threading = py.import("threading")?;
         if !threading
             .call_method0("current_thread")?
@@ -146,9 +170,18 @@ impl Bridge {
         let result = py.detach(move || {
             std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 gpui_kit::application()
-                    .with_assets(gpui_kit::assets::Assets)
+                    .with_assets(gpui_kit::assets::AllAssets)
                     .run(move |cx| {
                         gpui_kit::init(cx);
+                        gpui_kit::component::Theme::change(
+                            if dark {
+                                gpui_kit::component::ThemeMode::Dark
+                            } else {
+                                gpui_kit::component::ThemeMode::Light
+                            },
+                            None,
+                            cx,
+                        );
                         let options = WindowOptions {
                             window_bounds: Some(WindowBounds::centered(
                                 size(px(width), px(height)),

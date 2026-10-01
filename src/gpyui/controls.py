@@ -22,7 +22,7 @@ class Event:
 
     sender: Control | Application
     name: str
-    value: str | None = None
+    value: Any = None
 
 
 class Handler:
@@ -53,6 +53,7 @@ class Control:
         self._app: Application | None = None
         self._bindings: list[Callable[[], None]] = []
         self._handlers: dict[str, Handler] = {}
+        self._style: dict[str, Any] = {}
         if stack := _containers.get():
             stack[-1].add(self)
 
@@ -70,7 +71,19 @@ class Control:
             self._app._queue(self.id, name, value)
 
     def _spec(self) -> dict[str, Any]:
-        return {"id": self.id, "type": self._type, **self._properties}
+        return {"id": self.id, "type": self._type, **self._properties, "style": self._style}
+
+    def style(self, **properties: Any) -> Control:
+        """Set pixel layout and semantic theme styles; return this control."""
+        from .widgets import validate_style
+
+        value = validate_style({**self._style, **properties})
+        if self._app:
+            self._app._check_mutation()
+        self._style = value
+        if self._app:
+            self._app._queue(self.id, "style", value)
+        return self
 
     def update(self) -> None:
         """Flush pending application properties to the native queue."""
@@ -204,11 +217,22 @@ class TextInput(Control):
 
 
 class Button(Control):
-    def __init__(self, text: str, *, on_click: Callable[..., Any] | None = None, disabled: bool = False):
+    def __init__(
+        self,
+        text: str,
+        *,
+        on_click: Callable[..., Any] | None = None,
+        disabled: bool = False,
+        variant: str = "secondary",
+        icon: str = "",
+    ):
+        from .widgets import choice
+
         if not isinstance(disabled, bool):
             raise TypeError("disabled requires bool")
         handler = Handler(on_click) if on_click is not None else None
-        super().__init__("button", text=_text(text), disabled=disabled)
+        variant = choice("primary", "secondary", "outline", "ghost", "danger")(variant)
+        super().__init__("button", text=_text(text), disabled=disabled, variant=variant, icon=_text(icon))
         if handler is not None:
             self._handlers["click"] = handler
 
