@@ -3,6 +3,36 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Streaming example and GIF
+
+The Python workspace now runs a seeded local quote/trade stream on the existing
+owned asyncio callback loop. Updates are batched every 650 ms. Its native
+watchlist, current quote, change tag, 12-point rolling chart, four-row market tape
+and feed counter update together. Paper fills use the current simulated price;
+the requested symbol/side are captured before the asynchronous fill delay.
+
+`uv run --locked pytest -q`: **110 passed, 11 skipped**. The market tests verify
+replay, independent state, positive quotes, consistent percentages, matching
+latest chart/quote values and bounded histories/tape across 1,000 ticks.
+`scripts/test-native.sh -x`: **11 passed, 110 deselected in 16.05s**. The added
+streaming scenario verifies actual native chart/quote consistency, tape updates,
+paper fills and shutdown with no asyncio worker/executor threads left running.
+The original ten native scenarios still pass. After limiting the visible tape
+to four complete rows, the targeted streaming scenario passed again in 2.99s.
+
+[`scripts/record-workspace.py`](../scripts/record-workspace.py) records the actual
+1180×790 X11 window through FFmpeg, with real mouse/keyboard Buy/Sell activation
+and a switch to AAPL. Native snapshots verify both fills and the changed chart;
+shutdown reports no errors and only MainThread. The resulting
+[GIF](screenshots/workspace-stream.gif) contains 120 frames at 10 fps and loops
+over 12 seconds. Frames were decoded and visually inspected. Lossless source
+video, snapshots and logs remain under gitignored `artifacts/recording/`.
+
+Regenerate with `uv run python scripts/record-workspace.py` on Linux, with Xvfb,
+xdotool, FFmpeg, the development dependencies and native build prerequisites.
+There are no external market feeds or broker connections. `--static` disables
+streaming in the workspace example; its stream is cancelled when the app closes.
+
 
 ## Expanded catalog validation
 

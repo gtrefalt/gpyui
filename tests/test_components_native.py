@@ -26,7 +26,14 @@ def state_until(directory, process, predicate, timeout=15):
 
 
 @pytest.mark.parametrize(
-    "mode,theme", [("workspace", "light"), ("workspace", "dark"), ("gallery", "light"), ("overlays", "light")]
+    "mode,theme",
+    [
+        ("workspace", "light"),
+        ("workspace", "dark"),
+        ("stream", "dark"),
+        ("gallery", "light"),
+        ("overlays", "light"),
+    ],
 )
 def test_native_examples_and_python_order(tmp_path, mode, theme):
     ARTIFACTS.mkdir(exist_ok=True)
@@ -39,9 +46,12 @@ def test_native_examples_and_python_order(tmp_path, mode, theme):
         )
         try:
             ready = wait_file(tmp_path / "ready.json", process)
-            name = {"workspace": "Paper trading", "gallery": "Component gallery", "overlays": "Overlay test"}[
-                mode
-            ]
+            name = {
+                "workspace": "Paper trading",
+                "stream": "Paper trading",
+                "gallery": "Component gallery",
+                "overlays": "Overlay test",
+            }[mode]
             window = xdo("search", "--onlyvisible", "--name", name).splitlines()[-1]
             xdo("windowfocus", "--sync", window)
             time.sleep(0.3)
@@ -51,7 +61,31 @@ def test_native_examples_and_python_order(tmp_path, mode, theme):
                     check=True,
                     timeout=10,
                 )
-            if mode == "workspace":
+            if mode in {"workspace", "stream"}:
+                if mode == "stream":
+                    initial_chart = next(n["data"] for n in ready.values() if n["type"] == "line_chart")
+                    streamed = state_until(
+                        tmp_path,
+                        process,
+                        lambda s: any(
+                            n.get("columns") == ["Symbol", "Side", "Size", "Price"] and len(n["rows"]) >= 2
+                            for n in s.values()
+                        ),
+                    )
+                    chart = next(n["data"] for n in streamed.values() if n["type"] == "line_chart")
+                    assert len(chart) == 12 and chart != initial_chart
+                    quotes = next(
+                        n["rows"]
+                        for n in streamed.values()
+                        if n.get("columns") == ["Symbol", "Price", "Change"]
+                    )
+                    price = next(
+                        n["text"]
+                        for n in streamed.values()
+                        if n.get("text", "").startswith("$") and n["type"] == "label"
+                    )
+                    assert price == f"${float(quotes[0][1]):,.2f}"
+                    assert chart[-1][1] == float(quotes[0][1])
                 # Native Kit order button in the right pane; no callback injection.
                 xdo("mousemove", "--window", window, 1030, 470, "click", 1)
                 state = state_until(
@@ -62,7 +96,12 @@ def test_native_examples_and_python_order(tmp_path, mode, theme):
                 orders = next(
                     n for n in state.values() if n.get("columns") == ["Symbol", "Side", "Quantity", "Price"]
                 )
-                assert orders["rows"][-1] == ["NVDA", "Buy", "10", "$192.60"]
+                fill = orders["rows"][-1]
+                assert fill[:3] == ["NVDA", "Buy", "10"]
+                if mode == "workspace":
+                    assert fill[3] == "$192.60"
+                else:
+                    assert float(fill[3].lstrip("$")) > 0
             elif mode == "gallery":
                 types = {n["type"] for n in ready.values()}
                 assert {
@@ -113,7 +152,10 @@ def test_native_examples_and_python_order(tmp_path, mode, theme):
                 )
             close_window(window)
             assert process.wait(timeout=10) == 0, log_path.read_text()
-            assert json.loads((tmp_path / "closed.json").read_text())["errors"] == []
+            closed = json.loads((tmp_path / "closed.json").read_text())
+            assert closed["errors"] == []
+            assert "gpyui-asyncio" not in closed["threads"]
+            assert not any(name.startswith("asyncio_") for name in closed["threads"])
             assert not (tmp_path / "error.json").exists()
         except BaseException:
             print(log_path.read_text())

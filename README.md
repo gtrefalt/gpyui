@@ -34,19 +34,27 @@ Explicit composition also works: `Application(Column([Label("Hello"), ...]))`.
 See [examples/async_binding.py](examples/async_binding.py) for `State`, two-way
 input binding and an async callback.
 
-## Native screenshots
+## Native trading demo
 
 The [paper-trading workspace](examples/workspace.py) is a simpler desktop example
-inspired by a multi-pane trading terminal. Its native button runs an async Python
-callback and appends a simulated order to the native table. The
+inspired by a multi-pane trading terminal. A seeded, local stream updates the
+watchlist, price, percentage change, rolling chart and market tape every 650 ms.
+Its native button runs an async Python callback and fills a paper order at the
+current simulated price. The animation shows Buy/Sell orders and switching to
+AAPL while quotes continue updating. The
 [component gallery](examples/gallery.py) demonstrates the reusable controls.
 These are captures of the actual GPUI windows, rendered on Linux with Xvfb and
 Mesa Lavapipe.
 
-![Paper-trading workspace in dark appearance](docs/screenshots/workspace-dark.png)
+![Native trading workspace with simulated live quotes, trade tape and paper orders](docs/screenshots/workspace-stream.gif)
+
+The 12-second GIF records the actual native window at 10 fps. All data and trades
+are simulated locally; the example makes no broker connections.
 
 <details>
-<summary>Light appearance and component gallery</summary>
+<summary>Still screenshots and component gallery</summary>
+
+![Paper-trading workspace in dark appearance](docs/screenshots/workspace-dark.png)
 
 ![Paper-trading workspace in light appearance](docs/screenshots/workspace-light.png)
 
@@ -57,8 +65,19 @@ Mesa Lavapipe.
 ```bash
 uv run python examples/workspace.py --theme dark
 uv run python examples/workspace.py --theme light
+uv run python examples/workspace.py --static  # freeze prices
 uv run python examples/gallery.py
 ```
+
+To regenerate the GIF on Linux, install Xvfb, xdotool and FFmpeg, then run:
+
+```bash
+uv run python scripts/record-workspace.py
+```
+
+The recorder starts a free Xvfb display when needed, activates controls with real
+mouse/keyboard events, captures the native window and verifies the resulting
+orders and clean shutdown. Temporary video, logs and snapshots go to `artifacts/`.
 
 ## Compose and bind Kit controls
 

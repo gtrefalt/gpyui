@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import inspect
 from dataclasses import dataclass
+
+from market import SimulatedMarket
 
 from gpyui import (
     Application,
@@ -29,25 +32,6 @@ from gpyui import (
     Tag,
 )
 
-QUOTES = [
-    ["NVDA", "192.60", "+0.82%"],
-    ["AAPL", "255.30", "+0.50%"],
-    ["MSFT", "522.06", "+0.24%"],
-    ["TSLA", "439.89", "+1.00%"],
-    ["AMD", "164.82", "−0.31%"],
-    ["GOOG", "245.10", "+0.67%"],
-]
-PRICES = dict((row[0], float(row[1])) for row in QUOTES)
-
-
-def series(symbol: str, period: int = 0) -> list[list[str | float]]:
-    price = PRICES[symbol]
-    offsets = [-4.2, -3.5, -3.9, -2.8, -1.7, -2.1, -1.1, -1.9, -0.9, -0.3, -0.8, 0]
-    return [
-        [f"{9 + i // 4:02}:{(i % 4) * 15:02}", round(price + d * (1 + period * 0.3), 2)]
-        for i, d in enumerate(offsets)
-    ]
-
 
 @dataclass
 class Workspace:
@@ -60,22 +44,57 @@ class Workspace:
     positions: Table
     status: Label
     order: Button
+    tape: Table
+    feed: Label
+    price: Label
+    market: SimulatedMarket
 
 
-def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Workspace:
+def create_workspace(
+    theme: str = "dark", *, streaming: bool = True, on_start=None, on_error=None
+) -> Workspace:
+    market = SimulatedMarket()
+
+    async def stream() -> None:
+        while True:
+            await asyncio.sleep(0.65)
+            market.advance()
+            with app.batch():
+                watchlist.rows = market.quotes()
+                update_quote(symbol_select.value)
+                tape.rows = market.trades[:4]
+                feed.text = f"Simulated live feed · Tick {market.tick:03} · {market.histories['NVDA'][-1][0]}"
+
+    async def started(event) -> None:
+        async def external() -> None:
+            if on_start is not None:
+                result = on_start(event)
+                if inspect.isawaitable(result):
+                    await result
+
+        if streaming:
+            await asyncio.gather(stream(), external())
+        else:
+            await external()
+
     app = Application(
         title="gpyui · Paper trading",
         width=1180,
         height=790,
         theme=theme,
-        on_start=on_start,
+        on_start=started,
         on_error=on_error,
     )
 
-    def select_symbol(symbol: str) -> None:
+    def update_quote(symbol: str) -> None:
         instrument.text = symbol
-        price.text = f"${PRICES[symbol]:,.2f}"
-        chart.data = series(symbol, period.value)
+        price.text = f"${market.prices[symbol]:,.2f}"
+        change.text = f"{market.change(symbol):+.2f}%"
+        change.variant = "success" if market.change(symbol) >= 0 else "danger"
+        chart.data = market.series(symbol, period.value)
+
+    def select_symbol(symbol: str) -> None:
+        update_quote(symbol)
         symbol_select.value = symbol
         status.text = f"Ready to trade {symbol}"
 
@@ -87,12 +106,12 @@ def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Wo
         if count <= 0:
             status.text = "Enter a whole quantity above zero."
             return
+        symbol = symbol_select.value
+        action = "Buy" if side.value == 0 else "Sell"
         order.disabled = True
         status.text = "Placing paper order…"
         await asyncio.sleep(0.15)
-        symbol = symbol_select.value
-        action = "Buy" if side.value == 0 else "Sell"
-        positions.rows = [*positions.rows, [symbol, action, str(count), f"${PRICES[symbol]:.2f}"]]
+        positions.rows = [*positions.rows, [symbol, action, str(count), f"${market.prices[symbol]:.2f}"]]
         status.text = f"Filled: {action} {count} {symbol}"
         order.disabled = False
         if not remember.value:
@@ -106,7 +125,7 @@ def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Wo
                 Label("Market workspace").style(font_size=22, bold=True)
                 Tag("Paper account", variant="secondary")
             with Row():
-                Label("A quieter desktop, built in Python").style(color="muted_foreground", font_size=13)
+                Label("Simulated markets · Built in Python").style(color="muted_foreground", font_size=13)
                 Avatar("GP")
         Separator()
         with Row().style(full_width=True, flex=1, align="stretch", gap=20):
@@ -114,9 +133,9 @@ def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Wo
                 Label("Watchlist").style(bold=True, font_size=16)
                 watchlist = Table(
                     columns=["Symbol", "Price", "Change"],
-                    rows=QUOTES,
+                    rows=market.quotes(),
                     column_width=73,
-                    on_change=lambda event: select_symbol(QUOTES[event.value][0]),
+                    on_change=lambda event: select_symbol(list(market.prices)[event.value]),
                 )
                 watchlist.style(full_width=True, height=340)
                 Separator()
@@ -127,30 +146,39 @@ def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Wo
                 with Row().style(full_width=True, justify="between"):
                     with Column():
                         instrument = Label("NVDA").style(font_size=20, bold=True)
-                        Label("NVIDIA · Demo prices").style(color="muted_foreground", font_size=12)
+                        Label("Local simulation · Accelerated quotes").style(
+                            color="muted_foreground", font_size=12
+                        )
                     with Row():
                         price = Label("$192.60").style(font_size=26, bold=True)
-                        Tag("+0.82%", variant="success")
+                        change = Tag("+0.82%", variant="success")
                 period = Tabs(
                     ["Intraday", "1 week", "1 month"],
-                    on_change=lambda: setattr(chart, "data", series(symbol_select.value, period.value)),
+                    on_change=lambda: setattr(
+                        chart, "data", market.series(symbol_select.value, period.value)
+                    ),
                 )
-                chart = LineChart(series("NVDA")).style(full_width=True, height=250)
-                with Row().style(full_width=True, justify="between"):
-                    Label("Paper orders").style(font_size=16, bold=True)
-                    Tag("Local simulation")
-                positions = Table(
-                    columns=["Symbol", "Side", "Quantity", "Price"],
-                    rows=[
-                        ["NVDA", "Buy", "10", "$190.20"],
-                        ["AAPL", "Buy", "5", "$253.80"],
-                    ],
-                ).style(full_width=True, height=175)
+                chart = LineChart(market.series("NVDA")).style(full_width=True, height=250)
+                with Row().style(full_width=True, gap=12, align="stretch"):
+                    with Column().style(flex=1, gap=12):
+                        Label("Market tape").style(font_size=16, bold=True)
+                        tape = Table(columns=["Symbol", "Side", "Size", "Price"], column_width=73)
+                        tape.style(full_width=True, height=175)
+                    with Column().style(flex=1, gap=12):
+                        Label("Paper orders").style(font_size=16, bold=True)
+                        positions = Table(
+                            columns=["Symbol", "Side", "Quantity", "Price"],
+                            column_width=73,
+                            rows=[
+                                ["NVDA", "Buy", "10", "$190.20"],
+                                ["AAPL", "Buy", "5", "$253.80"],
+                            ],
+                        ).style(full_width=True, height=175)
             with Column().style(width=250, gap=16):
                 with GroupBox("New paper order").style(full_width=True):
                     Label("Symbol").style(font_size=12, color="muted_foreground")
                     symbol_select = Select(
-                        list(PRICES), value="NVDA", on_change=lambda e: select_symbol(e.value)
+                        list(market.prices), value="NVDA", on_change=lambda e: select_symbol(e.value)
                     )
                     side = RadioGroup(["Buy", "Sell"])
                     Label("Quantity").style(font_size=12, color="muted_foreground")
@@ -164,12 +192,30 @@ def create_workspace(theme: str = "dark", *, on_start=None, on_error=None) -> Wo
                 DescriptionList([["Session", "Demo"], ["Currency", "USD"], ["Execution", "Simulated"]])
         with StatusBar().style(full_width=True):
             Icon("circle-check").style(width=14, height=14, color="success")
-            Label("Local demo · Sample market data")
+            feed = Label(
+                "Simulated live feed · Starting…" if streaming else "Local demo · Static market data"
+            )
             Label("Python API / Native GPUI Kit")
-    return Workspace(app, watchlist, chart, symbol_select, quantity, side, positions, status, order)
+    return Workspace(
+        app,
+        watchlist,
+        chart,
+        symbol_select,
+        quantity,
+        side,
+        positions,
+        status,
+        order,
+        tape,
+        feed,
+        price,
+        market,
+    )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--theme", choices=("light", "dark"), default="dark")
-    create_workspace(parser.parse_args().theme).app.run()
+    parser.add_argument("--static", action="store_true", help="Disable the local simulated market stream")
+    args = parser.parse_args()
+    create_workspace(args.theme, streaming=not args.static).app.run()

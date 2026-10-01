@@ -3,6 +3,7 @@
 import asyncio
 import json
 import sys
+import threading
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "examples"))
@@ -35,8 +36,8 @@ def error(exc):
     write("error", {"type": type(exc).__name__, "message": str(exc)})
 
 
-if mode == "workspace":
-    app = create_workspace(theme, on_start=started, on_error=error).app
+if mode in {"workspace", "stream"}:
+    app = create_workspace(theme, streaming=mode == "stream", on_start=started, on_error=error).app
 elif mode == "gallery":
     app, _ = create_gallery(theme, on_start=started, on_error=error)
 else:
@@ -53,4 +54,10 @@ else:
             Label("Python-composed contents")
             Button("Close", on_click=sheet.close)
 app.run()
-write("closed", {"errors": [str(error) for error in app.errors]})
+write(
+    "closed",
+    {
+        "errors": [str(error) for error in app.errors],
+        "threads": [thread.name for thread in threading.enumerate()],
+    },
+)

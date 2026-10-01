@@ -191,8 +191,9 @@ flexible panes can shrink within the window. The theme is chosen at startup.
 
 The [workspace](../examples/workspace.py) and [gallery](../examples/gallery.py)
 are public Python API examples, not Rust-specific demos. The workspace simplifies
-the reference trading terminal to a watchlist, one chart, an order form and a
-paper-order table. A native button invokes an async Python handler that appends
+the reference trading terminal to a watchlist, one chart, a market tape, an order
+form and a paper-order table. A seeded asyncio stream batches simulated quotes
+and trades every 650 ms; its callback is cancelled on native close. A native button invokes an async Python handler that appends
 an order, updates status and shows a Kit notification. It makes no network trades.
 
 Current limits: single window, static mounted topology, initial theme only and
