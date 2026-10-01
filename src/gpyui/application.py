@@ -10,7 +10,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from typing import Any
 
-from .controls import Column, Control, Event, Handler, TextInput, _containers
+from .controls import Column, Control, Event, Handler, _containers
 
 
 class ApplicationClosedError(RuntimeError):
@@ -31,11 +31,15 @@ class Application:
         title: str = "gpyui",
         width: float = 480,
         height: float = 300,
+        theme: str = "light",
         on_start: Callable[..., Any] | None = None,
         on_error: Callable[[Exception], None] | None = None,
     ):
         if not isinstance(title, str):
             raise TypeError("title requires str")
+        if theme not in {"light", "dark"}:
+            raise ValueError("theme requires 'light' or 'dark'")
+        self.theme = theme
         if not math.isfinite(width) or not math.isfinite(height) or width < 240 or height < 160:
             raise ValueError("window size must be finite and at least 240 x 160")
         self.title, self.width, self.height = title, width, height
@@ -149,6 +153,16 @@ class Application:
         self.update()
         self._bridge.close()
 
+    def notify(self, message: str, *, title: str = "", variant: str = "info") -> None:
+        """Queue a native Kit notification on the callback loop."""
+        from .widgets import choice, text
+
+        self._check_mutation()
+        message, title = text(message), text(title)
+        variant = choice("info", "success", "warning", "danger")(variant)
+        self.update()
+        self._bridge.notify(message, title, variant)
+
     def call_soon(self, callback: Callable[..., Any], *args: Any) -> None:
         """Schedule a short synchronous callback from any Python thread."""
         if self._phase not in {"starting", "running"} or self._loop is None:
@@ -217,16 +231,12 @@ class Application:
                         future = self._snapshots.get(event["token"])
                         if future is not None and not future.done():
                             future.set_result({int(k): v for k, v in event["nodes"].items()})
-                    elif name in {"click", "change"}:
+                    elif name in {"click", "change", "release", "resize"}:
                         control = self._controls[event["id"]]
+                        for control_id, value in event.get("values", {}).items():
+                            self._controls[int(control_id)]._receive_native(value)
                         if name == "change":
-                            assert isinstance(control, TextInput)
                             control._receive_native(event["value"])
-                        else:
-                            for control_id, value in event["values"].items():
-                                input_control = self._controls[int(control_id)]
-                                assert isinstance(input_control, TextInput)
-                                input_control._receive_native(value)
                         if handler := control._handlers.get(name):
                             self._dispatch(handler, Event(control, name, event.get("value")))
                             # Begin this callback with its activation snapshot before
@@ -283,7 +293,7 @@ class Application:
         try:
             if not started.wait(5):
                 raise RuntimeError("Python callback loop failed to start")
-            self._bridge.run(self.title, self.width, self.height)
+            self._bridge.run(self.title, self.width, self.height, self.theme)
         finally:
             self._bridge.finish()
             worker.join(timeout=5)

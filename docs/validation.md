@@ -1,7 +1,87 @@
-# First milestone validation
+# Validation
 
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
+
+## Streaming example and GIF
+
+The Python workspace now runs a seeded local quote/trade stream on the existing
+owned asyncio callback loop. Updates are batched every 650 ms. Its native
+watchlist, current quote, change tag, 12-point rolling chart, four-row market tape
+and feed counter update together. Paper fills use the current simulated price;
+the requested symbol/side are captured before the asynchronous fill delay.
+
+`uv run --locked pytest -q`: **110 passed, 11 skipped**. The market tests verify
+replay, independent state, positive quotes, consistent percentages, matching
+latest chart/quote values and bounded histories/tape across 1,000 ticks.
+`scripts/test-native.sh -x`: **11 passed, 110 deselected in 16.05s**. The added
+streaming scenario verifies actual native chart/quote consistency, tape updates,
+paper fills and shutdown with no asyncio worker/executor threads left running.
+The original ten native scenarios still pass. After limiting the visible tape
+to four complete rows, the targeted streaming scenario passed again in 2.99s.
+
+[`scripts/record-workspace.py`](../scripts/record-workspace.py) records the actual
+1180×790 X11 window through FFmpeg, with real mouse/keyboard Buy/Sell activation
+and a switch to AAPL. Native snapshots verify both fills and the changed chart;
+shutdown reports no errors and only MainThread. The resulting
+[GIF](screenshots/workspace-stream.gif) contains 120 frames at 10 fps and loops
+over 12 seconds. Frames were decoded and visually inspected. Lossless source
+video, snapshots and logs remain under gitignored `artifacts/recording/`.
+
+Regenerate with `uv run python scripts/record-workspace.py` on Linux, with Xvfb,
+xdotool, FFmpeg, the development dependencies and native build prerequisites.
+There are no external market feeds or broker connections. `--static` disables
+streaming in the workspace example; its stream is cancelled when the app closes.
+
+
+## Expanded catalog validation
+
+The optimized extension was rebuilt successfully with `uv sync --locked` after
+adding the component catalog. This incremental release build took **29.02s**;
+upstream Kit/GPUI revisions remain unchanged. `cargo check --locked`,
+`cargo clippy --locked -- -D warnings`, `cargo fmt --check`, Ruff lint and Ruff
+format checks all passed.
+
+`uv run --locked pytest -q`: **108 passed, 10 skipped**. The skipped tests require
+an actual display. `scripts/test-native.sh -x`: **10 passed, 108 deselected in
+13.48s**, using the installed optimized extension, Xvfb and Mesa Lavapipe.
+
+The new Python/bridge tests validate all 67 additional control schemas through
+the real Rust bridge, typed binding, collection copies, layout ownership,
+constructor failure, immutable native constraints, invalid-update atomicity,
+RGB/RGBA values, duplicate tree IDs and per-window overlay limits. They establish
+the basic wrapper contracts; they do not test every upstream builder option.
+
+Four additional native scenarios extend the original six below:
+
+1. **Light workspace:** real mouse activation invokes the async Python handler;
+   native snapshots contain `Filled: Buy 10 NVDA` and the appended order row.
+2. **Dark workspace:** the same behavior with native dark appearance.
+3. **Component gallery:** constructs and renders native inputs, selection,
+   table, date/color controls, carousel, overlays and five chart families, with
+   no reported application error. This checks mounting/rendering; it does not
+   establish exhaustive interaction coverage for every control.
+4. **Native overlays:** mouse activation opens the Kit dialog and sheet;
+   Escape dismisses each, with native close mirrored to Python values.
+
+All scenarios also verify successful native shutdown and an empty error list.
+The original text editing/undo, ordered activation, async cancellation and error
+scenarios still pass. Actual captured windows were visually inspected and copied
+without image editing into [docs/screenshots](screenshots) for README display:
+[dark workspace](screenshots/workspace-dark.png),
+[light workspace](screenshots/workspace-light.png), and
+[gallery](screenshots/gallery-light.png). Rerunning the native script regenerates
+local captures and snapshots under the gitignored `artifacts/` directory.
+
+The measured scope is Linux/X11 software Vulkan, a fixed tree and one window.
+Complete Kit APIs, macOS/Windows/Wayland, portable wheels and large-data
+performance remain unverified. See [component coverage](component-coverage.md)
+for the implemented contracts and remaining Kit families.
+
+## Original first-milestone evidence
+
+The results below record the original four-control implementation; the expanded
+catalog results above supersede its test counts and scope.
 
 ## Upstream compatibility
 
