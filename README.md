@@ -242,6 +242,8 @@ NiceGUI/Flet comparison, design decisions and implementation plan,
 [docs/upstream-lock.json](docs/upstream-lock.json) for revisions, and
 [docs/validation.md](docs/validation.md) for measured results and limits.
 
-Linux/X11 is the initial test target. macOS, Windows, Wayland, multiwindow,
+Linux/X11 has native interaction tests. The [wheel workflow](docs/releases.md) covers
+Linux, Windows and macOS on x64 and ARM64; Windows/macOS use native window smoke tests.
+Wayland, multiwindow,
 dynamic topology, large control sets and additional wheel platforms remain follow-on
 work. This prototype does not claim complete Kit API coverage or production readiness.

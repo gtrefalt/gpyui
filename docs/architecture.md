@@ -131,8 +131,10 @@ performance, high-rate input coalescing, topology reconciliation and finer entit
 notification boundaries before expanding the API. GPU rendering releases the
 GIL, but CPU-bound pure Python still competes for it with other Python tasks.
 
-Linux/X11 is the validation target here. macOS and Windows use the upstream
-platform backends but remain unverified until native CI is available. Upstream
+Linux/X11 has full native interaction tests. The [wheel workflow](releases.md)
+also builds Linux ARM64, Windows x64/ARM64 and macOS Intel/Apple Silicon.
+Windows and macOS use the pinned upstream platform backends and have native
+window smoke tests, with OS mouse/keyboard interaction still to validate. Upstream
 native libraries, GPU/display drivers, assets, and dependency licenses require
 review before distributing wheels. Name availability remains unchecked.
 
