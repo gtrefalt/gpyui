@@ -1,4 +1,5 @@
 import json
+import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
@@ -59,6 +60,7 @@ def test_command_overload_is_explicit():
         bridge.finish()
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="X11/Wayland display validation is Linux-specific")
 def test_missing_display_cleans_up_python_worker(monkeypatch):
     import threading
 
