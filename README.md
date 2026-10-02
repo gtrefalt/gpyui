@@ -17,6 +17,23 @@ and the specialized Kit APIs still to expose.
 
 `gpyui` is a working name. Package-name availability has not been checked.
 
+## Documentation
+
+The [Zensical documentation](https://gtrefalt.github.io/gpyui/) includes guides, API references and
+a [visual catalog of all 71 controls](https://gtrefalt.github.io/gpyui/components/), each with a real
+native preview, properties, events and a runnable Python example.
+
+Preview it without building the Rust extension:
+
+```bash
+UV_PROJECT_ENVIRONMENT=.venv-docs uv sync --locked --only-group docs
+UV_PROJECT_ENVIRONMENT=.venv-docs uv run --locked --only-group docs zensical serve
+```
+
+Open `http://localhost:8000`. See [documentation development](docs/contributing-docs.md)
+for strict builds, generated-reference checks, native captures and optional Pages
+publication. Pull requests include a built HTML preview artifact.
+
 ```python
 from gpyui import Application, Button, Column, Label, TextInput
 

@@ -10,7 +10,7 @@ This is basic catalog coverage, not parity with every upstream builder method.
 The inventory below is grounded in the pinned
 [component crate](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/lib.rs).
 Component links resolve to that same immutable revision. Examples are entirely
-Python: [workspace](../examples/workspace.py) and [gallery](../examples/gallery.py).
+Python: [workspace](https://github.com/gtrefalt/gpyui/blob/main/examples/workspace.py) and [gallery](https://github.com/gtrefalt/gpyui/blob/main/examples/gallery.py).
 
 ## Available controls
 
