@@ -2,41 +2,95 @@
 
 Native selection controls composed in Python.
 
-<div class="component-grid">
-<a class="component-card" href="../checkbox/">
-<img src="../../screenshots/components/checkbox.png" alt="Native Checkbox component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Checkbox</strong><span>An independent boolean choice.</span></span>
-</a>
-<a class="component-card" href="../switch/">
-<img src="../../screenshots/components/switch.png" alt="Native Switch component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Switch</strong><span>A native boolean switch.</span></span>
-</a>
-<a class="component-card" href="../radio/">
-<img src="../../screenshots/components/radio.png" alt="Native Radio component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Radio</strong><span>A standalone native radio control.</span></span>
-</a>
-<a class="component-card" href="../toggle/">
-<img src="../../screenshots/components/toggle.png" alt="Native Toggle component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Toggle</strong><span>A boolean button-like toggle.</span></span>
-</a>
-<a class="component-card" href="../radio-group/">
-<img src="../../screenshots/components/radio-group.png" alt="Native RadioGroup component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>RadioGroup</strong><span>An exclusive indexed native choice.</span></span>
-</a>
-<a class="component-card" href="../select/">
-<img src="../../screenshots/components/select.png" alt="Native Select component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Select</strong><span>A retained native single-selection dropdown.</span></span>
-</a>
-<a class="component-card" href="../combobox/">
-<img src="../../screenshots/components/combobox.png" alt="Native Combobox component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Combobox</strong><span>Search within native string choices.</span></span>
-</a>
-<a class="component-card" href="../slider/">
-<img src="../../screenshots/components/slider.png" alt="Native Slider component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Slider</strong><span>A retained native scalar slider.</span></span>
-</a>
-<a class="component-card" href="../rating/">
-<img src="../../screenshots/components/rating.png" alt="Native Rating component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Rating</strong><span>Native zero-to-five rating.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Checkbox component](../../screenshots/components/checkbox.png)](../checkbox.md)
+
+**[Checkbox](../checkbox.md)**
+
+An independent boolean choice.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Switch component](../../screenshots/components/switch.png)](../switch.md)
+
+**[Switch](../switch.md)**
+
+A native boolean switch.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Radio component](../../screenshots/components/radio.png)](../radio.md)
+
+**[Radio](../radio.md)**
+
+A standalone native radio control.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Toggle component](../../screenshots/components/toggle.png)](../toggle.md)
+
+**[Toggle](../toggle.md)**
+
+A boolean button-like toggle.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native RadioGroup component](../../screenshots/components/radio-group.png)](../radio-group.md)
+
+**[RadioGroup](../radio-group.md)**
+
+An exclusive indexed native choice.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Select component](../../screenshots/components/select.png)](../select.md)
+
+**[Select](../select.md)**
+
+A retained native single-selection dropdown.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Combobox component](../../screenshots/components/combobox.png)](../combobox.md)
+
+**[Combobox](../combobox.md)**
+
+Search within native string choices.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Slider component](../../screenshots/components/slider.png)](../slider.md)
+
+**[Slider](../slider.md)**
+
+A retained native scalar slider.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Rating component](../../screenshots/components/rating.png)](../rating.md)
+
+**[Rating](../rating.md)**
+
+Native zero-to-five rating.
+
+</div>
+
 </div>

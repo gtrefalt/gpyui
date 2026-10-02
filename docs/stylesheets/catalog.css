@@ -25,15 +25,15 @@
   object-fit: contain;
   background: #090909;
 }
-.component-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: .4rem;
+.md-typeset .component-card p {
+  margin: 0;
   padding: .9rem;
   font-size: .75rem;
 }
-.component-card-body strong { font-size: .9rem; }
-.component-card-body span { color: var(--md-default-fg-color--light); }
+.md-typeset .component-card p:first-child { padding: 0; }
+.md-typeset .component-card p:nth-child(2) { padding-bottom: 0; font-size: .9rem; }
+.md-typeset .component-card p:last-child { color: var(--md-default-fg-color--light); }
+.md-typeset .component-card a { color: inherit; text-decoration: none; }
 .md-typeset img { border-radius: 8px; }
 .md-typeset .component-card img { border-radius: 0; }
 .md-typeset table:not([class]) td { vertical-align: top; }

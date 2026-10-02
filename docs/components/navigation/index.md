@@ -2,25 +2,55 @@
 
 Native navigation controls composed in Python.
 
-<div class="component-grid">
-<a class="component-card" href="../tabs/">
-<img src="../../screenshots/components/tabs.png" alt="Native Tabs component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tabs</strong><span>Native selection among labeled tabs.</span></span>
-</a>
-<a class="component-card" href="../sidebar/">
-<img src="../../screenshots/components/sidebar.png" alt="Native Sidebar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Sidebar</strong><span>Native sidebar navigation.</span></span>
-</a>
-<a class="component-card" href="../breadcrumb/">
-<img src="../../screenshots/components/breadcrumb.png" alt="Native Breadcrumb component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Breadcrumb</strong><span>Native breadcrumb selection.</span></span>
-</a>
-<a class="component-card" href="../stepper/">
-<img src="../../screenshots/components/stepper.png" alt="Native Stepper component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Stepper</strong><span>Native steps with indexed selection.</span></span>
-</a>
-<a class="component-card" href="../pagination/">
-<img src="../../screenshots/components/pagination.png" alt="Native Pagination component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Pagination</strong><span>A native pagination control.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Tabs component](../../screenshots/components/tabs.png)](../tabs.md)
+
+**[Tabs](../tabs.md)**
+
+Native selection among labeled tabs.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Sidebar component](../../screenshots/components/sidebar.png)](../sidebar.md)
+
+**[Sidebar](../sidebar.md)**
+
+Native sidebar navigation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Breadcrumb component](../../screenshots/components/breadcrumb.png)](../breadcrumb.md)
+
+**[Breadcrumb](../breadcrumb.md)**
+
+Native breadcrumb selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Stepper component](../../screenshots/components/stepper.png)](../stepper.md)
+
+**[Stepper](../stepper.md)**
+
+Native steps with indexed selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Pagination component](../../screenshots/components/pagination.png)](../pagination.md)
+
+**[Pagination](../pagination.md)**
+
+A native pagination control.
+
+</div>
+
 </div>

@@ -6,344 +6,770 @@ Use the site search to find a control by name. [Coverage and remaining APIs](../
 
 ## Layout
 
-<div class="component-grid">
-<a class="component-card" href="column/">
-<img src="../screenshots/components/column.png" alt="Native Column component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Column</strong><span>Stack controls vertically.</span></span>
-</a>
-<a class="component-card" href="row/">
-<img src="../screenshots/components/row.png" alt="Native Row component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Row</strong><span>Arrange controls horizontally.</span></span>
-</a>
-<a class="component-card" href="container/">
-<img src="../screenshots/components/container.png" alt="Native Container component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Container</strong><span>A composable GPUI layout surface.</span></span>
-</a>
-<a class="component-card" href="scroll/">
-<img src="../screenshots/components/scroll.png" alt="Native Scroll component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Scroll</strong><span>Native vertical scrolling for composed children.</span></span>
-</a>
-<a class="component-card" href="group-box/">
-<img src="../screenshots/components/group-box.png" alt="Native GroupBox component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>GroupBox</strong><span>Group related controls with a native title.</span></span>
-</a>
-<a class="component-card" href="toolbar/">
-<img src="../screenshots/components/toolbar.png" alt="Native Toolbar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Toolbar</strong><span>Compose a native toolbar.</span></span>
-</a>
-<a class="component-card" href="status-bar/">
-<img src="../screenshots/components/status-bar.png" alt="Native StatusBar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>StatusBar</strong><span>Native status content composed in Python.</span></span>
-</a>
-<a class="component-card" href="resizable/">
-<img src="../screenshots/components/resizable.png" alt="Native Resizable component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Resizable</strong><span>Native draggable boundaries between panes.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Column component](../screenshots/components/column.png)](column.md)
+
+**[Column](column.md)**
+
+Stack controls vertically.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Row component](../screenshots/components/row.png)](row.md)
+
+**[Row](row.md)**
+
+Arrange controls horizontally.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Container component](../screenshots/components/container.png)](container.md)
+
+**[Container](container.md)**
+
+A composable GPUI layout surface.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Scroll component](../screenshots/components/scroll.png)](scroll.md)
+
+**[Scroll](scroll.md)**
+
+Native vertical scrolling for composed children.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native GroupBox component](../screenshots/components/group-box.png)](group-box.md)
+
+**[GroupBox](group-box.md)**
+
+Group related controls with a native title.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Toolbar component](../screenshots/components/toolbar.png)](toolbar.md)
+
+**[Toolbar](toolbar.md)**
+
+Compose a native toolbar.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native StatusBar component](../screenshots/components/status-bar.png)](status-bar.md)
+
+**[StatusBar](status-bar.md)**
+
+Native status content composed in Python.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Resizable component](../screenshots/components/resizable.png)](resizable.md)
+
+**[Resizable](resizable.md)**
+
+Native draggable boundaries between panes.
+
+</div>
+
 </div>
 
 ## Text and buttons
 
-<div class="component-grid">
-<a class="component-card" href="label/">
-<img src="../screenshots/components/label.png" alt="Native Label component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Label</strong><span>A native text label.</span></span>
-</a>
-<a class="component-card" href="button/">
-<img src="../screenshots/components/button.png" alt="Native Button component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Button</strong><span>Native activation invokes Python callbacks.</span></span>
-</a>
-<a class="component-card" href="link/">
-<img src="../screenshots/components/link.png" alt="Native Link component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Link</strong><span>A native link with optional Python activation.</span></span>
-</a>
-<a class="component-card" href="clipboard/">
-<img src="../screenshots/components/clipboard.png" alt="Native Clipboard component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Clipboard</strong><span>Copy a string using the native clipboard.</span></span>
-</a>
-<a class="component-card" href="icon/">
-<img src="../screenshots/components/icon.png" alt="Native Icon component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Icon</strong><span>Bundled Lucide icons rendered natively.</span></span>
-</a>
-<a class="component-card" href="kbd/">
-<img src="../screenshots/components/kbd.png" alt="Native Kbd component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Kbd</strong><span>Display a parsed native keyboard shortcut.</span></span>
-</a>
-<a class="component-card" href="separator/">
-<img src="../screenshots/components/separator.png" alt="Native Separator component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Separator</strong><span>A native divider, optionally with a label.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Label component](../screenshots/components/label.png)](label.md)
+
+**[Label](label.md)**
+
+A native text label.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Button component](../screenshots/components/button.png)](button.md)
+
+**[Button](button.md)**
+
+Native activation invokes Python callbacks.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Link component](../screenshots/components/link.png)](link.md)
+
+**[Link](link.md)**
+
+A native link with optional Python activation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Clipboard component](../screenshots/components/clipboard.png)](clipboard.md)
+
+**[Clipboard](clipboard.md)**
+
+Copy a string using the native clipboard.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Icon component](../screenshots/components/icon.png)](icon.md)
+
+**[Icon](icon.md)**
+
+Bundled Lucide icons rendered natively.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Kbd component](../screenshots/components/kbd.png)](kbd.md)
+
+**[Kbd](kbd.md)**
+
+Display a parsed native keyboard shortcut.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Separator component](../screenshots/components/separator.png)](separator.md)
+
+**[Separator](separator.md)**
+
+A native divider, optionally with a label.
+
+</div>
+
 </div>
 
 ## Inputs
 
-<div class="component-grid">
-<a class="component-card" href="text-input/">
-<img src="../screenshots/components/text-input.png" alt="Native TextInput component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>TextInput</strong><span>Native single-line text editing.</span></span>
-</a>
-<a class="component-card" href="text-area/">
-<img src="../screenshots/components/text-area.png" alt="Native TextArea component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>TextArea</strong><span>Native multiline editing.</span></span>
-</a>
-<a class="component-card" href="number-input/">
-<img src="../screenshots/components/number-input.png" alt="Native NumberInput component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>NumberInput</strong><span>A native numeric editing buffer with step buttons.</span></span>
-</a>
-<a class="component-card" href="otp-input/">
-<img src="../screenshots/components/otp-input.png" alt="Native OtpInput component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>OtpInput</strong><span>Native one-time-code editing.</span></span>
-</a>
-<a class="component-card" href="editor/">
-<img src="../screenshots/components/editor.png" alt="Native Editor component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Editor</strong><span>A retained native editor buffer.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native TextInput component](../screenshots/components/text-input.png)](text-input.md)
+
+**[TextInput](text-input.md)**
+
+Native single-line text editing.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native TextArea component](../screenshots/components/text-area.png)](text-area.md)
+
+**[TextArea](text-area.md)**
+
+Native multiline editing.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native NumberInput component](../screenshots/components/number-input.png)](number-input.md)
+
+**[NumberInput](number-input.md)**
+
+A native numeric editing buffer with step buttons.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native OtpInput component](../screenshots/components/otp-input.png)](otp-input.md)
+
+**[OtpInput](otp-input.md)**
+
+Native one-time-code editing.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Editor component](../screenshots/components/editor.png)](editor.md)
+
+**[Editor](editor.md)**
+
+A retained native editor buffer.
+
+</div>
+
 </div>
 
 ## Selection
 
-<div class="component-grid">
-<a class="component-card" href="checkbox/">
-<img src="../screenshots/components/checkbox.png" alt="Native Checkbox component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Checkbox</strong><span>An independent boolean choice.</span></span>
-</a>
-<a class="component-card" href="switch/">
-<img src="../screenshots/components/switch.png" alt="Native Switch component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Switch</strong><span>A native boolean switch.</span></span>
-</a>
-<a class="component-card" href="radio/">
-<img src="../screenshots/components/radio.png" alt="Native Radio component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Radio</strong><span>A standalone native radio control.</span></span>
-</a>
-<a class="component-card" href="toggle/">
-<img src="../screenshots/components/toggle.png" alt="Native Toggle component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Toggle</strong><span>A boolean button-like toggle.</span></span>
-</a>
-<a class="component-card" href="radio-group/">
-<img src="../screenshots/components/radio-group.png" alt="Native RadioGroup component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>RadioGroup</strong><span>An exclusive indexed native choice.</span></span>
-</a>
-<a class="component-card" href="select/">
-<img src="../screenshots/components/select.png" alt="Native Select component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Select</strong><span>A retained native single-selection dropdown.</span></span>
-</a>
-<a class="component-card" href="combobox/">
-<img src="../screenshots/components/combobox.png" alt="Native Combobox component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Combobox</strong><span>Search within native string choices.</span></span>
-</a>
-<a class="component-card" href="slider/">
-<img src="../screenshots/components/slider.png" alt="Native Slider component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Slider</strong><span>A retained native scalar slider.</span></span>
-</a>
-<a class="component-card" href="rating/">
-<img src="../screenshots/components/rating.png" alt="Native Rating component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Rating</strong><span>Native zero-to-five rating.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Checkbox component](../screenshots/components/checkbox.png)](checkbox.md)
+
+**[Checkbox](checkbox.md)**
+
+An independent boolean choice.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Switch component](../screenshots/components/switch.png)](switch.md)
+
+**[Switch](switch.md)**
+
+A native boolean switch.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Radio component](../screenshots/components/radio.png)](radio.md)
+
+**[Radio](radio.md)**
+
+A standalone native radio control.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Toggle component](../screenshots/components/toggle.png)](toggle.md)
+
+**[Toggle](toggle.md)**
+
+A boolean button-like toggle.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native RadioGroup component](../screenshots/components/radio-group.png)](radio-group.md)
+
+**[RadioGroup](radio-group.md)**
+
+An exclusive indexed native choice.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Select component](../screenshots/components/select.png)](select.md)
+
+**[Select](select.md)**
+
+A retained native single-selection dropdown.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Combobox component](../screenshots/components/combobox.png)](combobox.md)
+
+**[Combobox](combobox.md)**
+
+Search within native string choices.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Slider component](../screenshots/components/slider.png)](slider.md)
+
+**[Slider](slider.md)**
+
+A retained native scalar slider.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Rating component](../screenshots/components/rating.png)](rating.md)
+
+**[Rating](rating.md)**
+
+Native zero-to-five rating.
+
+</div>
+
 </div>
 
 ## Navigation
 
-<div class="component-grid">
-<a class="component-card" href="tabs/">
-<img src="../screenshots/components/tabs.png" alt="Native Tabs component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tabs</strong><span>Native selection among labeled tabs.</span></span>
-</a>
-<a class="component-card" href="sidebar/">
-<img src="../screenshots/components/sidebar.png" alt="Native Sidebar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Sidebar</strong><span>Native sidebar navigation.</span></span>
-</a>
-<a class="component-card" href="breadcrumb/">
-<img src="../screenshots/components/breadcrumb.png" alt="Native Breadcrumb component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Breadcrumb</strong><span>Native breadcrumb selection.</span></span>
-</a>
-<a class="component-card" href="stepper/">
-<img src="../screenshots/components/stepper.png" alt="Native Stepper component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Stepper</strong><span>Native steps with indexed selection.</span></span>
-</a>
-<a class="component-card" href="pagination/">
-<img src="../screenshots/components/pagination.png" alt="Native Pagination component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Pagination</strong><span>A native pagination control.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Tabs component](../screenshots/components/tabs.png)](tabs.md)
+
+**[Tabs](tabs.md)**
+
+Native selection among labeled tabs.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Sidebar component](../screenshots/components/sidebar.png)](sidebar.md)
+
+**[Sidebar](sidebar.md)**
+
+Native sidebar navigation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Breadcrumb component](../screenshots/components/breadcrumb.png)](breadcrumb.md)
+
+**[Breadcrumb](breadcrumb.md)**
+
+Native breadcrumb selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Stepper component](../screenshots/components/stepper.png)](stepper.md)
+
+**[Stepper](stepper.md)**
+
+Native steps with indexed selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Pagination component](../screenshots/components/pagination.png)](pagination.md)
+
+**[Pagination](pagination.md)**
+
+A native pagination control.
+
+</div>
+
 </div>
 
 ## Data
 
-<div class="component-grid">
-<a class="component-card" href="list/">
-<img src="../screenshots/components/list.png" alt="Native List component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>List</strong><span>Compose selectable native ListItems.</span></span>
-</a>
-<a class="component-card" href="table/">
-<img src="../screenshots/components/table.png" alt="Native Table component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Table</strong><span>Native retained table state with string rows.</span></span>
-</a>
-<a class="component-card" href="tree/">
-<img src="../screenshots/components/tree.png" alt="Native Tree component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tree</strong><span>Native tree selection with stable item IDs.</span></span>
-</a>
-<a class="component-card" href="description-list/">
-<img src="../screenshots/components/description-list.png" alt="Native DescriptionList component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>DescriptionList</strong><span>Native label/value presentation.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native List component](../screenshots/components/list.png)](list.md)
+
+**[List](list.md)**
+
+Compose selectable native ListItems.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Table component](../screenshots/components/table.png)](table.md)
+
+**[Table](table.md)**
+
+Native retained table state with string rows.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Tree component](../screenshots/components/tree.png)](tree.md)
+
+**[Tree](tree.md)**
+
+Native tree selection with stable item IDs.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native DescriptionList component](../screenshots/components/description-list.png)](description-list.md)
+
+**[DescriptionList](description-list.md)**
+
+Native label/value presentation.
+
+</div>
+
 </div>
 
 ## Charts
 
-<div class="component-grid">
-<a class="component-card" href="line-chart/">
-<img src="../screenshots/components/line-chart.png" alt="Native LineChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>LineChart</strong><span>Native line plot with data-following domain.</span></span>
-</a>
-<a class="component-card" href="area-chart/">
-<img src="../screenshots/components/area-chart.png" alt="Native AreaChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>AreaChart</strong><span>A native filled area plot.</span></span>
-</a>
-<a class="component-card" href="bar-chart/">
-<img src="../screenshots/components/bar-chart.png" alt="Native BarChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>BarChart</strong><span>A native bar plot.</span></span>
-</a>
-<a class="component-card" href="pie-chart/">
-<img src="../screenshots/components/pie-chart.png" alt="Native PieChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>PieChart</strong><span>A native pie plot with nonnegative values.</span></span>
-</a>
-<a class="component-card" href="candlestick-chart/">
-<img src="../screenshots/components/candlestick-chart.png" alt="Native CandlestickChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>CandlestickChart</strong><span>Native OHLC candles.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native LineChart component](../screenshots/components/line-chart.png)](line-chart.md)
+
+**[LineChart](line-chart.md)**
+
+Native line plot with data-following domain.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native AreaChart component](../screenshots/components/area-chart.png)](area-chart.md)
+
+**[AreaChart](area-chart.md)**
+
+A native filled area plot.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native BarChart component](../screenshots/components/bar-chart.png)](bar-chart.md)
+
+**[BarChart](bar-chart.md)**
+
+A native bar plot.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native PieChart component](../screenshots/components/pie-chart.png)](pie-chart.md)
+
+**[PieChart](pie-chart.md)**
+
+A native pie plot with nonnegative values.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native CandlestickChart component](../screenshots/components/candlestick-chart.png)](candlestick-chart.md)
+
+**[CandlestickChart](candlestick-chart.md)**
+
+Native OHLC candles.
+
+</div>
+
 </div>
 
 ## Date, time and color
 
-<div class="component-grid">
-<a class="component-card" href="calendar/">
-<img src="../screenshots/components/calendar.png" alt="Native Calendar component" loading="lazy" width="640" height="480">
-<span class="component-card-body"><strong>Calendar</strong><span>Retained native calendar selection.</span></span>
-</a>
-<a class="component-card" href="date-picker/">
-<img src="../screenshots/components/date-picker.png" alt="Native DatePicker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>DatePicker</strong><span>Native single-date picker.</span></span>
-</a>
-<a class="component-card" href="time-field/">
-<img src="../screenshots/components/time-field.png" alt="Native TimeField component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>TimeField</strong><span>Native local time editing.</span></span>
-</a>
-<a class="component-card" href="color-picker/">
-<img src="../screenshots/components/color-picker.png" alt="Native ColorPicker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>ColorPicker</strong><span>Native RGB/RGBA color selection.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Calendar component](../screenshots/components/calendar.png)](calendar.md)
+
+**[Calendar](calendar.md)**
+
+Retained native calendar selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native DatePicker component](../screenshots/components/date-picker.png)](date-picker.md)
+
+**[DatePicker](date-picker.md)**
+
+Native single-date picker.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native TimeField component](../screenshots/components/time-field.png)](time-field.md)
+
+**[TimeField](time-field.md)**
+
+Native local time editing.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native ColorPicker component](../screenshots/components/color-picker.png)](color-picker.md)
+
+**[ColorPicker](color-picker.md)**
+
+Native RGB/RGBA color selection.
+
+</div>
+
 </div>
 
 ## Feedback
 
-<div class="component-grid">
-<a class="component-card" href="progress/">
-<img src="../screenshots/components/progress.png" alt="Native Progress component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Progress</strong><span>Native percentage progress.</span></span>
-</a>
-<a class="component-card" href="progress-circle/">
-<img src="../screenshots/components/progress-circle.png" alt="Native ProgressCircle component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>ProgressCircle</strong><span>Native circular percentage progress.</span></span>
-</a>
-<a class="component-card" href="spinner/">
-<img src="../screenshots/components/spinner.png" alt="Native Spinner component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Spinner</strong><span>Native animated busy feedback.</span></span>
-</a>
-<a class="component-card" href="skeleton/">
-<img src="../screenshots/components/skeleton.png" alt="Native Skeleton component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Skeleton</strong><span>Native placeholder feedback.</span></span>
-</a>
-<a class="component-card" href="shimmer/">
-<img src="../screenshots/components/shimmer.png" alt="Native Shimmer component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Shimmer</strong><span>Native animated loading text.</span></span>
-</a>
-<a class="component-card" href="alert/">
-<img src="../screenshots/components/alert.png" alt="Native Alert component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Alert</strong><span>Native semantic status messages.</span></span>
-</a>
-<a class="component-card" href="empty/">
-<img src="../screenshots/components/empty.png" alt="Native Empty component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Empty</strong><span>Native empty-state presentation.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Progress component](../screenshots/components/progress.png)](progress.md)
+
+**[Progress](progress.md)**
+
+Native percentage progress.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native ProgressCircle component](../screenshots/components/progress-circle.png)](progress-circle.md)
+
+**[ProgressCircle](progress-circle.md)**
+
+Native circular percentage progress.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Spinner component](../screenshots/components/spinner.png)](spinner.md)
+
+**[Spinner](spinner.md)**
+
+Native animated busy feedback.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Skeleton component](../screenshots/components/skeleton.png)](skeleton.md)
+
+**[Skeleton](skeleton.md)**
+
+Native placeholder feedback.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Shimmer component](../screenshots/components/shimmer.png)](shimmer.md)
+
+**[Shimmer](shimmer.md)**
+
+Native animated loading text.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Alert component](../screenshots/components/alert.png)](alert.md)
+
+**[Alert](alert.md)**
+
+Native semantic status messages.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Empty component](../screenshots/components/empty.png)](empty.md)
+
+**[Empty](empty.md)**
+
+Native empty-state presentation.
+
+</div>
+
 </div>
 
 ## Content
 
-<div class="component-grid">
-<a class="component-card" href="tag/">
-<img src="../screenshots/components/tag.png" alt="Native Tag component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tag</strong><span>Native text tags with semantic variants.</span></span>
-</a>
-<a class="component-card" href="badge/">
-<img src="../screenshots/components/badge.png" alt="Native Badge component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Badge</strong><span>Native count badges.</span></span>
-</a>
-<a class="component-card" href="avatar/">
-<img src="../screenshots/components/avatar.png" alt="Native Avatar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Avatar</strong><span>Native initials generated from a name.</span></span>
-</a>
-<a class="component-card" href="markdown/">
-<img src="../screenshots/components/markdown.png" alt="Native Markdown component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Markdown</strong><span>Native rich text from Markdown.</span></span>
-</a>
-<a class="component-card" href="html/">
-<img src="../screenshots/components/html.png" alt="Native Html component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Html</strong><span>Native rich text from supported HTML.</span></span>
-</a>
-<a class="component-card" href="bubble/">
-<img src="../screenshots/components/bubble.png" alt="Native Bubble component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Bubble</strong><span>Native bubble content composed in Python.</span></span>
-</a>
-<a class="component-card" href="message/">
-<img src="../screenshots/components/message.png" alt="Native Message component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Message</strong><span>Native authored message presentation.</span></span>
-</a>
-<a class="component-card" href="marker/">
-<img src="../screenshots/components/marker.png" alt="Native Marker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Marker</strong><span>Native message/date marker.</span></span>
-</a>
-<a class="component-card" href="attachment/">
-<img src="../screenshots/components/attachment.png" alt="Native Attachment component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Attachment</strong><span>Native attachment presentation.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Tag component](../screenshots/components/tag.png)](tag.md)
+
+**[Tag](tag.md)**
+
+Native text tags with semantic variants.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Badge component](../screenshots/components/badge.png)](badge.md)
+
+**[Badge](badge.md)**
+
+Native count badges.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Avatar component](../screenshots/components/avatar.png)](avatar.md)
+
+**[Avatar](avatar.md)**
+
+Native initials generated from a name.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Markdown component](../screenshots/components/markdown.png)](markdown.md)
+
+**[Markdown](markdown.md)**
+
+Native rich text from Markdown.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Html component](../screenshots/components/html.png)](html.md)
+
+**[Html](html.md)**
+
+Native rich text from supported HTML.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Bubble component](../screenshots/components/bubble.png)](bubble.md)
+
+**[Bubble](bubble.md)**
+
+Native bubble content composed in Python.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Message component](../screenshots/components/message.png)](message.md)
+
+**[Message](message.md)**
+
+Native authored message presentation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Marker component](../screenshots/components/marker.png)](marker.md)
+
+**[Marker](marker.md)**
+
+Native message/date marker.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Attachment component](../screenshots/components/attachment.png)](attachment.md)
+
+**[Attachment](attachment.md)**
+
+Native attachment presentation.
+
+</div>
+
 </div>
 
 ## Disclosure
 
-<div class="component-grid">
-<a class="component-card" href="collapsible/">
-<img src="../screenshots/components/collapsible.png" alt="Native Collapsible component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Collapsible</strong><span>Native disclosure for Python-composed content.</span></span>
-</a>
-<a class="component-card" href="accordion/">
-<img src="../screenshots/components/accordion.png" alt="Native Accordion component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Accordion</strong><span>Native disclosure among labeled items.</span></span>
-</a>
-<a class="component-card" href="carousel/">
-<img src="../screenshots/components/carousel.png" alt="Native Carousel component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Carousel</strong><span>Native slide selection.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Collapsible component](../screenshots/components/collapsible.png)](collapsible.md)
+
+**[Collapsible](collapsible.md)**
+
+Native disclosure for Python-composed content.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Accordion component](../screenshots/components/accordion.png)](accordion.md)
+
+**[Accordion](accordion.md)**
+
+Native disclosure among labeled items.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Carousel component](../screenshots/components/carousel.png)](carousel.md)
+
+**[Carousel](carousel.md)**
+
+Native slide selection.
+
+</div>
+
 </div>
 
 ## Overlays
 
-<div class="component-grid">
-<a class="component-card" href="tooltip/">
-<img src="../screenshots/components/tooltip.png" alt="Native Tooltip component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tooltip</strong><span>Native tooltip attached to composed content.</span></span>
-</a>
-<a class="component-card" href="popover/">
-<img src="../screenshots/components/popover.png" alt="Native Popover component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Popover</strong><span>Native popup with Python-composed contents.</span></span>
-</a>
-<a class="component-card" href="hover-card/">
-<img src="../screenshots/components/hover-card.png" alt="Native HoverCard component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>HoverCard</strong><span>Native hover preview content.</span></span>
-</a>
-<a class="component-card" href="dialog/">
-<img src="../screenshots/components/dialog.png" alt="Native Dialog component" loading="lazy" width="640" height="440">
-<span class="component-card-body"><strong>Dialog</strong><span>A native dialog containing Python controls.</span></span>
-</a>
-<a class="component-card" href="sheet/">
-<img src="../screenshots/components/sheet.png" alt="Native Sheet component" loading="lazy" width="640" height="440">
-<span class="component-card-body"><strong>Sheet</strong><span>A native side panel containing Python controls.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Tooltip component](../screenshots/components/tooltip.png)](tooltip.md)
+
+**[Tooltip](tooltip.md)**
+
+Native tooltip attached to composed content.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Popover component](../screenshots/components/popover.png)](popover.md)
+
+**[Popover](popover.md)**
+
+Native popup with Python-composed contents.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native HoverCard component](../screenshots/components/hover-card.png)](hover-card.md)
+
+**[HoverCard](hover-card.md)**
+
+Native hover preview content.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Dialog component](../screenshots/components/dialog.png)](dialog.md)
+
+**[Dialog](dialog.md)**
+
+A native dialog containing Python controls.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Sheet component](../screenshots/components/sheet.png)](sheet.md)
+
+**[Sheet](sheet.md)**
+
+A native side panel containing Python controls.
+
+</div>
+
 </div>

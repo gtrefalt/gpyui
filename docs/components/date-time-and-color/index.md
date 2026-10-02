@@ -2,21 +2,45 @@
 
 Native date, time and color controls composed in Python.
 
-<div class="component-grid">
-<a class="component-card" href="../calendar/">
-<img src="../../screenshots/components/calendar.png" alt="Native Calendar component" loading="lazy" width="640" height="480">
-<span class="component-card-body"><strong>Calendar</strong><span>Retained native calendar selection.</span></span>
-</a>
-<a class="component-card" href="../date-picker/">
-<img src="../../screenshots/components/date-picker.png" alt="Native DatePicker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>DatePicker</strong><span>Native single-date picker.</span></span>
-</a>
-<a class="component-card" href="../time-field/">
-<img src="../../screenshots/components/time-field.png" alt="Native TimeField component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>TimeField</strong><span>Native local time editing.</span></span>
-</a>
-<a class="component-card" href="../color-picker/">
-<img src="../../screenshots/components/color-picker.png" alt="Native ColorPicker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>ColorPicker</strong><span>Native RGB/RGBA color selection.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Calendar component](../../screenshots/components/calendar.png)](../calendar.md)
+
+**[Calendar](../calendar.md)**
+
+Retained native calendar selection.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native DatePicker component](../../screenshots/components/date-picker.png)](../date-picker.md)
+
+**[DatePicker](../date-picker.md)**
+
+Native single-date picker.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native TimeField component](../../screenshots/components/time-field.png)](../time-field.md)
+
+**[TimeField](../time-field.md)**
+
+Native local time editing.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native ColorPicker component](../../screenshots/components/color-picker.png)](../color-picker.md)
+
+**[ColorPicker](../color-picker.md)**
+
+Native RGB/RGBA color selection.
+
+</div>
+
 </div>

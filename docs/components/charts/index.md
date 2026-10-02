@@ -2,25 +2,55 @@
 
 Native charts controls composed in Python.
 
-<div class="component-grid">
-<a class="component-card" href="../line-chart/">
-<img src="../../screenshots/components/line-chart.png" alt="Native LineChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>LineChart</strong><span>Native line plot with data-following domain.</span></span>
-</a>
-<a class="component-card" href="../area-chart/">
-<img src="../../screenshots/components/area-chart.png" alt="Native AreaChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>AreaChart</strong><span>A native filled area plot.</span></span>
-</a>
-<a class="component-card" href="../bar-chart/">
-<img src="../../screenshots/components/bar-chart.png" alt="Native BarChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>BarChart</strong><span>A native bar plot.</span></span>
-</a>
-<a class="component-card" href="../pie-chart/">
-<img src="../../screenshots/components/pie-chart.png" alt="Native PieChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>PieChart</strong><span>A native pie plot with nonnegative values.</span></span>
-</a>
-<a class="component-card" href="../candlestick-chart/">
-<img src="../../screenshots/components/candlestick-chart.png" alt="Native CandlestickChart component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>CandlestickChart</strong><span>Native OHLC candles.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native LineChart component](../../screenshots/components/line-chart.png)](../line-chart.md)
+
+**[LineChart](../line-chart.md)**
+
+Native line plot with data-following domain.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native AreaChart component](../../screenshots/components/area-chart.png)](../area-chart.md)
+
+**[AreaChart](../area-chart.md)**
+
+A native filled area plot.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native BarChart component](../../screenshots/components/bar-chart.png)](../bar-chart.md)
+
+**[BarChart](../bar-chart.md)**
+
+A native bar plot.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native PieChart component](../../screenshots/components/pie-chart.png)](../pie-chart.md)
+
+**[PieChart](../pie-chart.md)**
+
+A native pie plot with nonnegative values.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native CandlestickChart component](../../screenshots/components/candlestick-chart.png)](../candlestick-chart.md)
+
+**[CandlestickChart](../candlestick-chart.md)**
+
+Native OHLC candles.
+
+</div>
+
 </div>

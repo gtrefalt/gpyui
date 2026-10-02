@@ -5,7 +5,6 @@ Use --check in CI to detect stale references or missing native screenshots.
 """
 
 import argparse
-import html
 import inspect
 import json
 import re
@@ -67,12 +66,12 @@ def source_link(cls):
 
 def card(name, prefix):
     sample = SAMPLES[name]
+    target = f"{prefix}{slug(name)}.md"
+    image = f"{prefix}../screenshots/components/{slug(name)}.png"
     return (
-        f'<a class="component-card" href="{prefix}{slug(name)}/">\n'
-        f'<img src="{prefix}../screenshots/components/{slug(name)}.png" '
-        f'alt="Native {name} component" loading="lazy" width="640" height="{sample.height}">\n'
-        f'<span class="component-card-body"><strong>{name}</strong>'
-        f"<span>{html.escape(sample.description)}</span></span>\n</a>"
+        f'<div class="component-card" markdown>\n\n'
+        f"[![Native {name} component]({image})]({target})\n\n"
+        f"**[{name}]({target})**\n\n{sample.description}\n\n</div>\n"
     )
 
 
@@ -202,7 +201,7 @@ def generated_files():
         lines += [
             f"## {group}",
             "",
-            '<div class="component-grid">',
+            '<div class="component-grid" markdown>',
             *[card(name, "") for name in members],
             "</div>",
             "",
@@ -212,7 +211,7 @@ def generated_files():
             "",
             f"Native {group.lower()} controls composed in Python.",
             "",
-            '<div class="component-grid">',
+            '<div class="component-grid" markdown>',
             *[card(name, "../") for name in members],
             "</div>",
             "",

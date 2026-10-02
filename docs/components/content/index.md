@@ -2,41 +2,95 @@
 
 Native content controls composed in Python.
 
-<div class="component-grid">
-<a class="component-card" href="../tag/">
-<img src="../../screenshots/components/tag.png" alt="Native Tag component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Tag</strong><span>Native text tags with semantic variants.</span></span>
-</a>
-<a class="component-card" href="../badge/">
-<img src="../../screenshots/components/badge.png" alt="Native Badge component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Badge</strong><span>Native count badges.</span></span>
-</a>
-<a class="component-card" href="../avatar/">
-<img src="../../screenshots/components/avatar.png" alt="Native Avatar component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Avatar</strong><span>Native initials generated from a name.</span></span>
-</a>
-<a class="component-card" href="../markdown/">
-<img src="../../screenshots/components/markdown.png" alt="Native Markdown component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Markdown</strong><span>Native rich text from Markdown.</span></span>
-</a>
-<a class="component-card" href="../html/">
-<img src="../../screenshots/components/html.png" alt="Native Html component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Html</strong><span>Native rich text from supported HTML.</span></span>
-</a>
-<a class="component-card" href="../bubble/">
-<img src="../../screenshots/components/bubble.png" alt="Native Bubble component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Bubble</strong><span>Native bubble content composed in Python.</span></span>
-</a>
-<a class="component-card" href="../message/">
-<img src="../../screenshots/components/message.png" alt="Native Message component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Message</strong><span>Native authored message presentation.</span></span>
-</a>
-<a class="component-card" href="../marker/">
-<img src="../../screenshots/components/marker.png" alt="Native Marker component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Marker</strong><span>Native message/date marker.</span></span>
-</a>
-<a class="component-card" href="../attachment/">
-<img src="../../screenshots/components/attachment.png" alt="Native Attachment component" loading="lazy" width="640" height="340">
-<span class="component-card-body"><strong>Attachment</strong><span>Native attachment presentation.</span></span>
-</a>
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Tag component](../../screenshots/components/tag.png)](../tag.md)
+
+**[Tag](../tag.md)**
+
+Native text tags with semantic variants.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Badge component](../../screenshots/components/badge.png)](../badge.md)
+
+**[Badge](../badge.md)**
+
+Native count badges.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Avatar component](../../screenshots/components/avatar.png)](../avatar.md)
+
+**[Avatar](../avatar.md)**
+
+Native initials generated from a name.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Markdown component](../../screenshots/components/markdown.png)](../markdown.md)
+
+**[Markdown](../markdown.md)**
+
+Native rich text from Markdown.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Html component](../../screenshots/components/html.png)](../html.md)
+
+**[Html](../html.md)**
+
+Native rich text from supported HTML.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Bubble component](../../screenshots/components/bubble.png)](../bubble.md)
+
+**[Bubble](../bubble.md)**
+
+Native bubble content composed in Python.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Message component](../../screenshots/components/message.png)](../message.md)
+
+**[Message](../message.md)**
+
+Native authored message presentation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Marker component](../../screenshots/components/marker.png)](../marker.md)
+
+**[Marker](../marker.md)**
+
+Native message/date marker.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Attachment component](../../screenshots/components/attachment.png)](../attachment.md)
+
+**[Attachment](../attachment.md)**
+
+Native attachment presentation.
+
+</div>
+
 </div>
