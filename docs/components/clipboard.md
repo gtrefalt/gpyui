@@ -4,7 +4,7 @@ Copy a string using the native clipboard.
 
 ![Native Clipboard preview](../screenshots/components/clipboard.png)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

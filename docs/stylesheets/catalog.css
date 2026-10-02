@@ -23,7 +23,7 @@
   height: auto;
   aspect-ratio: 640 / 340;
   object-fit: contain;
-  background: #090909;
+  background: var(--md-default-bg-color);
 }
 .md-typeset .component-card p {
   margin: 0;

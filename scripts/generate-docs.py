@@ -99,7 +99,7 @@ def component_page(name):
         "",
         f"![Native {name} preview](../screenshots/components/{slug(name)}.png)",
         "",
-        "A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.",
+        "A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.",
         "",
         "## Runnable example",
         "",

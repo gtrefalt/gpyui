@@ -53,7 +53,9 @@ scripts/native-display.sh .venv/bin/python scripts/capture-components.py Button 
 
 The helper uses a free Xvfb display when no display is present. Each specimen
 starts in a fresh native process, opens hover/popover/dialog states where relevant,
-captures the actual window, and verifies shutdown/error state. PNGs go to
+captures the actual window in the native light theme, and verifies shutdown/error
+state. The capture command explicitly selects light appearance so all catalog
+previews match the site's default. PNGs go to
 `docs/screenshots/components/`; native snapshots and logs go to `artifacts/`.
 No native previews are synthesized as HTML or drawn in Python.
 

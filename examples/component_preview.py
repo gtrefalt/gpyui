@@ -11,7 +11,7 @@ from component_catalog import SAMPLES, specimen
 import gpyui as ui
 
 
-def create_preview(name, theme="dark", *, state_dir=None):
+def create_preview(name, theme="light", *, state_dir=None):
     control, roots = specimen(name)
 
     def write(name, data):
@@ -56,7 +56,7 @@ def create_preview(name, theme="dark", *, state_dir=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("component", choices=SAMPLES)
-    parser.add_argument("--theme", choices=("light", "dark"), default="dark")
+    parser.add_argument("--theme", choices=("light", "dark"), default="light")
     parser.add_argument("--state-dir", type=Path)
     args = parser.parse_args()
     app, write = create_preview(args.component, args.theme, state_dir=args.state_dir)

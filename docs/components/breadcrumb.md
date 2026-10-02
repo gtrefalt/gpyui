@@ -4,7 +4,7 @@ Native breadcrumb selection.
 
 ![Native Breadcrumb preview](../screenshots/components/breadcrumb.png)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 
