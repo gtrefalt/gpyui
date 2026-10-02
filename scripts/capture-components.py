@@ -61,12 +61,13 @@ def capture(name):
         output.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["import", "-window", window, str(output)], check=True, timeout=10)
         subprocess.run(["xdotool", "key", "Escape"], check=True)
-        from Xlib import X, display, protocol
+        from Xlib import X, display
+        from Xlib.protocol.event import ClientMessage
 
         connection = display.Display()
         resource = connection.create_resource_object("window", int(window))
         resource.send_event(
-            protocol.event.ClientMessage(
+            ClientMessage(
                 window=resource,
                 client_type=connection.intern_atom("WM_PROTOCOLS"),
                 data=(32, [connection.intern_atom("WM_DELETE_WINDOW"), X.CurrentTime, 0, 0, 0]),

@@ -8,9 +8,13 @@ import math
 import threading
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 from .controls import Column, Control, Event, Handler, _containers
+
+if TYPE_CHECKING:
+    from .controls import TextInput
+    from .widgets import KitControl
 
 
 class ApplicationClosedError(RuntimeError):
@@ -233,10 +237,13 @@ class Application:
                             future.set_result({int(k): v for k, v in event["nodes"].items()})
                     elif name in {"click", "change", "release", "resize"}:
                         control = self._controls[event["id"]]
+                        # Rust includes values only for native input/Kit controls.
                         for control_id, value in event.get("values", {}).items():
-                            self._controls[int(control_id)]._receive_native(value)
+                            cast("TextInput | KitControl", self._controls[int(control_id)])._receive_native(
+                                value
+                            )
                         if name == "change":
-                            control._receive_native(event["value"])
+                            cast("TextInput | KitControl", control)._receive_native(event["value"])
                         if handler := control._handlers.get(name):
                             self._dispatch(handler, Event(control, name, event.get("value")))
                             # Begin this callback with its activation snapshot before

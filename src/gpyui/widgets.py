@@ -10,7 +10,7 @@ import copy
 import math
 from collections.abc import Callable, Iterable
 from datetime import date, time
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Self
 
 from .controls import Column, Control, Handler, _containers
 from .state import State
@@ -124,9 +124,10 @@ def validate_style(properties: dict[str, Any]) -> dict[str, Any]:
     for key, value in properties.items():
         if key not in validators:
             raise ValueError(f"unsupported style property: {key}")
-        result[key] = validators[key](value)
-        if isinstance(result[key], float) and result[key] < 0:
+        validated = validators[key](value)
+        if isinstance(validated, float) and validated < 0:
             raise ValueError(f"{key} must be nonnegative")
+        result[key] = validated
     return result
 
 
@@ -200,7 +201,7 @@ class KitControl(Column):
     def _validate(self, props: dict[str, Any]) -> None:
         pass
 
-    def add(self, *controls: Control) -> KitControl:
+    def add(self, *controls: Control) -> Self:
         if controls and not self.container:
             raise TypeError(f"{type(self).__name__} does not accept children")
         super().add(*controls)
@@ -229,7 +230,7 @@ class KitControl(Column):
         if name == "value" and self._state is not None:
             self._state.value = value
 
-    def bind_value(self, state: State[Any]) -> KitControl:
+    def bind_value(self, state: State[Any]) -> Self:
         if "value" not in self.fields or "change" not in self.events:
             raise TypeError("this control has no bindable value")
         self.unbind()
