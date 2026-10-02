@@ -202,13 +202,20 @@ Validated: native X11/Vulkan rendering, real Kit controls, typing and undo,
 pointer and keyboard activation, foreground updates from Python, queued callbacks,
 asyncio waits, explicit state binding, failure handling and clean Python shutdown.
 
-Not validated: macOS, Windows, Wayland, hardware GPUs, high-DPI/multiple monitors,
-AT-SPI interaction on a full desktop, IME/composition, wheel portability,
+The measurements above come from Linux/X11. Subsequent release CI validated
+installed wheels on Linux, macOS and Windows on x64 and ARM64, including native
+window/state/lifecycle smoke tests on macOS and Windows. See the
+[release matrix](releases.md) for exact Python versions and coverage.
+
+Still outside this evidence: Wayland, hardware GPUs, high-DPI/multiple monitors,
+AT-SPI interaction on a full desktop, IME/composition, manylinux portability,
 multiwindow, dynamic topology or high-volume performance. Coordinates are used
 as an Xvfb fallback because this environment lacks a desktop accessibility bus;
 screenshots substantiate rendered facts and snapshots substantiate native state.
 
 The initial maturin development install warned that patchelf was unavailable.
 The installed extension's runtime dependencies resolve in this workspace, but
-that is not an auditwheel or portable-wheel certification. No wheel was published.
-Package-name availability and the project's distribution license remain undecided.
+that is not an auditwheel or portable-wheel certification. Release CI now audits
+Linux dependencies; the Linux wheels retain system libraries and Linux tags.
+Version `0.1.0` is published on PyPI with macOS/Windows wheels and a source archive;
+Linux wheels are available on GitHub Releases. The project is licensed under MIT.

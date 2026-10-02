@@ -2,8 +2,8 @@
 
 The user's goal is a reusable Python UI toolkit exposing Longbridge's GPUI Kit
 components, enabling complete native desktop apps written entirely in Python,
-comparable in use to Tkinter and other Python UI libraries. The working name is
-gpyui; package-name availability has not been checked.
+comparable in use to Tkinter and other Python UI libraries. The package is
+published on PyPI as gpyui and licensed under MIT.
 
 Keep Rust behind the Python API. Rust owns native windows, rendering, component
 state and text editing; Python authors own composition and application behavior.

@@ -90,9 +90,11 @@ PyPI source archive instead requires Rust and the native build prerequisites.
 1. Create a [PyPI account](https://pypi.org/account/register/) and enable
    two-factor authentication. Connecting GitHub for account login does **not**
    configure a Trusted Publisher.
-2. The wheels include third-party license notices. The project's own license
-   remains undecided; its owner should choose a license and add the license file
-   and metadata. PyPI does not require a license field for uploading.
+2. gpyui uses the [MIT License](https://github.com/gtrefalt/gpyui/blob/main/LICENSE).
+   The license file and distribution metadata are configured for subsequent
+   builds. The already published `0.1.0` distributions cannot be replaced;
+   they predate this metadata update. Third-party notices are included in both
+   that release and subsequent builds.
 3. In PyPI's [publishing settings](https://pypi.org/manage/account/publishing/),
    add a pending Trusted Publisher for a new `gpyui` project, or a Trusted
    Publisher on an existing project you own:

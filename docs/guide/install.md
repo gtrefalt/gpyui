@@ -1,11 +1,40 @@
 # Install and first app
 
-gpyui currently builds from the repository. Use Python **3.12+**,
-[uv](https://docs.astral.sh/uv/) and the pinned Rust toolchain from
-`rust-toolchain.toml`. A working native display/GPU stack is required to open a
-window. Linux/X11 is the validated target.
+Use **CPython 3.12+** and a working native display/graphics stack. Prebuilt wheels
+are available for Linux, macOS and Windows on x64 and ARM64. A wheel installation
+does not need Rust. See the [release matrix](../releases.md) for platform versions,
+runtime libraries and test coverage.
+
+## Install a wheel
+
+On macOS 12+ and Windows, install from [PyPI](https://pypi.org/project/gpyui/):
+
+```bash
+pip install gpyui
+```
+
+With [uv](https://docs.astral.sh/uv/), use `uv pip install gpyui` in your virtual
+environment. Windows ARM64 is tested with Python 3.13+.
+
+On Linux, download the wheel matching your architecture from
+[GitHub Releases](https://github.com/gtrefalt/gpyui/releases). The filenames end
+in `linux_x86_64.whl` or `linux_aarch64.whl`. Install that downloaded file with
+`pip install path/to/wheel.whl` or `uv pip install path/to/wheel.whl`.
+PyPI currently provides a source archive for Linux; installing it compiles Rust.
+
+For Debian/Ubuntu, install the desktop runtime libraries before opening a window:
+
+```bash
+sudo apt-get install libxcb1 libxkbcommon0 libxkbcommon-x11-0 \
+  libfontconfig1 libfreetype6 libvulkan1 mesa-vulkan-drivers fonts-dejavu-core
+```
 
 ## Build from source
+
+Install [uv](https://docs.astral.sh/uv/) and
+[Rust through rustup](https://rustup.rs/); the checkout pins the Rust toolchain
+in `rust-toolchain.toml`. On macOS, install Xcode Command Line Tools. On Windows,
+install Visual Studio Build Tools with the C++ desktop workload and Windows SDK.
 
 On Debian-based Linux, install the native build prerequisites:
 
@@ -20,11 +49,12 @@ uv sync --locked
 ```
 
 The first build compiles the pinned GPUI Kit dependencies and can take several
-minutes. macOS/Windows, Wayland and portable wheels have not been validated.
+minutes. Linux/X11 has native interaction tests; macOS and Windows wheels have
+native window/state/lifecycle smoke tests. Wayland is not yet validated.
 
 ## First window
 
-Create `hello.py` in the checkout:
+Create `hello.py` in your project:
 
 ```python
 from gpyui import Application, Button, Column, Label, TextInput
@@ -43,7 +73,7 @@ app.run()
 ```
 
 ```bash
-uv run python hello.py
+python hello.py
 ```
 
 `run()` blocks the main thread until the native window closes. The native button
@@ -56,7 +86,7 @@ submits an update to Rust; Python never renders the label.
 uv run python examples/hello.py
 uv run python examples/async_binding.py
 uv run python examples/gallery.py
-uv run python examples/workspace.py --theme dark
+uv run python examples/workspace.py --theme light
 uv run python examples/component_preview.py Checkbox
 ```
 

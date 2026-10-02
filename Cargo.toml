@@ -2,6 +2,8 @@
 name = "gpyui"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+repository = "https://github.com/gtrefalt/gpyui"
 
 [lib]
 name = "_core"
