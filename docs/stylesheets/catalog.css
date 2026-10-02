@@ -1,0 +1,39 @@
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+.component-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  color: var(--md-default-fg-color) !important;
+  text-decoration: none !important;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.component-card:hover, .component-card:focus-visible {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 3px 14px var(--md-default-fg-color--lightest);
+}
+.component-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 640 / 340;
+  object-fit: contain;
+  background: #090909;
+}
+.component-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  padding: .9rem;
+  font-size: .75rem;
+}
+.component-card-body strong { font-size: .9rem; }
+.component-card-body span { color: var(--md-default-fg-color--light); }
+.md-typeset img { border-radius: 8px; }
+.md-typeset .component-card img { border-radius: 0; }
+.md-typeset table:not([class]) td { vertical-align: top; }

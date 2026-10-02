@@ -189,7 +189,7 @@ are applied to the layout node itself, so gaps/alignment affect its children.
 Leaf styles wrap the actual Kit component. Explicit sizes do not shrink, while
 flexible panes can shrink within the window. The theme is chosen at startup.
 
-The [workspace](../examples/workspace.py) and [gallery](../examples/gallery.py)
+The [workspace](https://github.com/gtrefalt/gpyui/blob/main/examples/workspace.py) and [gallery](https://github.com/gtrefalt/gpyui/blob/main/examples/gallery.py)
 are public Python API examples, not Rust-specific demos. The workspace simplifies
 the reference trading terminal to a watchlist, one chart, a market tape, an order
 form and a paper-order table. A seeded asyncio stream batches simulated quotes

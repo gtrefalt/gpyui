@@ -3,6 +3,35 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Zensical documentation
+
+Zensical 0.0.67 and Ruff 0.16.10 are pinned in the docs dependency group and
+`uv.lock`. A separate docs-only environment successfully generated/verified all
+71 references and built in strict/clean mode without importing the native
+extension. The site contains 98 Markdown pages and 99 generated HTML pages
+including the 404 page. The built-site check verifies local links, assets and
+anchors, including card links and the GitHub Pages subpath.
+
+Each of the 71 controls was mounted in a fresh real native process under
+Xvfb/Lavapipe, captured to its individual PNG, and closed without callback errors
+or a remaining Python asyncio worker. Native hover/popover/dialog/sheet previews
+were opened before capture. These captures prove basic mounting/rendering, not
+exhaustive interaction coverage for all builder options.
+
+All **80 complete Python examples** in the documentation, including the 71
+component examples, constructed their real control trees and were accepted by
+the Rust Bridge schema. The bridge was used for validation; those example-code
+checks did not start another native window or pretend to test rendering.
+
+Headless Chromium checks confirmed that the 71 catalog images load, the component
+page and search results render, and the mobile catalog has no horizontal overflow.
+Desktop/mobile captures are kept locally under `artifacts/docs/`. The existing
+Python/bridge suite still reports **110 passed, 11 skipped**; Ruff lint/format pass.
+
+The workflow builds an HTML preview artifact on PRs/main without Rust/native
+packages. Optional Pages deployment requires the repository Pages source and
+`PUBLISH_DOCS` variable described in [documentation development](contributing-docs.md).
+
 ## Streaming example and GIF
 
 The Python workspace now runs a seeded local quote/trade stream on the existing
@@ -20,7 +49,7 @@ paper fills and shutdown with no asyncio worker/executor threads left running.
 The original ten native scenarios still pass. After limiting the visible tape
 to four complete rows, the targeted streaming scenario passed again in 2.99s.
 
-[`scripts/record-workspace.py`](../scripts/record-workspace.py) records the actual
+[`scripts/record-workspace.py`](https://github.com/gtrefalt/gpyui/blob/main/scripts/record-workspace.py) records the actual
 1180×790 X11 window through FFmpeg, with real mouse/keyboard Buy/Sell activation
 and a switch to AAPL. Native snapshots verify both fills and the changed chart;
 shutdown reports no errors and only MainThread. The resulting
@@ -162,8 +191,8 @@ race. The Xlib close request now uses a server round-trip before disconnecting.
 The library does not substitute a fake window when native startup fails.
 
 Actual captured native windows were visually inspected. See
-[`artifacts/sync.png`](../artifacts/sync.png) and
-[`artifacts/async.png`](../artifacts/async.png) for the rendered outcome, and
+`artifacts/sync.png` and
+`artifacts/async.png` for the rendered outcome, and
 the corresponding JSON files for native state. Artifacts are local and
 gitignored; regenerate them with the native test script.
 
