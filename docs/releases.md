@@ -2,8 +2,14 @@
 
 The [Build wheels workflow](https://github.com/gtrefalt/gpyui/actions/workflows/release.yml)
 builds a Linux x86_64 wheel and source archive. The wheel uses Python's stable
-`abi3` interface starting at CPython 3.12. It is built and repaired in
-`manylinux_2_28`, targeting Linux systems with glibc 2.28 or newer.
+`abi3` interface starting at CPython 3.12. It is built in the `manylinux_2_28`
+container, targeting glibc 2.28 or newer, and tagged `linux_x86_64`.
+It uses the system's X11 libraries and does not claim manylinux portability.
+
+GPUI passes its XCB connection to the system graphics driver. Repairing this
+wheel with auditwheel bundles a separate XCB library, which caused a native
+crash inside Mesa during installed-wheel testing. Keeping the desktop libraries
+on the system avoids mixing their private connection structures.
 
 The workflow installs the resulting wheel into clean environments on Python
 3.12, 3.13 and 3.14. Each environment runs the Python/bridge tests and actual
@@ -14,6 +20,12 @@ wheel, not the source checkout.
 macOS, Windows, Linux ARM64 and musl/Alpine wheels are not included in this first
 build workflow. A functioning display, Vulkan driver and native font stack are
 still needed to run an application; an installed wheel does not require Rust.
+For Ubuntu/Debian, install the runtime packages before launching an app:
+
+```bash
+sudo apt-get install libxcb1 libxkbcommon0 libxkbcommon-x11-0 \
+  libfontconfig1 libfreetype6 libvulkan1 mesa-vulkan-drivers fonts-dejavu-core
+```
 
 ## Build and download
 
@@ -25,7 +37,7 @@ them. To install an extracted wheel:
 
 ```bash
 uv venv
-uv pip install path/to/gpyui-0.1.0-cp312-abi3-manylinux_2_28_x86_64.whl
+uv pip install path/to/gpyui-0.1.0-cp312-abi3-linux_x86_64.whl
 ```
 
 The exact filename is shown in the artifact. The workflow audits native

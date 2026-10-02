@@ -68,14 +68,17 @@ jobs:
         with:
           shared-key: manylinux-2-28-x86_64
           cache-on-failure: true
-      - name: Build and repair the abi3 wheel
+      - name: Build the abi3 wheel against system desktop libraries
         uses: PyO3/maturin-action@v1
         with:
           target: x86_64-unknown-linux-gnu
-          manylinux: "2_28"
+          # Mesa receives GPUI's XCB connection. Bundling a second libxcb causes
+          # native crashes when the system graphics driver uses that connection.
+          manylinux: "off"
+          container: quay.io/pypa/manylinux_2_28_x86_64:latest
           rust-toolchain: ${{ steps.versions.outputs.rust }}
           maturin-version: ${{ steps.versions.outputs.maturin }}
-          args: --release --locked --strip --sdist --auditwheel repair --out dist --interpreter /opt/python/cp312-cp312/bin/python
+          args: --release --locked --strip --sdist --auditwheel skip --out dist --interpreter /opt/python/cp312-cp312/bin/python
           before-script-linux: bash scripts/wheel-build-deps.sh
       - uses: astral-sh/setup-uv@v6
       - name: Check package metadata
@@ -88,7 +91,10 @@ jobs:
           wheels = list(Path('dist').glob('*.whl'))
           assert len(wheels) == 1, wheels
           assert '-cp312-abi3-' in wheels[0].name, wheels[0].name
-          assert 'manylinux_2_28_x86_64' in wheels[0].name, wheels[0].name
+          assert wheels[0].name.endswith('-linux_x86_64.whl'), wheels[0].name
+          from zipfile import ZipFile
+          with ZipFile(wheels[0]) as archive:
+              assert not any('/gpyui.libs/' in f'/{name}' for name in archive.namelist())
           assert len(list(Path('dist').glob('*.tar.gz'))) == 1
           PY
       - uses: actions/upload-artifact@v4
@@ -121,7 +127,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb xdotool imagemagick mesa-vulkan-drivers \
-            libvulkan1 libfontconfig1 libfreetype6 libxkbcommon-x11-0 fonts-dejavu-core
+            libvulkan1 libfontconfig1 libfreetype6 libxcb1 libxkbcommon0 \
+            libxkbcommon-x11-0 fonts-dejavu-core
       - name: Install the built wheel without rebuilding the project
         run: |
           uv venv .venv --python ${{ matrix.python }}
