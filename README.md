@@ -119,6 +119,12 @@ their getters return copies. See [the coverage and API guide](docs/component-cov
 
 ## Build and run
 
+The [Build wheels workflow](https://github.com/gtrefalt/gpyui/actions/workflows/release.yml)
+builds Linux x86_64 wheels and a source archive, tests the installed wheel on
+Python 3.12–3.14, and uploads downloadable artifacts. Optional PyPI Trusted
+Publishing runs from a matching version tag after explicit selection in a manual
+workflow run. See [wheels and release setup](docs/releases.md).
+
 Python 3.12+ and the pinned Rust toolchain are required. Native Linux builds need
 development packages for X11/XCB, xkbcommon, Wayland, fontconfig, FreeType and a
 Vulkan driver. Typical Debian packages:
@@ -237,5 +243,5 @@ NiceGUI/Flet comparison, design decisions and implementation plan,
 [docs/validation.md](docs/validation.md) for measured results and limits.
 
 Linux/X11 is the initial test target. macOS, Windows, Wayland, multiwindow,
-dynamic topology, large control sets and distributed wheels remain follow-on
+dynamic topology, large control sets and additional wheel platforms remain follow-on
 work. This prototype does not claim complete Kit API coverage or production readiness.

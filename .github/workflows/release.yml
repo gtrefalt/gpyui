@@ -1,0 +1,181 @@
+name: Build wheels
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/release.yml
+      - Cargo.toml
+      - Cargo.lock
+      - rust-toolchain.toml
+      - pyproject.toml
+      - src/**
+      - tests/**
+      - examples/**
+      - scripts/wheel-build-deps.sh
+      - scripts/test-native.sh
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to PyPI after all wheel tests pass (run from a matching version tag)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wheels-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  linux:
+    name: Linux x86_64 wheel and source distribution
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CARGO_BUILD_JOBS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read pinned build versions and validate release tag
+        id: versions
+        env:
+          PUBLISH: ${{ inputs.publish || false }}
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          project = tomllib.loads(Path('pyproject.toml').read_text())
+          version = project['project']['version']
+          ref = os.environ['GITHUB_REF']
+          if ref.startswith('refs/tags/') and ref != f'refs/tags/v{version}':
+              raise SystemExit(f'Tag must match the package version: v{version}')
+          if os.environ['PUBLISH'] == 'true' and ref != f'refs/tags/v{version}':
+              raise SystemExit(f'Publishing requires selecting the v{version} tag')
+          toolchain = tomllib.loads(Path('rust-toolchain.toml').read_text())['toolchain']['channel']
+          backend = next(req for req in project['build-system']['requires'] if req.startswith('maturin=='))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print(f'rust={toolchain}', file=output)
+              print(f'maturin={backend.split("==", 1)[1]}', file=output)
+          PY
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: manylinux-2-28-x86_64
+          cache-on-failure: true
+      - name: Build the abi3 wheel against system desktop libraries
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64-unknown-linux-gnu
+          # Mesa receives GPUI's XCB connection. Bundling a second libxcb causes
+          # native crashes when the system graphics driver uses that connection.
+          manylinux: "off"
+          container: quay.io/pypa/manylinux_2_28_x86_64:latest
+          rust-toolchain: ${{ steps.versions.outputs.rust }}
+          maturin-version: ${{ steps.versions.outputs.maturin }}
+          args: --release --locked --strip --sdist --auditwheel skip --out dist --interpreter /opt/python/cp312-cp312/bin/python
+          before-script-linux: bash scripts/wheel-build-deps.sh
+      - uses: astral-sh/setup-uv@v6
+      - name: Check package metadata
+        run: uvx --from twine==7.0.0 twine check --strict dist/*
+      - name: Audit Linux wheel compatibility
+        run: |
+          uvx --from auditwheel==6.8.2 auditwheel show dist/*.whl
+          python - <<'PY'
+          from pathlib import Path
+          wheels = list(Path('dist').glob('*.whl'))
+          assert len(wheels) == 1, wheels
+          assert '-cp312-abi3-' in wheels[0].name, wheels[0].name
+          assert wheels[0].name.endswith('-linux_x86_64.whl'), wheels[0].name
+          from zipfile import ZipFile
+          with ZipFile(wheels[0]) as archive:
+              assert not any('/gpyui.libs/' in f'/{name}' for name in archive.namelist())
+          assert len(list(Path('dist').glob('*.tar.gz'))) == 1
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gpyui-distributions
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+
+  test:
+    name: Installed wheel / Python ${{ matrix.python }}
+    needs: linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/download-artifact@v4
+        with:
+          name: gpyui-distributions
+          path: dist
+      - name: Install native runtime and test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xdotool imagemagick mesa-vulkan-drivers \
+            libvulkan1 libfontconfig1 libfreetype6 libxcb1 libxkbcommon0 \
+            libxkbcommon-x11-0 fonts-dejavu-core
+      - name: Install the built wheel without rebuilding the project
+        run: |
+          uv venv .venv --python ${{ matrix.python }}
+          uv pip install --python .venv/bin/python dist/*.whl 'pytest>=8,<10' 'python-xlib>=0.33,<1'
+          .venv/bin/python - <<'PY'
+          import sys
+          from pathlib import Path
+          import gpyui
+          import gpyui._core
+          for module in (gpyui, gpyui._core):
+              path = Path(module.__file__).resolve()
+              assert path.is_relative_to(Path(sys.prefix).resolve()), path
+              print(f'Testing installed wheel: {path}')
+          PY
+      - name: Run Python and bridge tests
+        run: .venv/bin/python -m pytest -q
+      - name: Select the software Vulkan driver
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          drivers = list(Path('/usr/share/vulkan/icd.d').glob('lvp*.json'))
+          assert len(drivers) == 1, drivers
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              print(f'VK_DRIVER_FILES={drivers[0]}', file=output)
+          PY
+      - name: Run actual native-window tests from the installed wheel
+        run: scripts/test-native.sh
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: native-test-failure-${{ matrix.python }}
+          path: artifacts/
+          retention-days: 7
+
+  publish:
+    name: Publish tested distributions to PyPI
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    needs: [linux, test]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: gpyui-distributions
+          path: dist
+      - uses: astral-sh/setup-uv@v6
+      - run: uv publish --trusted-publishing always

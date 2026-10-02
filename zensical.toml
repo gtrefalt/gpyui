@@ -142,6 +142,7 @@ nav = [
     { "Architecture and upstream" = "architecture.md" },
     { "Validation" = "validation.md" },
     { "Documentation development" = "contributing-docs.md" },
+    { "Wheels and PyPI releases" = "releases.md" },
   ] },
 ]
 
