@@ -185,13 +185,41 @@ uv run python examples/hello.py  # requires an actual display
 
 ## Validation
 
+The [Justfile](justfile) provides development commands, and
+[Lefthook](lefthook.yml) runs Ruff lint/format checks and ty on commit, then all
+Python checks before push. Tool versions are pinned in `uv.lock`. Set up once:
+
+```bash
+uv tool install rust-just==1.58.0
+just hooks
+```
+
+`just hooks` installs tools into `.venv-tools` and installs the Git hooks. The
+checks do not build the native extension or replace the native `.venv`:
+
+```bash
+just check          # Ruff lint, formatting and ty across src/examples/scripts/tests
+just format         # safe Ruff fixes and formatting
+just typecheck      # ty only
+just test           # Python and Rust bridge tests; native build prerequisites needed
+just test-native    # actual native-window interaction tests
+just rust-check     # cargo fmt and clippy
+just docs-check     # generated references, strict docs build and link checks
+just --list         # all available commands
+```
+
+Ruff checks staged Python files before commit. ty checks the entire Python tree
+when Python code or project configuration changes. Hooks report failures without
+modifying or restaging files. CI runs `just check` on every PR and main-branch push
+using a tools-only environment.
+
+Equivalent direct commands for native verification:
+
 ```bash
 uv run pytest -q
 cargo check --locked
 cargo clippy --locked -- -D warnings
 cargo fmt --check
-uv run ruff check src/gpyui examples tests
-uv run ruff format --check src/gpyui examples tests
 ```
 
 For actual native-window interaction tests, install Xvfb, xdotool and optionally

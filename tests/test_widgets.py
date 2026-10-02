@@ -33,7 +33,7 @@ def test_boolean_binding_does_not_echo_native_interaction():
     state = State(False)
     check = Checkbox("Enabled").bind_value(state)
     messages = []
-    check._app = type(
+    check._app = type(  # ty: ignore[invalid-assignment] -- minimal queueing test double
         "Mounted", (), {"_check_mutation": lambda _: None, "_queue": lambda _, *args: messages.append(args)}
     )()
     check._receive_native(True)

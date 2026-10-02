@@ -15,5 +15,6 @@ target/
 .ruff_cache/
 artifacts/
 .venv-docs/
+.venv-tools/
 site/
 .cache/

@@ -15,7 +15,9 @@ def test_explicit_and_context_composition():
             Button("Greet")
     assert app.children == (contextual,)
     assert [type(c) for c in explicit.children] == [type(c) for c in contextual.children]
-    assert explicit.children[1].value == contextual.children[1].value == "Ada"
+    explicit_input, contextual_input = explicit.children[1], contextual.children[1]
+    assert isinstance(explicit_input, TextInput) and isinstance(contextual_input, TextInput)
+    assert explicit_input.value == contextual_input.value == "Ada"
     assert len({c.id for c in (*explicit.children, *contextual.children)}) == 6
 
 
@@ -93,10 +95,10 @@ def test_state_equality_and_unsubscribe():
 @pytest.mark.parametrize(
     "construct",
     [
-        lambda: Label(1),
-        lambda: TextInput(placeholder=1),
-        lambda: Button("Go", disabled=1),
-        lambda: Button("Go", on_click=1),
+        lambda: Label(1),  # ty: ignore[invalid-argument-type] -- exercise runtime validation
+        lambda: TextInput(placeholder=1),  # ty: ignore[invalid-argument-type]
+        lambda: Button("Go", disabled=1),  # ty: ignore[invalid-argument-type]
+        lambda: Button("Go", on_click=1),  # ty: ignore[invalid-argument-type]
     ],
 )
 def test_invalid_control_properties_fail_early(construct):
@@ -114,7 +116,7 @@ def test_failed_handler_registration_does_not_attach_a_control():
         with pytest.raises(TypeError):
             Button("Go", on_click=lambda a, b: None)
         with pytest.raises(TypeError):
-            TextInput(on_change=42)
+            TextInput(on_change=42)  # ty: ignore[invalid-argument-type] -- invalid callback test
     assert app.children == ()
 
 

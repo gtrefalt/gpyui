@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import random
 from datetime import datetime, timedelta
+from typing import cast
 
 QUOTES = [
     ["NVDA", "192.60", "+0.82%"],
@@ -66,6 +67,6 @@ class SimulatedMarket:
     def series(self, symbol: str, period: int = 0) -> list[list[str | float]]:
         price = self.prices[symbol]
         return [
-            [stamp, round(price + (value - price) * (1 + period * 0.3), 2)]
+            [stamp, round(price + (cast(float, value) - price) * (1 + period * 0.3), 2)]
             for stamp, value in self.histories[symbol]
         ]

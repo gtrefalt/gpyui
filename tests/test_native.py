@@ -41,11 +41,12 @@ def xdo(*args):
 def close_window(window):
     # Send WM_DELETE_WINDOW, the same close request issued by a window manager.
     # xdotool windowclose destroys the X resource directly, so use python Xlib.
-    from Xlib import X, display, protocol
+    from Xlib import X, display
+    from Xlib.protocol.event import ClientMessage
 
     connection = display.Display()
     resource = connection.create_resource_object("window", int(window))
-    event = protocol.event.ClientMessage(
+    event = ClientMessage(
         window=resource,
         client_type=connection.intern_atom("WM_PROTOCOLS"),
         data=(32, [connection.intern_atom("WM_DELETE_WINDOW"), X.CurrentTime, 0, 0, 0]),

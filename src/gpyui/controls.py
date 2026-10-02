@@ -5,7 +5,7 @@ import itertools
 from collections.abc import Callable, Iterable
 from contextvars import ContextVar
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 from .state import State
 
@@ -73,7 +73,7 @@ class Control:
     def _spec(self) -> dict[str, Any]:
         return {"id": self.id, "type": self._type, **self._properties, "style": self._style}
 
-    def style(self, **properties: Any) -> Control:
+    def style(self, **properties: Any) -> Self:
         """Set pixel layout and semantic theme styles; return this control."""
         from .widgets import validate_style
 
@@ -109,7 +109,7 @@ class Column(Control):
     def children(self) -> tuple[Control, ...]:
         return tuple(self._children)
 
-    def add(self, *controls: Control) -> Column:
+    def add(self, *controls: Control) -> Self:
         if self._app:
             raise RuntimeError("the mounted tree is fixed for this milestone")
         for control in controls:
@@ -126,7 +126,7 @@ class Column(Control):
             self._children.append(control)
         return self
 
-    def __enter__(self) -> Column:
+    def __enter__(self) -> Self:
         _containers.set((*_containers.get(), self))
         return self
 
@@ -158,7 +158,7 @@ class Label(Control):
     def text(self, value: str) -> None:
         self._set("text", _text(value))
 
-    def bind_text(self, state: State[Any], transform: Callable[[Any], str] = str) -> Label:
+    def bind_text(self, state: State[Any], transform: Callable[[Any], str] = str) -> Self:
         self.text = transform(state.value)
         self._bindings.append(state.subscribe(lambda value: setattr(self, "text", transform(value))))
         return self
@@ -198,7 +198,7 @@ class TextInput(Control):
     def placeholder(self, value: str) -> None:
         self._set("placeholder", _text(value))
 
-    def bind_value(self, state: State[str]) -> TextInput:
+    def bind_value(self, state: State[str]) -> Self:
         self.unbind()
         self._state = state
         self.value = state.value
