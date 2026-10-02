@@ -2,9 +2,9 @@
 
 Native activation invokes Python callbacks.
 
-![Native Button preview](../screenshots/components/button.png)
+![Native Button preview](../screenshots/components/button.png?v=48327355dc73)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

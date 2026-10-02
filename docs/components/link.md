@@ -2,9 +2,9 @@
 
 A native link with optional Python activation.
 
-![Native Link preview](../screenshots/components/link.png)
+![Native Link preview](../screenshots/components/link.png?v=a5d439863218)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

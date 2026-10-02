@@ -2,9 +2,9 @@
 
 Native disclosure among labeled items.
 
-![Native Accordion preview](../screenshots/components/accordion.png)
+![Native Accordion preview](../screenshots/components/accordion.png?v=72cb58741fc8)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

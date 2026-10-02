@@ -2,9 +2,9 @@
 
 Native retained table state with string rows.
 
-![Native Table preview](../screenshots/components/table.png)
+![Native Table preview](../screenshots/components/table.png?v=9c4618ea2d84)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

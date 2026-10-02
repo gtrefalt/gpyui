@@ -2,9 +2,9 @@
 
 Native animated loading text.
 
-![Native Shimmer preview](../screenshots/components/shimmer.png)
+![Native Shimmer preview](../screenshots/components/shimmer.png?v=441aa9df9272)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

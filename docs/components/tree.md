@@ -2,9 +2,9 @@
 
 Native tree selection with stable item IDs.
 
-![Native Tree preview](../screenshots/components/tree.png)
+![Native Tree preview](../screenshots/components/tree.png?v=2151f23e5b3e)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

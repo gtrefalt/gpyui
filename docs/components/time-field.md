@@ -2,9 +2,9 @@
 
 Native local time editing.
 
-![Native TimeField preview](../screenshots/components/time-field.png)
+![Native TimeField preview](../screenshots/components/time-field.png?v=6d06dc4473f8)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

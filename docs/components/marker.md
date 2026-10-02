@@ -2,9 +2,9 @@
 
 Native message/date marker.
 
-![Native Marker preview](../screenshots/components/marker.png)
+![Native Marker preview](../screenshots/components/marker.png?v=a91c51f91c8a)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

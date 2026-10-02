@@ -2,9 +2,9 @@
 
 Native vertical scrolling for composed children.
 
-![Native Scroll preview](../screenshots/components/scroll.png)
+![Native Scroll preview](../screenshots/components/scroll.png?v=7acbded6babe)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

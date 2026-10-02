@@ -2,9 +2,9 @@
 
 Display a parsed native keyboard shortcut.
 
-![Native Kbd preview](../screenshots/components/kbd.png)
+![Native Kbd preview](../screenshots/components/kbd.png?v=71ef9f4ea29b)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

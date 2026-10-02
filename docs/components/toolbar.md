@@ -2,9 +2,9 @@
 
 Compose a native toolbar.
 
-![Native Toolbar preview](../screenshots/components/toolbar.png)
+![Native Toolbar preview](../screenshots/components/toolbar.png?v=18f41d211a41)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

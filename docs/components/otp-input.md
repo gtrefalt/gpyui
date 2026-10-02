@@ -2,9 +2,9 @@
 
 Native one-time-code editing.
 
-![Native OtpInput preview](../screenshots/components/otp-input.png)
+![Native OtpInput preview](../screenshots/components/otp-input.png?v=df1d3e3f4861)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

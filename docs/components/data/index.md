@@ -5,7 +5,7 @@ Native data controls composed in Python.
 <div class="component-grid" markdown>
 <div class="component-card" markdown>
 
-[![Native List component](../../screenshots/components/list.png)](../list.md)
+[![Native List component](../../screenshots/components/list.png?v=f0b9ce5fab45)](../list.md)
 
 **[List](../list.md)**
 
@@ -15,7 +15,7 @@ Compose selectable native ListItems.
 
 <div class="component-card" markdown>
 
-[![Native Table component](../../screenshots/components/table.png)](../table.md)
+[![Native Table component](../../screenshots/components/table.png?v=9c4618ea2d84)](../table.md)
 
 **[Table](../table.md)**
 
@@ -25,7 +25,7 @@ Native retained table state with string rows.
 
 <div class="component-card" markdown>
 
-[![Native Tree component](../../screenshots/components/tree.png)](../tree.md)
+[![Native Tree component](../../screenshots/components/tree.png?v=2151f23e5b3e)](../tree.md)
 
 **[Tree](../tree.md)**
 
@@ -35,7 +35,7 @@ Native tree selection with stable item IDs.
 
 <div class="component-card" markdown>
 
-[![Native DescriptionList component](../../screenshots/components/description-list.png)](../description-list.md)
+[![Native DescriptionList component](../../screenshots/components/description-list.png?v=de49b26f5a16)](../description-list.md)
 
 **[DescriptionList](../description-list.md)**
 

@@ -2,9 +2,9 @@
 
 Native RGB/RGBA color selection.
 
-![Native ColorPicker preview](../screenshots/components/color-picker.png)
+![Native ColorPicker preview](../screenshots/components/color-picker.png?v=fedb90daca78)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

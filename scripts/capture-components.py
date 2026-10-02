@@ -31,6 +31,8 @@ def capture(name):
                 sys.executable,
                 str(ROOT / "examples/component_preview.py"),
                 name,
+                "--theme",
+                "light",
                 "--state-dir",
                 str(directory),
             ],

@@ -2,9 +2,9 @@
 
 Native text tags with semantic variants.
 
-![Native Tag preview](../screenshots/components/tag.png)
+![Native Tag preview](../screenshots/components/tag.png?v=91f4b7155187)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

@@ -2,9 +2,9 @@
 
 Native circular percentage progress.
 
-![Native ProgressCircle preview](../screenshots/components/progress-circle.png)
+![Native ProgressCircle preview](../screenshots/components/progress-circle.png?v=7bedd8d41013)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

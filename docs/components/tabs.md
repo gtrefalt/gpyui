@@ -2,9 +2,9 @@
 
 Native selection among labeled tabs.
 
-![Native Tabs preview](../screenshots/components/tabs.png)
+![Native Tabs preview](../screenshots/components/tabs.png?v=1547636aefe2)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

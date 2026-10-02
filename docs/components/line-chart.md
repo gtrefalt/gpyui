@@ -2,9 +2,9 @@
 
 Native line plot with data-following domain.
 
-![Native LineChart preview](../screenshots/components/line-chart.png)
+![Native LineChart preview](../screenshots/components/line-chart.png?v=ffb53e85cd5e)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

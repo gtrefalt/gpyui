@@ -2,9 +2,9 @@
 
 A retained native editor buffer.
 
-![Native Editor preview](../screenshots/components/editor.png)
+![Native Editor preview](../screenshots/components/editor.png?v=7fc6b4f53888)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

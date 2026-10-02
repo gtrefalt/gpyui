@@ -2,9 +2,9 @@
 
 A native side panel containing Python controls.
 
-![Native Sheet preview](../screenshots/components/sheet.png)
+![Native Sheet preview](../screenshots/components/sheet.png?v=319b1e2fff44)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

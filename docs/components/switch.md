@@ -2,9 +2,9 @@
 
 A native boolean switch.
 
-![Native Switch preview](../screenshots/components/switch.png)
+![Native Switch preview](../screenshots/components/switch.png?v=f53562cc8c75)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

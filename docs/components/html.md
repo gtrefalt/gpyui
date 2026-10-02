@@ -2,9 +2,9 @@
 
 Native rich text from supported HTML.
 
-![Native Html preview](../screenshots/components/html.png)
+![Native Html preview](../screenshots/components/html.png?v=849cf4789ff8)
 
-A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.
+A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
 ## Runnable example
 

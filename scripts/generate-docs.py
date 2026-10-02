@@ -5,6 +5,7 @@ Use --check in CI to detect stale references or missing native screenshots.
 """
 
 import argparse
+import hashlib
 import inspect
 import json
 import re
@@ -64,10 +65,15 @@ def source_link(cls):
     return SOURCE + relative + f"#L{inspect.getsourcelines(cls)[1]}"
 
 
+def asset_url(path, prefix=""):
+    version = hashlib.sha256((ROOT / "docs" / path).read_bytes()).hexdigest()[:12]
+    return f"{prefix}{path}?v={version}"
+
+
 def card(name, prefix):
     sample = SAMPLES[name]
     target = f"{prefix}{slug(name)}.md"
-    image = f"{prefix}../screenshots/components/{slug(name)}.png"
+    image = asset_url(f"screenshots/components/{slug(name)}.png", f"{prefix}../")
     return (
         f'<div class="component-card" markdown>\n\n'
         f"[![Native {name} component]({image})]({target})\n\n"
@@ -97,9 +103,9 @@ def component_page(name):
         "",
         sample.description,
         "",
-        f"![Native {name} preview](../screenshots/components/{slug(name)}.png)",
+        f"![Native {name} preview]({asset_url(f'screenshots/components/{slug(name)}.png', '../')})",
         "",
-        "A real Linux/X11 native capture. The preview uses dark appearance; the same control supports the initial light theme.",
+        "A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.",
         "",
         "## Runnable example",
         "",
@@ -226,6 +232,11 @@ def generated_files():
     nav += ["] },"]
     pages["docs/components/index.md"] = "\n".join(lines)
     config = (ROOT / "zensical.toml").read_text()
+    config = re.sub(
+        r'"stylesheets/catalog\.css(?:\?v=[a-f0-9]+)?"',
+        f'"{asset_url("stylesheets/catalog.css")}"',
+        config,
+    )
     start, end = "# BEGIN COMPONENT NAV", "# END COMPONENT NAV"
     config = (
         config[: config.index(start) + len(start)]
