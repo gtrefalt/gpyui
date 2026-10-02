@@ -2,7 +2,7 @@
 
 Native popup with Python-composed contents.
 
-![Native Popover preview](../screenshots/components/popover.png)
+![Native Popover preview](../screenshots/components/popover.png?v=af96120a8e59)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

@@ -2,7 +2,7 @@
 
 Copy a string using the native clipboard.
 
-![Native Clipboard preview](../screenshots/components/clipboard.png)
+![Native Clipboard preview](../screenshots/components/clipboard.png?v=ade56993d344)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

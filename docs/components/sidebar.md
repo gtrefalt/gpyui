@@ -2,7 +2,7 @@
 
 Native sidebar navigation.
 
-![Native Sidebar preview](../screenshots/components/sidebar.png)
+![Native Sidebar preview](../screenshots/components/sidebar.png?v=5ff33b5c8bb7)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

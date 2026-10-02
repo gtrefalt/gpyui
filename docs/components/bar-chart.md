@@ -2,7 +2,7 @@
 
 A native bar plot.
 
-![Native BarChart preview](../screenshots/components/bar-chart.png)
+![Native BarChart preview](../screenshots/components/bar-chart.png?v=4c161600564e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

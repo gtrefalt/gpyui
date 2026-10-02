@@ -2,7 +2,7 @@
 
 Native disclosure for Python-composed content.
 
-![Native Collapsible preview](../screenshots/components/collapsible.png)
+![Native Collapsible preview](../screenshots/components/collapsible.png?v=4515b9ecc9d0)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

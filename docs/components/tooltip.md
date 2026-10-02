@@ -2,7 +2,7 @@
 
 Native tooltip attached to composed content.
 
-![Native Tooltip preview](../screenshots/components/tooltip.png)
+![Native Tooltip preview](../screenshots/components/tooltip.png?v=2c721e5c57af)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

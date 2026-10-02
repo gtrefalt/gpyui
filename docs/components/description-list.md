@@ -2,7 +2,7 @@
 
 Native label/value presentation.
 
-![Native DescriptionList preview](../screenshots/components/description-list.png)
+![Native DescriptionList preview](../screenshots/components/description-list.png?v=de49b26f5a16)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

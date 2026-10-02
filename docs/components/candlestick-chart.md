@@ -2,7 +2,7 @@
 
 Native OHLC candles.
 
-![Native CandlestickChart preview](../screenshots/components/candlestick-chart.png)
+![Native CandlestickChart preview](../screenshots/components/candlestick-chart.png?v=c9ab63153cea)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

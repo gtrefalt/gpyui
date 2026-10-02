@@ -2,7 +2,7 @@
 
 A composable GPUI layout surface.
 
-![Native Container preview](../screenshots/components/container.png)
+![Native Container preview](../screenshots/components/container.png?v=c4b11a4bbd6e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

@@ -2,7 +2,7 @@
 
 Native single-date picker.
 
-![Native DatePicker preview](../screenshots/components/date-picker.png)
+![Native DatePicker preview](../screenshots/components/date-picker.png?v=3b5af401f670)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

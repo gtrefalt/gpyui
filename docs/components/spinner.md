@@ -2,7 +2,7 @@
 
 Native animated busy feedback.
 
-![Native Spinner preview](../screenshots/components/spinner.png)
+![Native Spinner preview](../screenshots/components/spinner.png?v=96955bbcf9d1)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

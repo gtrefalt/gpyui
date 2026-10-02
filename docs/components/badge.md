@@ -2,7 +2,7 @@
 
 Native count badges.
 
-![Native Badge preview](../screenshots/components/badge.png)
+![Native Badge preview](../screenshots/components/badge.png?v=594f657a6712)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

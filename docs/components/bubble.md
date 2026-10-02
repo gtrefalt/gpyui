@@ -2,7 +2,7 @@
 
 Native bubble content composed in Python.
 
-![Native Bubble preview](../screenshots/components/bubble.png)
+![Native Bubble preview](../screenshots/components/bubble.png?v=742404714735)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

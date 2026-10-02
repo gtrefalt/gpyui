@@ -2,7 +2,7 @@
 
 Native empty-state presentation.
 
-![Native Empty preview](../screenshots/components/empty.png)
+![Native Empty preview](../screenshots/components/empty.png?v=4b1fd7e22971)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

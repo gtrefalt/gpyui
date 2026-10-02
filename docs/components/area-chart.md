@@ -2,7 +2,7 @@
 
 A native filled area plot.
 
-![Native AreaChart preview](../screenshots/components/area-chart.png)
+![Native AreaChart preview](../screenshots/components/area-chart.png?v=2f02c3c0661f)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

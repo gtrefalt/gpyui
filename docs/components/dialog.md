@@ -2,7 +2,7 @@
 
 A native dialog containing Python controls.
 
-![Native Dialog preview](../screenshots/components/dialog.png)
+![Native Dialog preview](../screenshots/components/dialog.png?v=7addeb8f8db1)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

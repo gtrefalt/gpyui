@@ -2,7 +2,7 @@
 
 Search within native string choices.
 
-![Native Combobox preview](../screenshots/components/combobox.png)
+![Native Combobox preview](../screenshots/components/combobox.png?v=29c9fc1a0516)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

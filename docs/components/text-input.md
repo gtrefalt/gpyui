@@ -2,7 +2,7 @@
 
 Native single-line text editing.
 
-![Native TextInput preview](../screenshots/components/text-input.png)
+![Native TextInput preview](../screenshots/components/text-input.png?v=73c34bf5510e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

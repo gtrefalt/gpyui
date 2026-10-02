@@ -2,7 +2,7 @@
 
 Native rich text from Markdown.
 
-![Native Markdown preview](../screenshots/components/markdown.png)
+![Native Markdown preview](../screenshots/components/markdown.png?v=6504c1637d8e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

@@ -2,7 +2,7 @@
 
 A retained native scalar slider.
 
-![Native Slider preview](../screenshots/components/slider.png)
+![Native Slider preview](../screenshots/components/slider.png?v=909cf05cf762)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

@@ -2,7 +2,7 @@
 
 An exclusive indexed native choice.
 
-![Native RadioGroup preview](../screenshots/components/radio-group.png)
+![Native RadioGroup preview](../screenshots/components/radio-group.png?v=722dcdef4910)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

@@ -2,7 +2,7 @@
 
 A boolean button-like toggle.
 
-![Native Toggle preview](../screenshots/components/toggle.png)
+![Native Toggle preview](../screenshots/components/toggle.png?v=977c60d6b77a)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

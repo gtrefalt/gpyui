@@ -2,7 +2,7 @@
 
 Native attachment presentation.
 
-![Native Attachment preview](../screenshots/components/attachment.png)
+![Native Attachment preview](../screenshots/components/attachment.png?v=793096f89497)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

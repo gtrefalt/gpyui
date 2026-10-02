@@ -2,7 +2,7 @@
 
 Stack controls vertically.
 
-![Native Column preview](../screenshots/components/column.png)
+![Native Column preview](../screenshots/components/column.png?v=f8d0a4cebb15)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

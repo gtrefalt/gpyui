@@ -2,7 +2,7 @@
 
 Native status content composed in Python.
 
-![Native StatusBar preview](../screenshots/components/status-bar.png)
+![Native StatusBar preview](../screenshots/components/status-bar.png?v=ebda5f1341b5)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

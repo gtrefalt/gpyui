@@ -2,7 +2,7 @@
 
 A native text label.
 
-![Native Label preview](../screenshots/components/label.png)
+![Native Label preview](../screenshots/components/label.png?v=4cd36b28ddd8)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

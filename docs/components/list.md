@@ -2,7 +2,7 @@
 
 Compose selectable native ListItems.
 
-![Native List preview](../screenshots/components/list.png)
+![Native List preview](../screenshots/components/list.png?v=f0b9ce5fab45)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

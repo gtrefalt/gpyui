@@ -2,7 +2,7 @@
 
 Native draggable boundaries between panes.
 
-![Native Resizable preview](../screenshots/components/resizable.png)
+![Native Resizable preview](../screenshots/components/resizable.png?v=6d7bbbacb7c3)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

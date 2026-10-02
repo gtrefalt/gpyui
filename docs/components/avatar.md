@@ -2,7 +2,7 @@
 
 Native initials generated from a name.
 
-![Native Avatar preview](../screenshots/components/avatar.png)
+![Native Avatar preview](../screenshots/components/avatar.png?v=15f4d263df7e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

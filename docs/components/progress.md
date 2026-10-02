@@ -2,7 +2,7 @@
 
 Native percentage progress.
 
-![Native Progress preview](../screenshots/components/progress.png)
+![Native Progress preview](../screenshots/components/progress.png?v=0e4472dd3fad)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

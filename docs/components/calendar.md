@@ -2,7 +2,7 @@
 
 Retained native calendar selection.
 
-![Native Calendar preview](../screenshots/components/calendar.png)
+![Native Calendar preview](../screenshots/components/calendar.png?v=1e22d24c7cd7)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

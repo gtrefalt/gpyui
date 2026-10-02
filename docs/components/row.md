@@ -2,7 +2,7 @@
 
 Arrange controls horizontally.
 
-![Native Row preview](../screenshots/components/row.png)
+![Native Row preview](../screenshots/components/row.png?v=0e4e8d32ff5f)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

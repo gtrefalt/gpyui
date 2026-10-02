@@ -2,7 +2,7 @@
 
 Native breadcrumb selection.
 
-![Native Breadcrumb preview](../screenshots/components/breadcrumb.png)
+![Native Breadcrumb preview](../screenshots/components/breadcrumb.png?v=bc746ebb9008)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

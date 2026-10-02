@@ -2,7 +2,7 @@
 
 Group related controls with a native title.
 
-![Native GroupBox preview](../screenshots/components/group-box.png)
+![Native GroupBox preview](../screenshots/components/group-box.png?v=53247cd4744e)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

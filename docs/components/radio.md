@@ -2,7 +2,7 @@
 
 A standalone native radio control.
 
-![Native Radio preview](../screenshots/components/radio.png)
+![Native Radio preview](../screenshots/components/radio.png?v=df31ce022f27)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

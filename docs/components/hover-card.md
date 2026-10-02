@@ -2,7 +2,7 @@
 
 Native hover preview content.
 
-![Native HoverCard preview](../screenshots/components/hover-card.png)
+![Native HoverCard preview](../screenshots/components/hover-card.png?v=34745285c50c)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

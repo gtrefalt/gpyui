@@ -2,7 +2,7 @@
 
 An independent boolean choice.
 
-![Native Checkbox preview](../screenshots/components/checkbox.png)
+![Native Checkbox preview](../screenshots/components/checkbox.png?v=07aafa653daf)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

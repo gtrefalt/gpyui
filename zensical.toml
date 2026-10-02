@@ -7,7 +7,7 @@ repo_name = "gtrefalt/gpyui"
 edit_uri = "edit/main/docs/"
 docs_dir = "docs"
 site_dir = "site"
-extra_css = ["stylesheets/catalog.css"]
+extra_css = ["stylesheets/catalog.css?v=8b0979e9ea32"]
 nav = [
   { "Home" = "index.md" },
   { "Guide" = [

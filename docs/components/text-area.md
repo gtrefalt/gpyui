@@ -2,7 +2,7 @@
 
 Native multiline editing.
 
-![Native TextArea preview](../screenshots/components/text-area.png)
+![Native TextArea preview](../screenshots/components/text-area.png?v=b5b0a8692f3c)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 

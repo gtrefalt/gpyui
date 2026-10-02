@@ -59,6 +59,11 @@ previews match the site's default. PNGs go to
 `docs/screenshots/components/`; native snapshots and logs go to `artifacts/`.
 No native previews are synthesized as HTML or drawn in Python.
 
+After recapturing, run `scripts/generate-docs.py` in the docs environment to update
+the content versions on preview and stylesheet URLs. These versions make browsers
+fetch new screenshots immediately after deployment, including when older dark
+captures are cached.
+
 ## CI and GitHub Pages
 
 The documentation workflow verifies generated references, builds in strict mode,
