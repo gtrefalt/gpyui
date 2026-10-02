@@ -104,7 +104,13 @@ def check_wheel(wheel, platform):
     assert wheel.name == f"gpyui-{project_version()}-cp312-abi3-{platform}.whl", wheel
     with ZipFile(wheel) as archive:
         names = archive.namelist()
-        for required in ("gpyui/py.typed", "gpyui/_core.pyi", "gpyui/application.py", "gpyui/controls.py"):
+        for required in (
+            "gpyui/py.typed",
+            "gpyui/THIRD_PARTY_NOTICES.txt",
+            "gpyui/_core.pyi",
+            "gpyui/application.py",
+            "gpyui/controls.py",
+        ):
             assert required in names, required
         assert any(name.startswith("gpyui/_core.") and name.endswith((".so", ".pyd")) for name in names)
         assert not any(name.startswith("gpyui.libs/") for name in names)
@@ -118,7 +124,8 @@ def check():
 
 
 def venv_python():
-    return Path(".venv/Scripts/python.exe" if sys.platform == "win32" else ".venv/bin/python").resolve()
+    # Resolving this symlink selects the base interpreter and loses venv isolation.
+    return Path(".venv/Scripts/python.exe" if sys.platform == "win32" else ".venv/bin/python").absolute()
 
 
 def install():
@@ -147,11 +154,13 @@ import sys
 from pathlib import Path
 import gpyui
 import gpyui._core
+assert Path(sys.prefix).resolve() == Path(sys.argv[1]).resolve(), sys.prefix
 for module in (gpyui, gpyui._core):
     path = Path(module.__file__).resolve()
     assert path.is_relative_to(Path(sys.prefix).resolve()), path
     print(f'Testing installed wheel: {path}')
 """,
+            str(Path(".venv").resolve()),
         ],
         check=True,
     )

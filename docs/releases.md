@@ -53,6 +53,11 @@ uv pip install path/to/gpyui-0.1.0-cp312-abi3-linux_x86_64.whl
 
 The exact filenames and sizes are shown in the artifacts. Wheel contents and
 metadata are checked before upload; Linux native dependencies are also audited.
+Wheels and source archives include `gpyui/THIRD_PARTY_NOTICES.txt`, an inventory
+of locked Rust dependencies and their license texts. To regenerate it after
+changing dependencies, run `python scripts/generate-wheel-notices.py` with the
+pinned Rust toolchain available. It includes optional, build-time and platform
+dependencies as well as packages compiled into the binary.
 
 ## GitHub releases
 
