@@ -19,8 +19,8 @@ and the specialized Kit APIs still to expose.
 
 ## Documentation
 
-The [Zensical documentation](docs/index.md) includes guides, API references and
-a [visual catalog of all 71 controls](docs/components/index.md), each with a real
+The [Zensical documentation](https://gtrefalt.github.io/gpyui/) includes guides, API references and
+a [visual catalog of all 71 controls](https://gtrefalt.github.io/gpyui/components/), each with a real
 native preview, properties, events and a runnable Python example.
 
 Preview it without building the Rust extension:

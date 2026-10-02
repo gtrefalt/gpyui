@@ -65,7 +65,14 @@ without the native extension, and uploads a browsable `gpyui-docs` HTML artifact
 on pull requests and main. Download and extract the artifact, then serve it with
 `python -m http.server --directory site` (or the extracted directory).
 
-For optional publication at `https://gtrefalt.github.io/gpyui/`, select **GitHub
-Actions** as the repository's Pages source and set repository variable
-`PUBLISH_DOCS` to `true`. Main-branch pushes or a manual workflow run then deploy
-the same built site. Pull requests only build and upload their preview artifact.
+The publication URL is <https://gtrefalt.github.io/gpyui/>. In
+[Settings → Pages](https://github.com/gtrefalt/gpyui/settings/pages), select
+**GitHub Actions** under **Build and deployment → Source**. No repository
+variables or additional secrets are needed.
+
+After enabling Pages, open the
+[Documentation workflow](https://github.com/gtrefalt/gpyui/actions/workflows/docs.yml)
+and select **Run workflow** on `main` for the first deployment. Subsequent
+main-branch pushes publish the same verified site automatically. Pull requests
+only build and upload their preview artifact. If Pages has not been enabled, the
+build still runs and emits a setup warning, and deployment is skipped.
