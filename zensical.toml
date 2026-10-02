@@ -164,7 +164,6 @@ text = "Inter"
 code = "JetBrains Mono"
 
 [[project.theme.palette]]
-media = "(prefers-color-scheme: light)"
 scheme = "default"
 primary = "teal"
 accent = "cyan"
@@ -172,7 +171,6 @@ toggle.icon = "lucide/moon"
 toggle.name = "Switch to dark appearance"
 
 [[project.theme.palette]]
-media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 primary = "teal"
 accent = "cyan"
