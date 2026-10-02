@@ -43,8 +43,9 @@ Python example. The documentation search indexes all component names.
 !!! note "Current scope"
 
     gpyui is a prototype with 71 controls and native notifications. Linux/X11 is
-    tested. One window and static mounted topology are supported. The name is
-    provisional; package-name availability has not been checked.
+    tested, and macOS/Windows wheels have native smoke tests. One window and
+    static mounted topology are supported. The package is
+    [available on PyPI](https://pypi.org/project/gpyui/) and licensed under MIT.
     [Coverage](component-coverage.md) lists the remaining specialized Kit APIs.
 
 ## Sources and evidence

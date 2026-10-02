@@ -74,12 +74,27 @@ release automatically. Pull requests never create releases. Manual runs can sele
 a matching version tag and enable **Create a GitHub prerelease**.
 GitHub releases do not publish packages to PyPI.
 
+## PyPI platform support
+
+PyPI accepts the four macOS/Windows wheels and the source archive. The workflow
+checks the complete six-wheel build before selecting those five distributions.
+The Linux wheels remain on GitHub Releases: PyPI's
+[platform validation](https://github.com/pypi/warehouse/blob/main/warehouse/utils/wheel.py)
+rejects `linux_x86_64` and `linux_aarch64`. We cannot claim manylinux compatibility
+by changing the filename; the XCB/graphics-driver issue described above must be
+resolved first. On Linux, download a prebuilt wheel from GitHub. Installing the
+PyPI source archive instead requires Rust and the native build prerequisites.
+
 ## Connect PyPI once
 
 1. Create a [PyPI account](https://pypi.org/account/register/) and enable
-   two-factor authentication.
-2. Choose the project's distribution license, add its license file and metadata,
-   and include required third-party license notices before the first public release.
+   two-factor authentication. Connecting GitHub for account login does **not**
+   configure a Trusted Publisher.
+2. gpyui uses the [MIT License](https://github.com/gtrefalt/gpyui/blob/main/LICENSE).
+   The license file and distribution metadata are configured for subsequent
+   builds. The already published `0.1.0` distributions cannot be replaced;
+   they predate this metadata update. Third-party notices are included in both
+   that release and subsequent builds.
 3. In PyPI's [publishing settings](https://pypi.org/manage/account/publishing/),
    add a pending Trusted Publisher for a new `gpyui` project, or a Trusted
    Publisher on an existing project you own:
@@ -113,3 +128,12 @@ only after the build and all installed-wheel test jobs succeed.
 
 Manual runs default to building only. Pull requests and tag pushes do not upload
 anything to PyPI. Configure the publisher before selecting the publish checkbox.
+
+To publish an already tested GitHub release without rebuilding, run the workflow
+on **main**, enable **Publish to PyPI**, and enter the matching published tag
+(for example `v0.1.0`) in **existing_release**. Leave **Create a GitHub prerelease**
+disabled. The tag must match the current project's version. The job verifies
+that the tag's release workflow passed all six builds and 17 installed-wheel
+tests, downloads its seven distributions, checks their SHA256SUMS and GitHub
+asset digests, then uploads the PyPI-compatible subset with Trusted Publishing.
+This path preserves the exact tested distribution bytes.

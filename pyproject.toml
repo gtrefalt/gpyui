@@ -3,11 +3,20 @@ name = "gpyui"
 version = "0.1.0"
 description = "Native Python UI controls powered by GPUI and GPUI Kit"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "Polina Gregor", email = "polyxeni.gregor@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = []
+
+[project.urls]
+Homepage = "https://gtrefalt.github.io/gpyui/"
+Documentation = "https://gtrefalt.github.io/gpyui/"
+Repository = "https://github.com/gtrefalt/gpyui"
+Issues = "https://github.com/gtrefalt/gpyui/issues"
+Releases = "https://github.com/gtrefalt/gpyui/releases"
 
 [tool.maturin]
 module-name = "gpyui._core"

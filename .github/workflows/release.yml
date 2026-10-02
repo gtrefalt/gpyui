@@ -26,6 +26,10 @@ on:
         description: Publish to PyPI after all wheel tests pass (select a version tag)
         type: boolean
         default: false
+      existing_release:
+        description: Optional published release tag to reuse instead of rebuilding (run on main, enable Publish to PyPI)
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -36,6 +40,7 @@ concurrency:
 
 jobs:
   prepare:
+    if: inputs.existing_release == ''
     runs-on: ubuntu-24.04
     outputs:
       rust: ${{ steps.config.outputs.rust }}
@@ -205,10 +210,39 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: gpyui-dist-*
           merge-multiple: true
           path: dist
       - uses: astral-sh/setup-uv@v6
-      - run: uv publish --trusted-publishing always
+      - name: Select PyPI-compatible distributions
+        run: python scripts/wheel-ci.py pypi
+      - run: uv publish --trusted-publishing always pypi-dist/*
+
+  publish-existing:
+    name: Publish a previously tested GitHub release to PyPI
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && inputs.existing_release != ''
+    runs-on: ubuntu-24.04
+    environment: pypi
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+      - name: Verify release tests and download checked assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.existing_release }}
+        run: python scripts/wheel-ci.py existing-release
+      - name: Select PyPI-compatible distributions
+        run: python scripts/wheel-ci.py pypi
+      - run: uv publish --trusted-publishing always pypi-dist/*
