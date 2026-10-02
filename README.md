@@ -120,10 +120,14 @@ their getters return copies. See [the coverage and API guide](docs/component-cov
 ## Build and run
 
 The [Build wheels workflow](https://github.com/gtrefalt/gpyui/actions/workflows/release.yml)
-builds Linux x86_64 wheels and a source archive, tests the installed wheel on
-Python 3.12–3.14, and uploads downloadable artifacts. Optional PyPI Trusted
-Publishing runs from a matching version tag after explicit selection in a manual
-workflow run. See [wheels and release setup](docs/releases.md).
+builds six wheels for Linux, macOS and Windows on x86_64 and ARM64, plus a source
+archive, and tests the installed packages on Python 3.12–3.14. The
+[GitHub release](https://github.com/gtrefalt/gpyui/releases) provides every wheel.
+Optional PyPI Trusted Publishing uploads the macOS/Windows wheels and source
+archive; Linux wheels remain on GitHub because PyPI rejects their current tags.
+A manual workflow can publish a matching version tag after building and testing,
+or reuse a previously tested release with checksum verification.
+See [wheels and release setup](docs/releases.md).
 
 Python 3.12+ and the pinned Rust toolchain are required. Native Linux builds need
 development packages for X11/XCB, xkbcommon, Wayland, fontconfig, FreeType and a

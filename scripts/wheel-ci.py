@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -216,6 +217,104 @@ def release():
     Path("artifacts/release-notes.md").write_text("\n".join(notes) + "\n")
 
 
+def distribution_names():
+    version = project_version()
+    return {
+        *(f"gpyui-{version}-cp312-abi3-{p['platform']}.whl" for p in PLATFORMS),
+        f"gpyui-{version}.tar.gz",
+    }
+
+
+def verify_checksums(dist, manifest):
+    expected = distribution_names()
+    checksums = {}
+    for line in manifest.splitlines():
+        digest, name = line.split("  ", 1)
+        assert name in expected and name not in checksums, name
+        assert len(digest) == 64 and all(char in "0123456789abcdef" for char in digest), digest
+        checksums[name] = digest
+    assert set(checksums) == expected, checksums
+    for name, digest in checksums.items():
+        assert hashlib.sha256((dist / name).read_bytes()).hexdigest() == digest, name
+
+
+def existing_release():
+    tag = os.environ["RELEASE_TAG"]
+    assert tag == f"v{project_version()}", "Release tag must match the current project version"
+    repo = os.environ["GITHUB_REPOSITORY"]
+
+    def api(path):
+        return json.loads(subprocess.check_output(["gh", "api", f"repos/{repo}/{path}"], text=True))
+
+    release_info = api(f"releases/tags/{tag}")
+    assert not release_info["draft"], "The GitHub release must already be published"
+    expected = distribution_names() | {"SHA256SUMS"}
+    assets = release_info["assets"]
+    assert len(assets) == len(expected) and {asset["name"] for asset in assets} == expected, assets
+    commit = subprocess.check_output(["git", "rev-list", "-n", "1", tag], text=True).strip()
+    runs = api(f"actions/workflows/release.yml/runs?event=push&head_sha={commit}&status=success")[
+        "workflow_runs"
+    ]
+    run = next((run for run in runs if run["head_branch"] == tag), None)
+    assert run is not None, "No successful tag build/test workflow for this release"
+    jobs = api(f"actions/runs/{run['id']}/jobs?per_page=100")["jobs"]
+    required = {
+        *(f"Wheel / {p['name']}" for p in PLATFORMS),
+        *(
+            f"Installed wheel / {p['name']} / Python {python}"
+            for p in PLATFORMS
+            for python in ("3.12", "3.13", "3.14")
+            if not (p["name"] == "windows-arm64" and python == "3.12")
+        ),
+    }
+    passed = {job["name"] for job in jobs if job["conclusion"] == "success"}
+    assert required <= passed, f"Required builds/tests missing: {required - passed}"
+    print(f"Verified all six builds and 17 installed-wheel jobs: {run['html_url']}")
+    dist = Path("dist")
+    assert not dist.exists(), "Use a clean workspace for release downloads"
+    subprocess.run(["gh", "release", "download", tag, "--repo", repo, "--dir", str(dist)], check=True)
+    assert {file.name for file in dist.iterdir()} == expected
+    verify_checksums(dist, (dist / "SHA256SUMS").read_text())
+    for asset in assets:
+        actual = f"sha256:{hashlib.sha256((dist / asset['name']).read_bytes()).hexdigest()}"
+        assert asset["digest"] == actual, asset["name"]
+    print("Verified every release asset against SHA256SUMS and GitHub's asset digests")
+
+
+def pypi():
+    dist = Path("dist")
+    expected = distribution_names()
+    files = {file.name for file in dist.iterdir()}
+    assert files in (expected, expected | {"SHA256SUMS"}), files
+    output = Path("pypi-dist")
+    assert not output.exists(), "Use a clean destination for publishing"
+    # PyPI rejects linux_x86_64/linux_aarch64. Retain these wheels on GitHub;
+    # auditwheel bundling is unsafe until GPUI/Mesa share the same XCB library.
+    selected = []
+    for platform in PLATFORMS:
+        wheel = dist / f"gpyui-{project_version()}-cp312-abi3-{platform['platform']}.whl"
+        check_wheel(wheel, platform["platform"])
+        if platform["platform"].startswith("linux_"):
+            print(f"GitHub-only Linux wheel (PyPI rejects this platform tag): {wheel.name}")
+        else:
+            selected.append(wheel)
+    selected.append(dist / f"gpyui-{project_version()}.tar.gz")
+    assert len(selected) == 5
+    output.mkdir()
+    for file in selected:
+        shutil.copy2(file, output / file.name)
+    print("Prepared four macOS/Windows wheels and one source archive for PyPI")
+
+
 if __name__ == "__main__":
-    commands = dict(prepare=prepare, check=check, install=install, test=test, native=native, release=release)
+    commands = {
+        "prepare": prepare,
+        "check": check,
+        "install": install,
+        "test": test,
+        "native": native,
+        "release": release,
+        "existing-release": existing_release,
+        "pypi": pypi,
+    }
     commands[sys.argv[1]]()
