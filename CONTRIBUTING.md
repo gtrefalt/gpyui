@@ -76,7 +76,7 @@ update the component catalog when the API changes, and keep implemented support
 distinct from planned capabilities. Add tests for meaningful behavior or
 regressions and run the checks appropriate to your change.
 
-Pull requests run Python checks and documentation builds. Native wheel builds
+Pull requests run Python lint/type checks, pure-Python tests and documentation builds. Native wheel builds
 and the platform test matrix run only when a new version tag is pushed. See the
 [release guide](https://gtrefalt.github.io/gpyui/releases/) for version updates,
 automatic publishing and recovery without rebuilding.
