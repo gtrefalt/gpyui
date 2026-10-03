@@ -1,33 +1,16 @@
-name: Build wheels
+name: Release
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/release.yml
-      - Cargo.toml
-      - Cargo.lock
-      - rust-toolchain.toml
-      - pyproject.toml
-      - src/**
-      - tests/**
-      - examples/**
-      - scripts/wheel*.py
-      - scripts/wheel-build-deps.sh
-      - scripts/test-native.sh
   push:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
-      github_release:
-        description: Create a GitHub prerelease after all wheel tests pass (select a version tag)
-        type: boolean
-        default: false
       publish:
-        description: Publish to PyPI after all wheel tests pass (select a version tag)
+        description: Publish an already tested GitHub release to PyPI without rebuilding
         type: boolean
         default: false
       existing_release:
-        description: Optional published release tag to reuse instead of rebuilding (run on main, enable Publish to PyPI)
+        description: Published tag to reuse (run on main; blank uses the current package version)
         type: string
         default: ""
 
@@ -36,11 +19,11 @@ permissions:
 
 concurrency:
   group: wheels-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: false
 
 jobs:
   prepare:
-    if: inputs.existing_release == ''
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-24.04
     outputs:
       rust: ${{ steps.config.outputs.rust }}
@@ -54,9 +37,6 @@ jobs:
         with:
           python-version: "3.12"
       - id: config
-        env:
-          PUBLISH: ${{ inputs.publish || false }}
-          RELEASE: ${{ inputs.github_release || false }}
         run: python scripts/wheel-ci.py prepare
 
   build:
@@ -177,7 +157,7 @@ jobs:
 
   release:
     name: GitHub release with verified wheels
-    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) || (github.event_name == 'workflow_dispatch' && inputs.github_release)
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs: [prepare, build, test]
     runs-on: ubuntu-24.04
     permissions:
@@ -203,11 +183,13 @@ jobs:
 
   publish:
     name: Publish tested distributions to PyPI
-    if: github.event_name == 'workflow_dispatch' && inputs.publish
-    needs: [prepare, build, test]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [prepare, build, test, release]
     runs-on: ubuntu-24.04
     environment: pypi
     permissions:
+      contents: read
+      actions: read
       id-token: write
     steps:
       - uses: actions/checkout@v4
@@ -223,7 +205,7 @@ jobs:
 
   publish-existing:
     name: Publish a previously tested GitHub release to PyPI
-    if: github.event_name == 'workflow_dispatch' && inputs.publish && inputs.existing_release != ''
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
     runs-on: ubuntu-24.04
     environment: pypi
     permissions:

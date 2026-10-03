@@ -1,6 +1,6 @@
 THIRD-PARTY LICENSE NOTICES
 
-Generated from Cargo.lock SHA256 93264c3bd7b6d96f83102ca3dc2df94085850e96992c3b51565c7ff0cbfd205f.
+Generated from Cargo.lock SHA256 2b2370bcb32445b1f9c6a5982be75fdf422520086eedc25b9e568ed16dc63f77.
 This inventory includes build-time, optional and platform-specific packages in the lockfile.
 Their inclusion here does not imply every package is compiled into every wheel.
 License terms below apply to their respective components, not to gpyui authors' own code.

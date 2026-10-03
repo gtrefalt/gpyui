@@ -76,10 +76,8 @@ def prepare():
     version = project_version()
     ref = os.environ["GITHUB_REF"]
     tag = f"refs/tags/v{version}"
-    if ref.startswith("refs/tags/") and ref != tag:
-        raise SystemExit(f"Tag must match the package version: v{version}")
-    if any(os.environ.get(flag) == "true" for flag in ("PUBLISH", "RELEASE")) and ref != tag:
-        raise SystemExit(f"Publishing requires selecting the v{version} tag")
+    if os.environ.get("GITHUB_EVENT_NAME") != "push" or ref != tag:
+        raise SystemExit(f"Building requires a pushed version tag matching v{version}")
     project = tomllib.loads(Path("pyproject.toml").read_text())
     backend = next(r for r in project["build-system"]["requires"] if r.startswith("maturin=="))
     tests = [
@@ -197,7 +195,9 @@ def release():
         "".join(f"{hashlib.sha256(file.read_bytes()).hexdigest()}  {file.name}\n" for file in files)
     )
     notes = [
-        f"Initial gpyui {project_version()} prerelease: native Python controls powered by GPUI Kit.",
+        f"gpyui {project_version()}: native Python controls powered by GPUI Kit.",
+        "",
+        f"[Changelog](https://github.com/gtrefalt/gpyui/blob/v{project_version()}/CHANGELOG.md)",
         "",
         "Download the wheel matching your OS and architecture; install with `uv pip install path/to/wheel.whl`.",
         "CPython 3.12+ uses the stable abi3 interface; Windows ARM64 is tested on 3.13+.",
@@ -239,7 +239,7 @@ def verify_checksums(dist, manifest):
 
 
 def existing_release():
-    tag = os.environ["RELEASE_TAG"]
+    tag = os.environ.get("RELEASE_TAG") or f"v{project_version()}"
     assert tag == f"v{project_version()}", "Release tag must match the current project version"
     repo = os.environ["GITHUB_REPOSITORY"]
 
@@ -252,12 +252,26 @@ def existing_release():
     assets = release_info["assets"]
     assert len(assets) == len(expected) and {asset["name"] for asset in assets} == expected, assets
     commit = subprocess.check_output(["git", "rev-list", "-n", "1", tag], text=True).strip()
-    runs = api(f"actions/workflows/release.yml/runs?event=push&head_sha={commit}&status=success")[
+    runs = api(f"actions/workflows/release.yml/runs?event=push&head_sha={commit}&status=completed")[
         "workflow_runs"
     ]
     run = next((run for run in runs if run["head_branch"] == tag), None)
-    assert run is not None, "No successful tag build/test workflow for this release"
-    jobs = api(f"actions/runs/{run['id']}/jobs?per_page=100")["jobs"]
+    assert run is not None, "No completed tag workflow for this release"
+    # A failed PyPI upload must not hide the passed build/test jobs. Include
+    # earlier attempts when only the publishing job has been rerun.
+    pages = json.loads(
+        subprocess.check_output(
+            [
+                "gh",
+                "api",
+                "--paginate",
+                "--slurp",
+                f"repos/{repo}/actions/runs/{run['id']}/jobs?per_page=100&filter=all",
+            ],
+            text=True,
+        )
+    )
+    jobs = [job for page in pages for job in page["jobs"]]
     required = {
         *(f"Wheel / {p['name']}" for p in PLATFORMS),
         *(

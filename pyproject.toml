@@ -1,6 +1,6 @@
 [project]
 name = "gpyui"
-version = "0.1.0"
+version = "0.1.1"
 description = "Native Python UI controls powered by GPUI and GPUI Kit"
 readme = "README.md"
 license = "MIT"
@@ -17,6 +17,7 @@ Documentation = "https://gtrefalt.github.io/gpyui/"
 Repository = "https://github.com/gtrefalt/gpyui"
 Issues = "https://github.com/gtrefalt/gpyui/issues"
 Releases = "https://github.com/gtrefalt/gpyui/releases"
+Changelog = "https://github.com/gtrefalt/gpyui/blob/main/CHANGELOG.md"
 
 [tool.maturin]
 module-name = "gpyui._core"
