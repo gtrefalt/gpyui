@@ -1,6 +1,6 @@
 # Wheels and releases
 
-The [Build wheels workflow](https://github.com/gtrefalt/gpyui/actions/workflows/release.yml)
+The [Release workflow](https://github.com/gtrefalt/gpyui/actions/workflows/release.yml)
 builds six native wheels and one source archive with pinned Rust and maturin versions.
 All wheels use Python's stable `abi3` interface starting at CPython 3.12.
 
@@ -40,7 +40,10 @@ sudo apt-get install libxcb1 libxkbcommon0 libxkbcommon-x11-0 \
 
 ## Build and download
 
-Relevant pull requests, version tags and manual workflow runs build artifacts.
+Only a pushed version tag builds release artifacts. Pull requests and ordinary
+branch pushes run lightweight Python checks and documentation builds; they do
+not build native wheels. Manual release workflow runs reuse tested GitHub release
+assets without rebuilding.
 Each target uploads `gpyui-dist-<platform>` to its workflow run, retained for
 14 days. Each contains a wheel; Linux x64 also includes the source archive.
 No PyPI account is needed to build or download them. Install the extracted wheel
@@ -48,7 +51,7 @@ matching your operating system and architecture:
 
 ```bash
 uv venv
-uv pip install path/to/gpyui-0.1.0-cp312-abi3-linux_x86_64.whl
+uv pip install path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
 ```
 
 The exact filenames and sizes are shown in the artifacts. Wheel contents and
@@ -61,7 +64,7 @@ dependencies as well as packages compiled into the binary.
 
 ## GitHub releases
 
-Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.1.0`.
+Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.1.1`.
 After all six builds and all installed-wheel test jobs pass, the workflow creates
 a GitHub prerelease, attaches the six wheels, source archive and `SHA256SUMS`,
 and publishes it. Release notes list the download size of each distribution.
@@ -70,9 +73,9 @@ These assets remain available on the
 
 The workflow creates a draft first and publishes it only after attaching assets.
 If upload fails, it leaves a draft for recovery. It will not replace an existing
-release automatically. Pull requests never create releases. Manual runs can select
-a matching version tag and enable **Create a GitHub prerelease**.
-GitHub releases do not publish packages to PyPI.
+release automatically. Pull requests and manual runs never create GitHub
+releases. After the GitHub release succeeds, the same workflow automatically
+publishes the PyPI-compatible distributions with Trusted Publishing.
 
 ## PyPI platform support
 
@@ -117,23 +120,29 @@ PyPI source archive instead requires Rust and the native build prerequisites.
 
 Update the version in `pyproject.toml`, the corresponding Rust package version
 in `Cargo.toml`, and both lockfiles. Each PyPI version must be new; uploaded
-distribution filenames cannot be reused. An alpha is appropriate for the current
-scope: Python `0.1.0a1` corresponds to Rust `0.1.0-alpha.1`.
+distribution filenames cannot be reused. Record release changes in `CHANGELOG.md`.
 
-Commit the version update, then create and push a matching version tag such as
-`v0.1.0a1`. Tag pushes build and test artifacts. To publish, open **Build wheels**,
-select **Run workflow**, select that tag as the ref, and enable **Publish to PyPI**.
-The tag must exactly match `v` plus the Python package version. Publication runs
-only after the build and all installed-wheel test jobs succeed.
+Merge the version update, then create and push a matching version tag such as
+`v0.1.1`. This is the only event that starts native builds. After all six builds
+and 17 installed-wheel test jobs pass, the workflow publishes the GitHub release
+and then uploads the PyPI-compatible files automatically. Configure the Trusted
+Publisher before pushing the tag.
 
-Manual runs default to building only. Pull requests and tag pushes do not upload
-anything to PyPI. Configure the publisher before selecting the publish checkbox.
+To recover a PyPI upload without rebuilding, run **Release** on **main**, enable
+**Publish to PyPI**, and enter the published tag in **existing_release** (or leave
+it blank to use the current project's version). The tag must match the current
+project's version. The job checks the tag's passed build/test jobs, even if an
+earlier PyPI upload failed. It
+downloads its seven distributions, verifies SHA256SUMS and GitHub asset digests,
+then uploads the PyPI-compatible subset. Already published distributions are not
+replaced; their filenames and bytes must match. A manual run with publication
+disabled does not build or upload anything.
 
-To publish an already tested GitHub release without rebuilding, run the workflow
-on **main**, enable **Publish to PyPI**, and enter the matching published tag
-(for example `v0.1.0`) in **existing_release**. Leave **Create a GitHub prerelease**
-disabled. The tag must match the current project's version. The job verifies
-that the tag's release workflow passed all six builds and 17 installed-wheel
-tests, downloads its seven distributions, checks their SHA256SUMS and GitHub
-asset digests, then uploads the PyPI-compatible subset with Trusted Publishing.
-This path preserves the exact tested distribution bytes.
+## Updating the PyPI README
+
+PyPI displays the README stored in the uploaded distribution metadata. A commit
+to GitHub changes the repository README, but does not change PyPI. To refresh
+the PyPI description, screenshots, license metadata or project links, publish a
+new version (a patch release such as `0.1.1` is appropriate for packaging changes).
+Existing release files cannot be overwritten. Use absolute image and documentation
+URLs so the README also renders outside the GitHub checkout.

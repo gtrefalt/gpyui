@@ -25,3 +25,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --locked --only-group dev
       - run: uv run --locked --only-group dev just check
+      - name: Run Python tests without compiling the native extension
+        env:
+          PYTHONPATH: src
+        run: uv run --locked --only-group dev pytest -q tests/test_controls.py tests/test_market.py tests/test_wheel_ci.py
