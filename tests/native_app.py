@@ -46,9 +46,12 @@ app = Application(title=f"gpyui native test {mode}", on_start=started, on_error=
 async def verify():
     global calls
     calls += 1
+    call_number = calls
+    input_value, state_value = field.value, name_state.value
     snapshot = await app.snapshot()
     write(
-        f"result-{calls}", {"snapshot": snapshot, "input_value": field.value, "state_value": name_state.value}
+        f"result-{call_number}",
+        {"snapshot": snapshot, "input_value": input_value, "state_value": state_value},
     )
     write(
         "result",

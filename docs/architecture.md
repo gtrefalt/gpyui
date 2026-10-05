@@ -18,6 +18,39 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
+## Dynamic composition in 0.2.0
+
+Python roots and container children now support runtime replacement, insertion,
+removal, reordering and same-app moves. A structural update sends the owned
+forest, active root IDs and explicit property patches in one queued command.
+The bridge validates the entire command, including unique ownership, depth,
+constructor identity and disposed IDs, before enqueueing and committing its
+schema. Failed enqueue leaves the old native schema intact.
+
+Rust reconciles by stable ID: existing native controls, entities and per-control
+subscriptions are reused. Only children lists change; mutable tree-description
+values are never replayed into existing editors. That distinction preserves
+native edits that have not reached the Python mirror, caret, selection and undo
+history. It follows Kit's retained `Entity<InputState>` contract and
+[semantic undo transaction boundaries](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/base/src/input/base/undo_manager.rs).
+
+Visibility removes the control from layout without destroying its state. Removal
+detaches but keeps ownership and bindings, allowing reattachment. Explicit
+`dispose()` releases the subtree, native entities/subscriptions, Python bindings
+and handlers; disposed IDs cannot be reused. Detached nodes count toward the
+10,000-control bound. Native focus is blurred when an editing control becomes
+hidden or detached; moving a displayed control retains its focus. Python ignores
+disposed events and suppresses handlers for hidden or detached controls.
+
+Open overlays read current children from the retained view, and carousel bounds
+follow visible children. Property-only updates retain the existing compact
+batch path. Structural commands serialize the retained forest; large-tree update
+performance and a smaller structural diff protocol remain future measurement
+work. There is still one window and a startup-only theme.
+
+The comparison and first-milestone plan below record the original investigation;
+this section describes the current runtime contract.
+
 ## Reproducible upstream baseline
 
 All four repositories were cloned into `/workspace/upstream`. Exact inspected
@@ -198,7 +231,7 @@ form and a paper-order table. A seeded asyncio stream batches simulated quotes
 and trades every 650 ms; its callback is cancelled on native close. A native button invokes an async Python handler that appends
 an order, updates status and shows a Kit notification. It makes no network trades.
 
-Current limits: single window, static mounted topology, initial theme only and
+Current limits: single window, initial theme only and
 basic builder options. Menus/commands, virtualized list delegates, typed forms,
 docking, multiwindow and additional plot families remain explicit implementation
 work. Acceptance gates for these next steps are recorded in the coverage guide.

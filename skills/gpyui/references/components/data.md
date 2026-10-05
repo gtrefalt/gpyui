@@ -1,6 +1,6 @@
 # Data
 
-Generated Python API reference for gpyui 0.1.1.
+Generated Python API reference for gpyui 0.2.0.
 
 ## List
 
@@ -27,6 +27,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `value` | `0` | nonnegative int | Assignment |
 | `disabled` | `false` | bool | Assignment |
 
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](https://gtrefalt.github.io/gpyui/reference/core/).
+
 ### Events and state
 
 - `on_change(event)`: Runs after native value and Python mirror/bound State change.
@@ -41,7 +43,7 @@ This wrapper composes ListItems. It does not expose virtual ListState/delegate o
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L573) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L580) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Table
 
@@ -73,6 +75,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `value` | `0` | nonnegative int | Assignment |
 | `column_width` | `125` | finite number | Constructor only |
 
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](https://gtrefalt.github.io/gpyui/reference/core/).
+
 ### Events and state
 
 - `on_change(event)`: Runs after native value and Python mirror/bound State change.
@@ -87,7 +91,7 @@ Rows must match the column count. Columns and column_width are fixed. Reassign r
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L477) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L484) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Tree
 
@@ -119,6 +123,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `items` | `[]` | list[tree item] | Constructor only |
 | `value` | `""` | str | Assignment |
 
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](https://gtrefalt.github.io/gpyui/reference/core/).
+
 ### Events and state
 
 - `on_change(event)`: Runs after native value and Python mirror/bound State change.
@@ -133,7 +139,7 @@ Item IDs must be unique. value is an item ID or an empty string. Items are fixed
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L717) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L724) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## DescriptionList
 
@@ -158,6 +164,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | --- | --- | --- | --- |
 | `items` | `[]` | list[list[str]] | Assignment |
 
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](https://gtrefalt.github.io/gpyui/reference/core/).
+
 ### Events and state
 
 This wrapper exposes no Python activation/change handler. Update its mutable properties by assignment from a running callback. Native behavior remains in Rust.
@@ -168,4 +176,4 @@ Each item is a two-string label/value pair.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L423) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L430) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)

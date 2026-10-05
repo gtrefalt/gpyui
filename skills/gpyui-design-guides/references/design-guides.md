@@ -40,8 +40,10 @@ native caret or undo behavior on each keystroke.
 Prefer a small number of purposeful regions. Avoid a grid of identical bordered
 cards, oversized blank gutters, nested cards and decorative banners that consume
 the workspace. Dense data can be compact while forms retain comfortable spacing.
-The mounted tree is currently static: design around updates to prebuilt controls,
-not a plan requiring runtime navigation to insert or hide arbitrary children.
+Use `visible` to switch between retained pages, or update a content container's
+children. Preserve editing controls across moves and hide/show operations so
+navigation does not lose a user's selection or undo history. Dispose permanently
+discarded pages; detached pages otherwise retain native resources.
 
 ## Establish a visual language
 

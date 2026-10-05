@@ -15,7 +15,7 @@ use gpui_kit::{
 };
 use serde_json::{Value, json};
 use std::{
-    collections::{BTreeMap, HashMap},
+    collections::{BTreeMap, HashMap, HashSet},
     sync::Arc,
 };
 
@@ -37,7 +37,11 @@ pub(crate) struct NativeView {
     controls: HashMap<u64, NativeControl>,
     styles: HashMap<u64, serde_json::Map<String, Value>>,
     transport: Arc<Transport>,
-    _subscriptions: Vec<Subscription>,
+    subscriptions: HashMap<u64, Vec<Subscription>>,
+    visible: HashMap<u64, bool>,
+    attached: HashSet<u64>,
+    displayed: HashSet<u64>,
+    opened: HashMap<String, u64>,
     _commands: Task<()>,
 }
 
@@ -64,30 +68,33 @@ impl NativeView {
             controls: HashMap::new(),
             styles: HashMap::new(),
             transport,
-            _subscriptions: Vec::new(),
+            subscriptions: HashMap::new(),
+            visible: HashMap::new(),
+            attached: HashSet::new(),
+            displayed: HashSet::new(),
+            opened: HashMap::new(),
             _commands: task,
         };
         view.mount(nodes, window, cx);
-        let initial_overlays: Vec<_> = view
-            .controls
-            .iter()
-            .filter_map(|(id, c)| match c {
-                NativeControl::Kit(k)
-                    if matches!(k.kind.as_str(), "dialog" | "sheet")
-                        && k.props["value"] == true =>
-                {
-                    Some(*id)
-                }
-                _ => None,
-            })
-            .collect();
-        for id in initial_overlays {
-            view.open_overlay(id, window, cx);
-        }
+        view.refresh(window, cx);
         view
     }
     fn mount(&mut self, nodes: Vec<Node>, window: &mut Window, cx: &mut Context<Self>) {
         for node in nodes {
+            if self.controls.contains_key(&node.id) {
+                if let Control::Column { children } | Control::Kit { children, .. } = node.control {
+                    let ids = children.iter().map(|child| child.id).collect();
+                    self.mount(children, window, cx);
+                    match self.controls.get_mut(&node.id).expect("retained control") {
+                        NativeControl::Column(children) => *children = ids,
+                        NativeControl::Kit(kit) => kit.children = ids,
+                        _ => unreachable!("validated retained container"),
+                    }
+                }
+                continue;
+            }
+            let mut subscriptions = Vec::new();
+            self.visible.insert(node.id, node.visible);
             self.styles.insert(node.id, node.style);
             let control = match node.control {
                 Control::Column { children } => {
@@ -114,8 +121,8 @@ impl NativeView {
                             .placeholder(placeholder)
                     });
                     let id = node.id;
-                    self._subscriptions.push(cx.subscribe_in(&input, window, move |view, input, event, _, cx| {
-                        if matches!(event, InputEvent::Change)
+                    subscriptions.push(cx.subscribe_in(&input, window, move |view, input, event, _, cx| {
+                        if view.displayed.contains(&id) && matches!(event, InputEvent::Change)
                             && !view.transport.emit(json!({"event":"change", "id":id, "value":input.read(cx).value().as_str()})) { cx.quit(); }
                     }));
                     NativeControl::Input(input)
@@ -141,7 +148,7 @@ impl NativeView {
                                     .step(p.n("step"))
                                     .default_value(p.n("value"))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| match event {
@@ -164,7 +171,7 @@ impl NativeView {
                                 .position(|s| *s == p.s("value"))
                                 .map(|i| gpui_kit::component::IndexPath::default().row(i));
                             let state = cx.new(|cx| SelectState::new(items, index, window, cx));
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event: &SelectEvent<Vec<SharedString>>, _, cx| {
@@ -195,7 +202,7 @@ impl NativeView {
                                 .sortable(false)
                                 .col_movable(false)
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -215,7 +222,7 @@ impl NativeView {
                             state.update(cx, |state, cx| {
                                 state.set_selected_values(&[p.s("value")], window, cx)
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event: &ComboboxEvent<Vec<SharedString>>, _, cx| {
@@ -242,7 +249,7 @@ impl NativeView {
                                     .default_value(p.s("value"))
                                     .placeholder(p.s("placeholder"))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, state, event, _, cx| {
@@ -260,7 +267,7 @@ impl NativeView {
                                     .placeholder(p.s("placeholder"))
                                     .step(1.)
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, state, event, _, cx| {
@@ -277,7 +284,7 @@ impl NativeView {
                                 OtpState::new(p.ix("length"), window, cx)
                                     .default_value(p.s("value"))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, state, event, _, cx| {
@@ -294,7 +301,7 @@ impl NativeView {
                             state.update(cx, |state, cx| {
                                 state.set_date(crate::kit::date_value(&p.s("value")), window, cx)
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -312,7 +319,7 @@ impl NativeView {
                             state.update(cx, |state, cx| {
                                 state.set_date(crate::kit::date_value(&p.s("value")), window, cx)
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -341,7 +348,7 @@ impl NativeView {
                                     cx,
                                 )
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -360,7 +367,7 @@ impl NativeView {
                                 ColorPickerState::new(window, cx)
                                     .default_value(crate::kit::color_value(&p.s("value")))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -377,7 +384,7 @@ impl NativeView {
                             let state = cx.new(|_| {
                                 CarouselState::new(ids.len()).with_selected_index(p.ix("value"))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, _, event, _, cx| {
@@ -394,7 +401,7 @@ impl NativeView {
                                     .default_value(p.s("value"))
                                     .placeholder(p.s("placeholder"))
                             });
-                            self._subscriptions.push(cx.subscribe_in(
+                            subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
                                 move |view, state, event, _, cx| {
@@ -421,20 +428,19 @@ impl NativeView {
                                     cx,
                                 );
                             });
-                            self._subscriptions
-                                .push(cx.observe(&state, move |view, state, cx| {
-                                    view.change(
-                                        id,
-                                        json!(
-                                            state
-                                                .read(cx)
-                                                .selected_item()
-                                                .map(|item| item.id.as_str())
-                                                .unwrap_or("")
-                                        ),
-                                        cx,
-                                    )
-                                }));
+                            subscriptions.push(cx.observe(&state, move |view, state, cx| {
+                                view.change(
+                                    id,
+                                    json!(
+                                        state
+                                            .read(cx)
+                                            .selected_item()
+                                            .map(|item| item.id.as_str())
+                                            .unwrap_or("")
+                                    ),
+                                    cx,
+                                )
+                            }));
                             NativeState::Tree(state)
                         }
                         "resizable" => NativeState::Resizable(
@@ -451,6 +457,7 @@ impl NativeView {
                 }
             };
             self.controls.insert(node.id, control);
+            self.subscriptions.insert(node.id, subscriptions);
         }
     }
     fn values(&self, cx: &App) -> BTreeMap<u64, Value> {
@@ -471,7 +478,7 @@ impl NativeView {
         self.controls
             .iter()
             .map(|(id, control)| {
-                let value = match control {
+                let mut value = match control {
                     NativeControl::Column(children) => {
                         json!({"type":"column", "children":children})
                     }
@@ -492,11 +499,15 @@ impl NativeView {
                         Value::Object(props)
                     }
                 };
+                value["visible"] = json!(self.visible[id]);
+                value["attached"] = json!(self.attached.contains(id));
+                value["displayed"] = json!(self.displayed.contains(id));
                 (*id, value)
             })
             .collect()
     }
     fn apply(&mut self, command: Command, window: &mut Window, cx: &mut Context<Self>) {
+        let focused = self.focused_control(window, cx);
         match command {
             Command::Close => cx.quit(),
             Command::Notify {
@@ -528,57 +539,185 @@ impl NativeView {
                     cx.quit();
                 }
             }
+            Command::Reconcile {
+                nodes,
+                roots,
+                patches,
+                retained,
+            } => {
+                self.mount(nodes, window, cx);
+                self.roots = roots;
+                self.controls.retain(|id, _| retained.contains(id));
+                self.styles.retain(|id, _| retained.contains(id));
+                self.visible.retain(|id, _| retained.contains(id));
+                self.subscriptions.retain(|id, _| retained.contains(id));
+                self.apply_patches(patches, window, cx);
+                self.refresh(window, cx);
+                cx.notify();
+            }
             Command::Batch(patches) => {
                 let changed = !patches.is_empty();
-                for Patch {
-                    id,
-                    property,
-                    value,
-                } in patches
-                {
-                    if property == "style" {
-                        self.styles
-                            .insert(id, value.as_object().expect("validated style").clone());
-                        continue;
-                    }
-                    // The bridge validates the whole batch against the immutable schema.
-                    let overlay_change = matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "dialog" | "sheet") && property == "value");
-                    match self.controls.get_mut(&id).expect("validated control ID") {
-                        NativeControl::Label(text) => {
-                            *text = value.as_str().expect("validated string").to_owned().into()
-                        }
-                        NativeControl::Button { text, disabled, .. } => {
-                            if property == "text" {
-                                *text = value.as_str().expect("validated string").to_owned().into();
-                            } else {
-                                *disabled = value.as_bool().expect("validated bool");
-                            }
-                        }
-                        NativeControl::Input(input) => input.update(cx, |input, cx| {
-                            let text = value.as_str().expect("validated string").to_owned();
-                            if property == "value" {
-                                input.set_value(text, window, cx);
-                            } else {
-                                input.set_placeholder(text, window, cx);
-                            }
-                        }),
-                        NativeControl::Column(_) => {
-                            unreachable!("columns have no mutable properties")
-                        }
-                        NativeControl::Kit(kit) => kit.apply(&property, value, window, cx),
-                    }
-                    if overlay_change {
-                        self.open_overlay(id, window, cx);
+                self.apply_patches(patches, window, cx);
+                if changed {
+                    self.refresh(window, cx);
+                    cx.notify();
+                }
+            }
+        }
+        if focused.is_some_and(|id| !self.displayed.contains(&id)) {
+            window.blur(cx);
+        }
+    }
+    fn apply_patches(&mut self, patches: Vec<Patch>, window: &mut Window, cx: &mut Context<Self>) {
+        for Patch {
+            id,
+            property,
+            value,
+        } in patches
+        {
+            if property == "visible" {
+                self.visible
+                    .insert(id, value.as_bool().expect("validated visibility"));
+                continue;
+            }
+            if property == "style" {
+                self.styles
+                    .insert(id, value.as_object().expect("validated style").clone());
+                continue;
+            }
+            match self.controls.get_mut(&id).expect("validated control ID") {
+                NativeControl::Label(text) => {
+                    *text = value.as_str().expect("validated string").to_owned().into()
+                }
+                NativeControl::Button { text, disabled, .. } => {
+                    if property == "text" {
+                        *text = value.as_str().expect("validated string").to_owned().into();
+                    } else {
+                        *disabled = value.as_bool().expect("validated bool");
                     }
                 }
-                if changed {
-                    cx.notify();
+                NativeControl::Input(input) => input.update(cx, |input, cx| {
+                    let text = value.as_str().expect("validated string").to_owned();
+                    if property == "value" {
+                        input.set_value(text, window, cx);
+                    } else {
+                        input.set_placeholder(text, window, cx);
+                    }
+                }),
+                NativeControl::Column(_) => unreachable!("columns have no component properties"),
+                NativeControl::Kit(kit) => kit.apply(&property, value, window, cx),
+            }
+        }
+    }
+    fn focused_control(&self, window: &Window, cx: &App) -> Option<u64> {
+        self.controls.iter().find_map(|(id, control)| {
+            let focus = match control {
+                NativeControl::Input(state) => Some(state.read(cx).focus_handle(cx)),
+                NativeControl::Kit(kit) => match &kit.state {
+                    NativeState::Textarea(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Number(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Otp(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Editor(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Select(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Combobox(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::DatePicker(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Time(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Color(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Table(state) => Some(state.read(cx).focus_handle(cx)),
+                    NativeState::Carousel(state) => Some(state.read(cx).focus_handle(cx)),
+                    _ => None,
+                },
+                _ => None,
+            };
+            focus
+                .filter(|focus| focus.contains_focused(window, cx))
+                .map(|_| *id)
+        })
+    }
+    fn refresh(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        fn visit(
+            view: &NativeView,
+            id: u64,
+            shown: bool,
+            attached: &mut HashSet<u64>,
+            displayed: &mut HashSet<u64>,
+        ) {
+            attached.insert(id);
+            let shown = shown && view.visible[&id];
+            if shown {
+                displayed.insert(id);
+            }
+            let children = match &view.controls[&id] {
+                NativeControl::Column(children) => children.as_slice(),
+                NativeControl::Kit(kit) => kit.children.as_slice(),
+                _ => &[],
+            };
+            for child in children {
+                visit(view, *child, shown, attached, displayed);
+            }
+        }
+        let mut attached = HashSet::new();
+        let mut displayed = HashSet::new();
+        for root in &self.roots {
+            visit(self, *root, true, &mut attached, &mut displayed);
+        }
+        self.attached = attached;
+        self.displayed = displayed;
+        let carousels: Vec<_> = self
+            .controls
+            .iter()
+            .filter_map(|(id, control)| {
+                if let NativeControl::Kit(kit) = control
+                    && let NativeState::Carousel(state) = &kit.state
+                {
+                    return Some((
+                        *id,
+                        state.clone(),
+                        kit.children.iter().filter(|id| self.visible[id]).count(),
+                    ));
+                }
+                None
+            })
+            .collect();
+        for (id, state, count) in carousels {
+            let old = state.read(cx).selected_index();
+            state.update(cx, |state, cx| state.set_item_count(count, cx));
+            let new = state.read(cx).selected_index();
+            if old != new {
+                self.change(id, json!(new.unwrap_or(0)), cx);
+            }
+        }
+        for kind in ["dialog", "sheet"] {
+            let wanted = self
+                .controls
+                .iter()
+                .find_map(|(id, control)| match control {
+                    NativeControl::Kit(kit)
+                        if kit.kind == kind
+                            && kit.props["value"] == true
+                            && self.displayed.contains(id) =>
+                    {
+                        Some(*id)
+                    }
+                    _ => None,
+                });
+            if self.opened.get(kind).copied() != wanted {
+                use gpui_kit::component::WindowExt;
+                if self.opened.remove(kind).is_some() {
+                    if kind == "sheet" {
+                        window.close_sheet(cx);
+                    } else {
+                        window.close_dialog(cx);
+                    }
+                }
+                if let Some(id) = wanted {
+                    self.open_overlay(id, window, cx);
                 }
             }
         }
     }
     pub(crate) fn change(&mut self, id: u64, value: Value, cx: &mut Context<Self>) {
-        if let NativeControl::Kit(kit) = self.controls.get_mut(&id).expect("mounted Kit control") {
+        if let Some(NativeControl::Kit(kit)) = self.controls.get_mut(&id) {
             if kit.props.get("value") == Some(&value) {
                 return;
             }
@@ -607,7 +746,7 @@ impl NativeView {
             return;
         }
         let title = Props(&kit.props).s("title");
-        let children = kit.children.clone();
+        self.opened.insert(kit.kind.clone(), id);
         let view = cx.entity();
         let close = std::rc::Rc::new(
             cx.listener(move |view, _: &ClickEvent, _, cx| view.change(id, json!(false), cx)),
@@ -621,11 +760,17 @@ impl NativeView {
                         move |e, w, cx| close(e, w, cx)
                     })
                     .child(view.update(cx, |v, cx| {
-                        div()
-                            .flex()
-                            .flex_col()
-                            .gap_3()
-                            .children(children.iter().map(|id| v.render_control(*id, cx)))
+                        div().flex().flex_col().gap_3().children(
+                            v.controls
+                                .get(&id)
+                                .into_iter()
+                                .flat_map(|control| match control {
+                                    NativeControl::Kit(kit) => kit.children.as_slice(),
+                                    _ => &[],
+                                })
+                                .filter(|id| v.visible[id])
+                                .map(|id| v.render_control(*id, cx)),
+                        )
                     }))
             });
         } else {
@@ -637,11 +782,17 @@ impl NativeView {
                         move |e, w, cx| close(e, w, cx)
                     })
                     .child(view.update(cx, |v, cx| {
-                        div()
-                            .flex()
-                            .flex_col()
-                            .gap_3()
-                            .children(children.iter().map(|id| v.render_control(*id, cx)))
+                        div().flex().flex_col().gap_3().children(
+                            v.controls
+                                .get(&id)
+                                .into_iter()
+                                .flat_map(|control| match control {
+                                    NativeControl::Kit(kit) => kit.children.as_slice(),
+                                    _ => &[],
+                                })
+                                .filter(|id| v.visible[id])
+                                .map(|id| v.render_control(*id, cx)),
+                        )
                     }))
             });
         }
@@ -652,17 +803,19 @@ impl NativeView {
         }
     }
     pub(crate) fn click(&mut self, id: u64, cx: &mut Context<Self>) {
-        if !self
-            .transport
-            .emit(json!({"event":"click", "id":id, "values":self.values(cx)}))
+        if self.displayed.contains(&id)
+            && !self
+                .transport
+                .emit(json!({"event":"click", "id":id, "values":self.values(cx)}))
         {
             cx.quit();
         }
     }
     pub(crate) fn event(&mut self, id: u64, event: &str, value: Value, cx: &mut Context<Self>) {
-        if !self
-            .transport
-            .emit(json!({"event":event, "id":id, "value":value, "values":self.values(cx)}))
+        if self.displayed.contains(&id)
+            && !self
+                .transport
+                .emit(json!({"event":event, "id":id, "value":value, "values":self.values(cx)}))
         {
             cx.quit();
         }
@@ -675,7 +828,12 @@ impl NativeView {
                     &self.styles[&id],
                     cx,
                 )
-                .children(children.iter().map(|id| self.render_control(*id, cx)))
+                .children(
+                    children
+                        .iter()
+                        .filter(|id| self.visible[id])
+                        .map(|id| self.render_control(*id, cx)),
+                )
                 .into_any_element();
             }
             NativeControl::Label(text) => div()
@@ -723,6 +881,7 @@ impl NativeView {
                 id,
                 kit.children
                     .iter()
+                    .filter(|id| self.visible[id])
                     .map(|id| self.render_control(*id, cx))
                     .collect(),
                 &self.styles[&id],
@@ -748,6 +907,11 @@ impl Render for NativeView {
             .gap_3()
             .bg(cx.theme().background)
             .text_color(cx.theme().foreground)
-            .children(self.roots.iter().map(|id| self.render_control(*id, cx)))
+            .children(
+                self.roots
+                    .iter()
+                    .filter(|id| self.visible[id])
+                    .map(|id| self.render_control(*id, cx)),
+            )
     }
 }

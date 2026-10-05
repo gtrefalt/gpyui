@@ -16,7 +16,7 @@ Download the correct architecture (`linux_x86_64` or `linux_aarch64`) and use,
 from your uv project:
 
 ```bash
-uv add /path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.2.0-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install gpyui` or `pip install /path/to/wheel.whl` in a
@@ -61,8 +61,10 @@ the default. Runtime theme switching is not exposed.
 `run()` blocks the main thread until the window closes. One native application
 may run per process, with one window. Python callbacks run on the separate,
 owned asyncio worker; Rust releases the GIL while running the native loop.
-Construct the full control tree before starting. `children` is a tuple;
-`add(*controls)` works before mounting only.
+Construct the initial tree before starting. `children` is a tuple supporting
+assignment. Root and container mutations work on the running callback loop.
+Removal and visibility retain native state; `dispose()` permanently releases
+controls. See [dynamic composition](composition.md#dynamic-composition).
 
 ## Startup and shutdown
 

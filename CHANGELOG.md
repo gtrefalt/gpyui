@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 — 2026-10-05
+
+- Add runtime child insertion, replacement, reordering and removal to containers
+  and application roots, with coalesced structural/property batches.
+- Add visibility without layout space. Moving, hiding and detaching existing
+  controls preserve native identity, text, caret, selection and undo history.
+- Add explicit subtree disposal to release native state, subscriptions, handlers
+  and bindings. Validate tree updates atomically and ignore stale disposed events.
+- Refresh open dialog/sheet content and carousel bounds after child updates.
+- Document the new contracts and add native editing regression tests.
+- Standardize installation on `uv add` with `pip install` alternatives and add
+  Python application-building and design agent skills.
+
 ## 0.1.1 — 2026-10-03
 
 - Refresh the package README with a native light-theme dashboard PNG, a short

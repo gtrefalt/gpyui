@@ -10,7 +10,7 @@
 | Choose one item | RadioGroup, Select, Combobox | RadioGroup index; Select/Combobox string |
 | Navigate | Tabs, Sidebar, Breadcrumb, Stepper, Pagination | Index and `on_change`; application owns content behavior |
 | Browse data | List, Table, Tree | List/Table selected index; Tree stable string ID |
-| Compose geometry | Column, Row, Container, GroupBox, Scroll, Resizable | Children created before mount; Rust lays out and scrolls |
+| Compose geometry | Column, Row, Container, GroupBox, Scroll, Resizable | Dynamic children; Rust retains controls, lays out and scrolls |
 | Present a workflow overlay | Dialog, Sheet | Boolean `value`, `open()`, `close()`, `on_change` |
 | Show feedback | Label, Alert, Tag, Progress, notification | Mutable text/status; `app.notify()` is runtime-only |
 | Plot data | LineChart, AreaChart, BarChart, PieChart, CandlestickChart | Reassigned `data` collection; constructor contract per chart |
@@ -38,7 +38,7 @@ with app, Column().style(gap=16, padding=24, align="stretch"):
 ```
 
 A new control attaches to the innermost active container. `.style()` returns the
-same control. Each control has one parent, and cycles/reparenting are rejected.
+same control. Each control has one parent; sharing and cycles are rejected.
 Do not add context-created children again or pass them to another parent.
 
 ## Explicit trees
@@ -89,7 +89,21 @@ bounded parent. Do not put an expanding document in an unbounded Scroll and
 expect overflow. Resizable exposes native draggable pane boundaries, not the
 full Kit dock/tiles API.
 
-Navigation controls do not own arbitrary content pages. The mounted tree is
-static: no runtime child insertion/removal, generic visibility switch, route
-stack or multi-window support. Update prebuilt fields and datasets. If a task
-needs dynamic topology, implement that library capability before relying on it.
+## Dynamic composition
+
+Containers and application roots support `add(*controls)`, `insert(index, control)`,
+`remove(*controls)`, `clear()`, `set_children(controls)` and `children = controls`.
+Use these on the callback loop after startup. Reuse existing instances when
+reordering or moving: Rust retains their identity, selection and undo history.
+Move by removing from the old parent then adding to the new parent in a synchronous
+`app.batch()`. A mounted control cannot move between applications.
+
+Set `control.visible = False` to hide its entire subtree without layout space.
+Hiding and removal retain state and bindings; add a detached control again to
+restore it. `dispose()` permanently releases a subtree's native state, bindings
+and handlers; it cannot be reused. Detached controls count toward the 10,000-control
+limit until disposed. For a bounded list or route cache, dispose discarded pages.
+
+Navigation controls select an index and do not own pages. Implement page switching
+with visibility on retained pages or replace a content container's children.
+There is no built-in router, global keyboard registry or multi-window support.

@@ -54,6 +54,8 @@ class Control:
         self._bindings: list[Callable[[], None]] = []
         self._handlers: dict[str, Handler] = {}
         self._style: dict[str, Any] = {}
+        self._visible = True
+        self._disposed = False
         if stack := _containers.get():
             stack[-1].add(self)
 
@@ -62,6 +64,7 @@ class Control:
         return self._id
 
     def _set(self, name: str, value: Any) -> None:
+        self._ensure_alive()
         if self._app:
             self._app._check_mutation()
         if self._properties[name] == value:
@@ -71,12 +74,59 @@ class Control:
             self._app._queue(self.id, name, value)
 
     def _spec(self) -> dict[str, Any]:
-        return {"id": self.id, "type": self._type, **self._properties, "style": self._style}
+        return {
+            "id": self.id,
+            "type": self._type,
+            **self._properties,
+            "style": self._style,
+            "visible": self.visible,
+        }
+
+    def _ensure_alive(self) -> None:
+        if self._disposed:
+            raise RuntimeError("control has been disposed")
+
+    @property
+    def disposed(self) -> bool:
+        return self._disposed
+
+    @property
+    def visible(self) -> bool:
+        return self._visible
+
+    @visible.setter
+    def visible(self, value: bool) -> None:
+        self._ensure_alive()
+        if not isinstance(value, bool):
+            raise TypeError("visible requires bool")
+        if self._app:
+            self._app._check_mutation()
+        if self._visible != value:
+            self._visible = value
+            if self._app:
+                self._app._queue(self.id, "visible", value)
+
+    def _is_displayed(self) -> bool:
+        node: Control | Application | None = self
+        while isinstance(node, Control):
+            if not node.visible or node.disposed:
+                return False
+            node = node._parent
+        return self._app is not None and node is self._app
+
+    def dispose(self) -> None:
+        """Detach and permanently release this subtree and its bindings."""
+        if self.disposed:
+            return
+        from .tree import dispose
+
+        dispose(self)
 
     def style(self, **properties: Any) -> Self:
         """Set pixel layout and semantic theme styles; return this control."""
         from .widgets import validate_style
 
+        self._ensure_alive()
         value = validate_style({**self._style, **properties})
         if self._app:
             self._app._check_mutation()
@@ -109,21 +159,35 @@ class Column(Control):
     def children(self) -> tuple[Control, ...]:
         return tuple(self._children)
 
+    @children.setter
+    def children(self, controls: Iterable[Control]) -> None:
+        self.set_children(controls)
+
+    def set_children(self, controls: Iterable[Control]) -> Self:
+        """Replace/reorder children, retaining existing native control identities."""
+        from .tree import set_children
+
+        set_children(self, controls)
+        return self
+
     def add(self, *controls: Control) -> Self:
-        if self._app:
-            raise RuntimeError("the mounted tree is fixed for this milestone")
-        for control in controls:
-            if not isinstance(control, Control):
-                raise TypeError("columns accept Control children")
-            parent: Column | Application | None = self
-            while isinstance(parent, Column):
-                if parent is control:
-                    raise ValueError("control tree cannot contain a cycle")
-                parent = parent._parent
-            if control._parent is not None or control._app is not None:
-                raise ValueError("a control can have only one parent")
-            control._parent = self
-            self._children.append(control)
+        self.set_children((*self._children, *controls))
+        return self
+
+    def insert(self, index: int, control: Control) -> Self:
+        children = list(self.children)
+        children.insert(index, control)
+        self.set_children(children)
+        return self
+
+    def remove(self, *controls: Control) -> Self:
+        if any(control not in self._children for control in controls):
+            raise ValueError("control is not a child of this container")
+        self.set_children(control for control in self._children if control not in controls)
+        return self
+
+    def clear(self) -> Self:
+        self.set_children(())
         return self
 
     def __enter__(self) -> Self:

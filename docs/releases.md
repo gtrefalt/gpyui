@@ -52,7 +52,7 @@ matching your operating system and architecture:
 ```bash
 uv init my-app
 cd my-app
-uv add /path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.2.0-cp312-abi3-linux_x86_64.whl
 ```
 
 For an existing uv project, only the `uv add` command is needed.
@@ -68,7 +68,7 @@ dependencies as well as packages compiled into the binary.
 
 ## GitHub releases
 
-Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.1.1`.
+Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.2.0`.
 After all six builds and all installed-wheel test jobs pass, the workflow creates
 a GitHub prerelease, attaches the six wheels, source archive and `SHA256SUMS`,
 and publishes it. Release notes list the download size of each distribution.
@@ -127,7 +127,7 @@ in `Cargo.toml`, and both lockfiles. Each PyPI version must be new; uploaded
 distribution filenames cannot be reused. Record release changes in `CHANGELOG.md`.
 
 Merge the version update, then create and push a matching version tag such as
-`v0.1.1`. This is the only event that starts native builds. After all six builds
+`v0.2.0`. This is the only event that starts native builds. After all six builds
 and 17 installed-wheel test jobs pass, the workflow publishes the GitHub release
 and then uploads the PyPI-compatible files automatically. Configure the Trusted
 Publisher before pushing the tag.
@@ -147,6 +147,6 @@ disabled does not build or upload anything.
 PyPI displays the README stored in the uploaded distribution metadata. A commit
 to GitHub changes the repository README, but does not change PyPI. To refresh
 the PyPI description, screenshots, license metadata or project links, publish a
-new version (a patch release such as `0.1.1` is appropriate for packaging changes).
+new version (a patch release such as `0.2.1` is appropriate for packaging changes).
 Existing release files cannot be overwritten. Use absolute image and documentation
 URLs so the README also renders outside the GitHub checkout.

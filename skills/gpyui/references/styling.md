@@ -33,6 +33,9 @@ positioning, opacity, font families or Rust `.primary()` builders: those
 styling APIs are not exposed. ColorPicker's hex **value** is a separate data
 contract; it does not add raw hex colors to `.style()`.
 
+Visibility is a control property: `control.visible = False`, not a style key.
+Hidden controls consume no layout space and keep their native state.
+
 Button `variant` is fixed at construction and accepts `primary`, `secondary`,
 `outline`, `ghost`, `danger`. Its icon is also fixed. Other controls have their
 own variant contracts: read the catalog, do not transfer Button variants to Tag

@@ -32,6 +32,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `items` | `[]` | list[tree item] | Constructor only |
 | `value` | `""` | str | Assignment |
 
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](../reference/core.md).
+
 ## Events and state
 
 - `on_change(event)`: Runs after native value and Python mirror/bound State change.
@@ -46,4 +48,4 @@ Item IDs must be unique. value is an item ID or an empty string. Items are fixed
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L717) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L724) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

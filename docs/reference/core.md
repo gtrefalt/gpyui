@@ -8,6 +8,9 @@ Use concrete controls rather than constructing `Control` directly.
 | API | Contract |
 | --- | --- |
 | `id` | Stable positive integer identifying the control |
+| `visible` | Boolean; hide from layout without destroying native state |
+| `disposed` | Read-only boolean indicating permanent disposal |
+| `dispose()` | Detach and permanently release the entire subtree; idempotent |
 | `style(**properties)` | Validate/merge native styles and return the same control |
 | `update()` | Flush the owning application's pending changes, if mounted |
 | `unbind()` | Remove this control's binding subscriptions |
@@ -16,9 +19,21 @@ Mutable component properties submit coalesced updates by assignment. Field table
 on the [component pages](../components/index.md) distinguish assignment from
 constructor-only settings. Collections return copies.
 
-Containers additionally expose `children`, `add(*controls)` and a context manager.
-Every control has one parent; reparenting and cycles are rejected. Topology is
-fixed after mounting.
+Containers and application roots expose a `children` tuple and these mutation APIs:
+
+| API | Contract |
+| --- | --- |
+| `children = controls`, `set_children(controls)` | Replace or reorder the children |
+| `add(*controls)` | Append children |
+| `insert(index, control)` | Insert with Python list index semantics |
+| `remove(*controls)` | Detach direct children; reject absent controls |
+| `clear()` | Detach all children |
+
+Mutation methods return the same parent. A control has one parent; sharing and
+cycles are rejected. Remove before moving to another parent in the same app.
+Before startup, compose normally; after startup, mutate on the callback loop.
+Detach/hide retains state and subscriptions; `dispose()` releases them.
+See [runtime composition](../guide/layout.md#runtime-children-and-visibility).
 
 ## Event
 
@@ -55,7 +70,7 @@ label = Label().bind_text(enabled, lambda value: "On" if value else "Off")
 
 `bind_value` is two-way on native value/change controls. `Label.bind_text` is
 one-way, with `str` as the default transform. `unbind()` removes subscriptions;
-app shutdown unbinds mounted controls. [State binding](../guide/state.md) explains
+`dispose()` and app shutdown unbind retained controls, including detached ones. [State binding](../guide/state.md) explains
 thread ownership and native editing history.
 
 [Control/Event source](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py) ·

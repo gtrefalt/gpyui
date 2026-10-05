@@ -1,7 +1,8 @@
 # Application
 
 `Application` owns one native window and one Python asyncio worker loop.
-The control tree must be constructed before `run()` mounts it.
+Construct the initial tree before `run()`. Running callbacks can update children
+and visibility while retaining native state.
 
 ```python
 from gpyui import Application, Column, Label
@@ -29,17 +30,25 @@ until native close. A process may start the native application once. Native
 window close cancels awaiting callback tasks and joins the Python worker.
 
 `close()` flushes pending mutations and requests native shutdown from the callback
-loop. `children` exposes a tuple of roots. `add(*controls)` attaches roots before
-mounting. `errors` exposes reported callback errors as a tuple.
+loop. `children` exposes a tuple of roots and supports assignment. `add`, `insert`,
+`remove`, `clear` and `set_children` work before mounting and on the running
+callback loop, using the same contracts as [containers](core.md).
+`errors` exposes reported callback errors as a tuple.
 
 ## Updates
 
 | Method | Contract |
 | --- | --- |
-| `update()` | Flush coalesced property assignments from the callback loop |
+| `update()` | Flush coalesced property and child updates from the callback loop |
 | `batch()` | Context manager grouping synchronous assignments; no rollback |
 | `await snapshot()` | Flush and wait for applied native state, indexed by integer control IDs |
 | `call_soon(callback, *args)` | Thread-safe handoff of short synchronous work to the callback loop |
+
+Snapshots include retained detached controls until disposal. Each node includes
+`visible` (its own flag), `attached` (under an application root) and `displayed`
+(attached and visible, including ancestors). Structural updates and explicit
+property patches in one batch apply together. Existing native properties are
+never replayed from a tree description.
 
 The native snapshot barrier does not wait for GPU presentation. While the app
 runs, mutate controls/State on the callback loop. External worker threads can
