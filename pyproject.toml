@@ -60,4 +60,4 @@ root = ["src", "examples", "tests"]
 python-version = "3.12"
 
 [tool.ty.src]
-include = ["src", "examples", "scripts", "tests"]
+include = ["src", "examples", "scripts", "tests", "skills"]

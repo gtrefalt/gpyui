@@ -1,4 +1,4 @@
-"""Generate component pages from the actual Python contracts and runnable specimens.
+"""Generate docs and skill references from Python contracts and runnable specimens.
 
 The docs-only environment can run this without a compiled Rust extension.
 Use --check in CI to detect stale references or missing native screenshots.
@@ -11,6 +11,7 @@ import json
 import re
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -246,7 +247,57 @@ def generated_files():
         + config[config.index(end) :]
     )
     pages["zensical.toml"] = config
+    pages.update(skill_references())
     return pages
+
+
+def skill_references():
+    """Bundle the same contracts/examples with the installable agent skill."""
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
+    prefix = "skills/gpyui/references/"
+    index = [
+        "# Python component index",
+        "",
+        f"Generated from gpyui {version}'s Python contracts and tested catalog specimens.",
+        "Run `uv run --only-group docs python scripts/generate-docs.py` in the library checkout to regenerate.",
+        "",
+        "Read only the families relevant to the task. Each includes complete runnable examples,",
+        "properties, events, constructor-only fields and limits. Rust Kit methods do not imply Python methods.",
+        "See [composition](composition.md), [state/events](state-and-events.md) and [styling](styling.md) for shared contracts.",
+        "",
+        "| Family | Python controls |",
+        "| --- | --- |",
+    ]
+    files = {}
+    for group, names in GROUPS.items():
+        relative = f"components/{slug(group)}.md"
+        index.append(f"| [{group}]({relative}) | {', '.join(names)} |")
+        lines = [f"# {group}", "", f"Generated Python API reference for gpyui {version}.", ""]
+        for name in names:
+            page = component_page(name)
+            page = re.sub(r"^!\[Native .*?\n\n", "", page, flags=re.MULTILINE)
+            page = page.replace(
+                "A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.\n\n",
+                "",
+            )
+            page = re.sub(r"^(#+) ", r"\1# ", page, flags=re.MULTILINE)
+            page = re.sub(
+                r"\]\(\.\./([^)]*?)\.md\)",
+                lambda match: (
+                    "]("
+                    + {
+                        "guide/styling": "../styling.md",
+                        "guide/events": "../state-and-events.md",
+                        "guide/state": "../state-and-events.md",
+                    }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
+                    + ")"
+                ),
+                page,
+            )
+            lines.append(page)
+        files[prefix + relative] = "\n".join(lines)
+    files[prefix + "components.md"] = "\n".join(index) + "\n"
+    return files
 
 
 if __name__ == "__main__":
@@ -269,5 +320,5 @@ if __name__ == "__main__":
     if args.check and (stale or missing):
         raise SystemExit(f"Stale generated docs: {stale}; missing native previews: {missing}")
     print(
-        f"{'Verified' if args.check else 'Generated'} {len(SAMPLES)} component references and runnable examples."
+        f"{'Verified' if args.check else 'Generated'} {len(SAMPLES)} component references and runnable examples for docs and skills."
     )

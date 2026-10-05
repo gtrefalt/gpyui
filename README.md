@@ -43,11 +43,14 @@ documentation for the animated walkthrough.
 Requires **CPython 3.12+**. On macOS 12+ and Windows, install from PyPI:
 
 ```bash
-uv pip install gpyui
+uv init my-app
+cd my-app
+uv add gpyui
 ```
 
-Or use `pip install gpyui`. Native wheels are available for Intel/x64 and ARM64;
-Windows ARM64 is tested with Python 3.13+.
+In an existing uv project, just run `uv add gpyui`. Alternatively, use
+`pip install gpyui` in a virtual environment. Native wheels are available for
+Intel/x64 and ARM64; Windows ARM64 is tested with Python 3.13+.
 
 On **Linux**, install the matching prebuilt wheel from
 [GitHub Releases](https://github.com/gtrefalt/gpyui/releases). Linux wheels use
@@ -77,8 +80,9 @@ with app, Column().style(gap=12, padding=24):
 app.run()
 ```
 
-Run `python hello.py`. Clicking the native button runs your Python callback and
-updates the label. Explore [layouts](https://gtrefalt.github.io/gpyui/guide/layout/),
+Run `uv run python hello.py` (or `python hello.py` with pip). Clicking the native
+button runs your Python callback and updates the label. Explore
+[layouts](https://gtrefalt.github.io/gpyui/guide/layout/),
 [state binding](https://gtrefalt.github.io/gpyui/guide/state/) and
 [async events](https://gtrefalt.github.io/gpyui/guide/events/) for larger apps.
 
@@ -91,6 +95,21 @@ control, plus guides for styling, application lifecycle and release builds.
 Try the [trading dashboard](https://gtrefalt.github.io/gpyui/examples/trading/),
 [component gallery](https://gtrefalt.github.io/gpyui/examples/gallery/) or
 [async binding example](https://github.com/gtrefalt/gpyui/blob/main/examples/async_binding.py).
+
+## Agent skills
+
+Give your coding agent the Python API, component contracts, async recipes and
+native desktop design guidance:
+
+```bash
+npx skills add gtrefalt/gpyui --skill gpyui --skill gpyui-design-guides
+```
+
+Inspired by [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/main/skills),
+these skills cover the Python bindings and their current limits. See
+[installation and usage](https://gtrefalt.github.io/gpyui/agent-skills/), including
+manual installation for Codex. Python dependencies use uv; the command above
+installs agent instructions.
 
 ## Project status
 

@@ -50,9 +50,13 @@ No PyPI account is needed to build or download them. Install the extracted wheel
 matching your operating system and architecture:
 
 ```bash
-uv venv
-uv pip install path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
+uv init my-app
+cd my-app
+uv add /path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
 ```
+
+For an existing uv project, only the `uv add` command is needed.
+Alternatively, use `pip install /path/to/wheel.whl` in a virtual environment.
 
 The exact filenames and sizes are shown in the artifacts. Wheel contents and
 metadata are checked before upload; Linux native dependencies are also audited.

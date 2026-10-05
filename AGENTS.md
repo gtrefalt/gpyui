@@ -15,3 +15,16 @@ Extend component coverage and Python access to layout, styling, events, state an
 application lifecycle as the toolkit develops. Distinguish implemented support
 from planned capabilities. See README.md and docs/architecture.md for the current
 API, source evidence and constraints.
+
+# Application-building skills
+
+For Python application work, read `skills/gpyui/SKILL.md` and its task-specific
+references. Before designing or changing visible UI, also read
+`skills/gpyui-design-guides/SKILL.md` and the bundled design guide. These cover
+the Python bindings; do not substitute upstream Rust APIs. See skills/README.md
+for installation into application projects outside this checkout.
+
+Keep generated skill component references in sync with the docs using
+`just docs-generate`. Run `just skills-check` and `just docs-check` after changes
+to skills or public component contracts. Docs/skills-only changes do not need
+a version bump, native wheel build, or release tag.

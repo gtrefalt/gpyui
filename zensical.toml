@@ -16,6 +16,7 @@ nav = [
     { "State and binding" = "guide/state.md" },
     { "Events and asyncio" = "guide/events.md" },
     { "Style and theme" = "guide/styling.md" },
+    { "Agent skills" = "agent-skills.md" },
   ] },
 # BEGIN COMPONENT NAV
 { "Components" = [
