@@ -15,6 +15,7 @@ nav = [
     { "Compose layouts" = "guide/layout.md" },
     { "State and binding" = "guide/state.md" },
     { "Events and asyncio" = "guide/events.md" },
+    { "Commands and menus" = "guide/commands.md" },
     { "Style and theme" = "guide/styling.md" },
     { "Agent skills" = "agent-skills.md" },
   ] },
@@ -36,6 +37,7 @@ nav = [
     { "Overview" = "components/text-and-buttons/index.md" },
     { "Label" = "components/label.md" },
     { "Button" = "components/button.md" },
+    { "DropdownMenu" = "components/dropdown-menu.md" },
     { "Link" = "components/link.md" },
     { "Clipboard" = "components/clipboard.md" },
     { "Icon" = "components/icon.md" },
@@ -136,6 +138,7 @@ nav = [
   ] },
   { "Examples" = [
     { "Trading stream" = "examples/trading.md" },
+    { "Notes editor" = "examples/notes.md" },
     { "Component gallery" = "examples/gallery.md" },
   ] },
   { "Project" = [

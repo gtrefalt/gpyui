@@ -18,6 +18,49 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
+## Commands and menus in 0.3.0
+
+The implementation retains the pinned upstream baseline below. Before adding
+menus we inspected [DropdownMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/dropdown_menu.rs),
+[ContextMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/context_menu.rs),
+[PopupMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/popup_menu.rs),
+[AppMenuBar](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/app_menu_bar.rs)
+and [NativeMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/native_menu/mod.rs).
+The actual NativeMenu conversion is `From<gpui::Menu>`; its doc comment's
+`from_menu_items` method does not exist in the pinned implementation.
+
+The implementation follows these verified steps:
+
+1. Add Python Command/Menu models separate from controls, with stable IDs and
+   window-lifetime ownership. Register references before validating/committing
+   tree and menu configuration; reject duplicate shortcuts and cross-app reuse.
+2. Represent native activation with a typed GPUI Action carrying the command ID.
+   Bind keys in the window's root context. Kit buttons and popup items enqueue
+   the same command event, including native editing snapshots; Python sync/async
+   handlers continue on the existing asyncio worker.
+3. Build actual Kit menus and retain weak popup entities so updates can rebuild
+   open drawn menus without replacing editors or introducing ownership cycles.
+   GPUI's menu action-context focus restoration remains native. Native menu
+   overlays outside the view also need an application-level action fallback.
+4. Use GPUI's system menus on macOS and Kit AppMenuBar on Windows/Linux. OS popup
+   tracking remains in Kit NativeMenu, including the drawn Linux fallback.
+   Capture assigned native context-menu presses before the input's built-in menu;
+   for drawn menus suppress that input callback for the current right press.
+   Kit restores the default editing-menu callback on the following render.
+5. Test shared enabled/checked state, nested menu routing, dynamic registration,
+   async snapshots and shutdown with actual native interactions and installed
+   release wheels, then document the narrower platform guarantees.
+
+Native command properties use explicit patches. Reconciliation never replays
+old mutable command values. Button disablement combines local disabled state
+with shared command enabled state. Source-bound drawn popup callbacks validate
+that their host remains displayed and the command still belongs to its menu.
+Commands themselves remain registered for the window lifetime. Menu and popup
+refresh flags avoid reloading application menus on unrelated label/input edits.
+OS-native open menus contain a snapshot, but the latest enabled gate is checked
+again at activation. The public [commands guide](guide/commands.md) records
+bounds, menu-update behavior and remaining command-palette/keymap gaps.
+
 ## Dynamic composition in 0.2.0
 
 Python roots and container children now support runtime replacement, insertion,

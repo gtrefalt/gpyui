@@ -21,7 +21,7 @@ uv run python examples/component_preview.py Tree
 These commands open real GPUI windows. The documentation previews are captures
 of those native specimens, not interactive browser implementations.
 
-The [catalog](../components/index.md) provides all 71 controls, individual images,
+The [catalog](../components/index.md) provides all 72 controls, individual images,
 property tables and complete runnable examples. Animated controls' screenshots
 capture one frame. Popup previews open the actual native overlay before capture.
 

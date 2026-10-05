@@ -1,6 +1,6 @@
 # Overlays
 
-Generated Python API reference for gpyui 0.2.0.
+Generated Python API reference for gpyui 0.3.0.
 
 ## Tooltip
 

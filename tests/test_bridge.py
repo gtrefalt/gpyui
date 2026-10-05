@@ -129,3 +129,71 @@ def test_failed_enqueue_does_not_commit_future_tree_schema():
             bridge.submit('[{"id":2,"property":"text","value":"New schema was not committed"}]')
     finally:
         bridge.finish()
+
+
+def test_command_schema_validates_references_and_readonly_fields():
+    from gpyui import Button, Command, Menu
+    from gpyui.commands import menu_specs
+
+    command = Command("Save", lambda: None, shortcut="mod+s")
+    tree = json.dumps([Button(command=command)._spec()])
+    config = json.dumps({"commands": [command._spec()], "menus": menu_specs([Menu("File", [command])])})
+    bridge = Bridge(tree, config)
+    bridge.submit(
+        json.dumps(
+            [
+                {"id": command.id, "property": "enabled", "value": False},
+                {"id": command.id, "property": "checked", "value": True},
+            ]
+        )
+    )
+    for property in ["label", "shortcut", "visible", "style"]:
+        with pytest.raises(ValueError, match="invalid property"):
+            bridge.submit(json.dumps([{"id": command.id, "property": property, "value": True}]))
+    invalid = command._spec() | {"shortcut": "bogus-s"}
+    with pytest.raises(ValueError, match="invalid command shortcut"):
+        Bridge("[]", json.dumps({"commands": [invalid]}))
+    with pytest.raises(ValueError, match="unknown command"):
+        Bridge(tree)
+    bridge.finish()
+
+
+def test_command_config_queue_overload_is_atomic():
+    from gpyui import Command
+
+    first = Command("First", lambda: None)
+    second = Command("Second", lambda: None)
+    bridge = Bridge("[]", json.dumps({"commands": [first._spec()]}))
+    for token in range(1024):
+        bridge.snapshot(token)
+    with pytest.raises(RuntimeError, match="queue unavailable"):
+        bridge.reconcile("[]", "[]", "[]", json.dumps({"commands": [first._spec(), second._spec()]}))
+    with pytest.raises(ValueError, match="unknown control"):
+        bridge.submit(json.dumps([{"id": second.id, "property": "enabled", "value": False}]))
+    bridge.finish()
+
+
+def test_invalid_menu_and_command_identity_do_not_commit_schema():
+    from gpyui import Command
+
+    command = Command("Save", lambda: None, shortcut="mod+s")
+    bridge = Bridge("[]", json.dumps({"commands": [command._spec()]}))
+    invalid = command._spec() | {"label": "Changed identity"}
+    with pytest.raises(ValueError, match="constructor-only"):
+        bridge.reconcile("[]", "[]", "[]", json.dumps({"commands": [invalid]}))
+    with pytest.raises(ValueError, match="unknown command"):
+        bridge.reconcile(
+            "[]",
+            "[]",
+            "[]",
+            json.dumps(
+                {
+                    "commands": [command._spec()],
+                    "menus": [
+                        {"type": "menu", "label": "File", "items": [{"type": "command", "id": 999999}]}
+                    ],
+                }
+            ),
+        )
+    bridge.submit(json.dumps([{"id": command.id, "property": "enabled", "value": False}]))
+    bridge.finish()

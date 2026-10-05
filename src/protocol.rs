@@ -1,3 +1,4 @@
+use crate::commands::{ContextMenuSpec, MenuEntry, UiConfig};
 use serde::Deserialize;
 use serde_json::Value;
 use std::collections::{HashMap, HashSet};
@@ -9,6 +10,8 @@ pub(crate) struct Node {
     pub(crate) style: serde_json::Map<String, Value>,
     #[serde(default = "visible_by_default")]
     pub(crate) visible: bool,
+    #[serde(default)]
+    pub(crate) context_menu: Option<ContextMenuSpec>,
     #[serde(flatten)]
     pub(crate) control: Control,
 }
@@ -26,7 +29,14 @@ pub(crate) enum Control {
         value: String,
         placeholder: String,
     },
+    DropdownMenu {
+        text: String,
+        items: Vec<MenuEntry>,
+        disabled: bool,
+    },
     Button {
+        #[serde(default)]
+        command: Option<u64>,
         text: String,
         disabled: bool,
         #[serde(default)]
@@ -51,7 +61,16 @@ pub(crate) enum ControlType {
     Column,
     Label,
     Input,
-    Button { variant: String, icon: String },
+    Button {
+        variant: String,
+        icon: String,
+        command: Option<u64>,
+    },
+    DropdownMenu,
+    Action {
+        label: String,
+        shortcut: String,
+    },
     Kit(String, serde_json::Map<String, Value>),
 }
 
@@ -70,7 +89,9 @@ pub(crate) enum Command {
         roots: Vec<u64>,
         patches: Vec<Patch>,
         retained: HashSet<u64>,
+        config: UiConfig,
     },
+    Execute(u64),
     Snapshot(u64),
     Close,
     Notify {
@@ -80,7 +101,10 @@ pub(crate) enum Command {
     },
 }
 
-pub(crate) fn schema(nodes: &[Node]) -> Result<HashMap<u64, ControlType>, String> {
+pub(crate) fn schema(
+    nodes: &[Node],
+    config: &UiConfig,
+) -> Result<HashMap<u64, ControlType>, String> {
     fn visit(
         nodes: &[Node],
         out: &mut HashMap<u64, ControlType>,
@@ -94,10 +118,17 @@ pub(crate) fn schema(nodes: &[Node]) -> Result<HashMap<u64, ControlType>, String
                 Control::Column { .. } => ControlType::Column,
                 Control::Label { .. } => ControlType::Label,
                 Control::Input { .. } => ControlType::Input,
-                Control::Button { variant, icon, .. } => ControlType::Button {
+                Control::Button {
+                    variant,
+                    icon,
+                    command,
+                    ..
+                } => ControlType::Button {
                     variant: variant.clone(),
                     icon: icon.clone(),
+                    command: *command,
                 },
+                Control::DropdownMenu { .. } => ControlType::DropdownMenu,
                 Control::Kit {
                     kind,
                     props,
@@ -147,6 +178,7 @@ pub(crate) fn schema(nodes: &[Node]) -> Result<HashMap<u64, ControlType>, String
     }
     let mut out = HashMap::new();
     visit(nodes, &mut out, 0)?;
+    crate::commands::add_schema(config, &mut out, nodes)?;
     Ok(out)
 }
 
@@ -209,7 +241,13 @@ pub(crate) fn validate_batch(
         let control = schema
             .get(&patch.id)
             .ok_or_else(|| format!("unknown control {}", patch.id))?;
-        let valid = if patch.property == "visible" {
+        let valid = if let ControlType::Action { .. } = control {
+            matches!(patch.property.as_str(), "enabled" | "checked") && patch.value.is_boolean()
+        } else if patch.property == "context_menu" {
+            patch.value.is_null()
+                || serde_json::from_value::<ContextMenuSpec>(patch.value.clone())
+                    .is_ok_and(|menu| crate::commands::validate_items(&menu.items, schema).is_ok())
+        } else if patch.property == "visible" {
             patch.value.is_boolean()
         } else if patch.property == "style" {
             patch
@@ -220,7 +258,14 @@ pub(crate) fn validate_batch(
             match (control, patch.property.as_str()) {
                 (ControlType::Label | ControlType::Button { .. }, "text")
                 | (ControlType::Input, "value" | "placeholder") => patch.value.is_string(),
-                (ControlType::Button { .. }, "disabled") => patch.value.is_boolean(),
+                (ControlType::Button { .. } | ControlType::DropdownMenu, "disabled") => {
+                    patch.value.is_boolean()
+                }
+                (ControlType::DropdownMenu, "text") => patch.value.is_string(),
+                (ControlType::DropdownMenu, "items") => {
+                    serde_json::from_value::<Vec<MenuEntry>>(patch.value.clone())
+                        .is_ok_and(|items| crate::commands::validate_items(&items, schema).is_ok())
+                }
                 (ControlType::Kit(kind, initial), property) => {
                     crate::kit::validate_property(kind, initial, property, &patch.value)
                 }

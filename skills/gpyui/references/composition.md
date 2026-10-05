@@ -106,4 +106,4 @@ limit until disposed. For a bounded list or route cache, dispose discarded pages
 
 Navigation controls select an index and do not own pages. Implement page switching
 with visibility on retained pages or replace a content container's children.
-There is no built-in router, global keyboard registry or multi-window support.
+There is no built-in router, OS-global hotkey registry or multi-window support.

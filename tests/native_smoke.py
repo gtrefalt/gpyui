@@ -5,7 +5,21 @@ import json
 import threading
 from pathlib import Path
 
-from gpyui import Application, Button, Carousel, Column, Dialog, Label, Sheet, State, TextInput
+from gpyui import (
+    Application,
+    Button,
+    Carousel,
+    Column,
+    Command,
+    Dialog,
+    DropdownMenu,
+    Label,
+    Menu,
+    MenuSeparator,
+    Sheet,
+    State,
+    TextInput,
+)
 
 message = State("Starting")
 observed = {}
@@ -81,6 +95,41 @@ async def started():
         overlay.dispose()
         state = await app.snapshot()
         assert overlay.id not in state and replacement.id not in state
+    # Shared commands and queued callbacks are exercised by installed wheels on
+    # every release platform, including the macOS system application menu path.
+    completed = asyncio.Event()
+    calls = []
+
+    async def save(event):
+        assert event.sender is action and event.name == "command"
+        calls.append(field.value)
+        label.text = "Saved by command"
+        completed.set()
+
+    action = Command("Save", save, shortcut="mod+s")
+    with app.batch():
+        app.add_command(action)
+        action_button = Button(command=action)
+        dropdown = DropdownMenu("More", [action, MenuSeparator(), Menu("Nested", [action])])
+        app.add(action_button, dropdown)
+        field.context_menu([action], native=True)
+        app.menus = [Menu("File", [action])]
+    action.execute()
+    await asyncio.wait_for(completed.wait(), 5)
+    state = await app.snapshot()
+    assert calls == ["Wheel test"] and state[label.id]["text"] == "Saved by command"
+    with app.batch():
+        action.enabled = False
+        action.checked = True
+        dropdown.items = [action]
+    action.execute()  # Disabled commands do not queue another callback.
+    state = await app.snapshot()
+    assert state[action.id]["enabled"] is False and state[action.id]["checked"] is True
+    assert state[action_button.id]["disabled"] is True
+    assert len(calls) == 1
+    action.enabled = True
+    app.menus = []
+    await app.snapshot()
     observed.update(state)
     await asyncio.sleep(0.3)
     app.close()
@@ -99,4 +148,6 @@ assert not app.errors, app.errors
 assert not any(t.name == "gpyui-asyncio" for t in threading.enumerate())
 Path("artifacts").mkdir(exist_ok=True)
 Path("artifacts/native-smoke.json").write_text(json.dumps(observed))
-print("Native window, dynamic children, visibility, retained input state, asyncio and shutdown verified.")
+print(
+    "Native window, dynamic children, visibility, retained input state, shared commands, menus, asyncio and shutdown verified."
+)

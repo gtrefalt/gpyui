@@ -1,4 +1,5 @@
 mod bridge;
+mod commands;
 mod kit;
 mod protocol;
 mod view;

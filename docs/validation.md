@@ -3,6 +3,34 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Shared commands and menus (0.3.0)
+
+The feature's local checks pass 157 Python/bridge tests, Ruff, ty, Rust formatting
+and strict Clippy. The documentation generates 72 component references and
+validates 104 built pages; both installable skills construct 81 examples/recipes.
+
+Two Linux/X11 real-window cases exercise the Kit and native-menu fallback paths:
+Save from a button, dropdown, assigned context menu, application menu, shortcut
+and queued `Command.execute()`, shared disablement, checked sidebar visibility,
+nested submenu navigation, replacement/removal of open drawn menus, runtime
+shortcut registration, callback thread and shutdown. Input caret insertion and
+native Undo are checked around command activation. The full suite runs 16 native
+regression cases, including existing editing, dynamic-layout and lifecycle checks.
+OS-native context menus contain an opening snapshot;
+open drawn menus refresh from live commands/items.
+
+`tests/native_smoke.py` additionally checks command discovery, menu construction,
+async queued activation, latest input snapshots and enabled/checked state in
+installed release wheels on every supported release platform. macOS/Windows
+pointer and keyboard menu interaction remains a separate platform validation
+need; a smoke test does not certify every OS interaction.
+
+The new notes editor was run as a native light-theme window. Its save shortcut
+wrote a real temporary UTF-8 document, and its sidebar shortcut changed layout.
+The public PNGs capture that native window and an open Kit DropdownMenu.
+Unit tests verify successful notes persistence, actionable I/O failures and
+cancellation after native shutdown. No simulated browser controls are used.
+
 ## Dynamic composition (0.2.0)
 
 Real X11/Vulkan interaction tests cover TextInput, TextArea and Editor. While

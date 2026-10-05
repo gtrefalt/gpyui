@@ -1,6 +1,6 @@
 # Text and buttons
 
-Generated Python API reference for gpyui 0.2.0.
+Generated Python API reference for gpyui 0.3.0.
 
 ## Label
 
@@ -35,7 +35,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L213) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L244) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Button
 
@@ -61,7 +61,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 
 | Property | Default | Type / accepted values | Update |
 | --- | --- | --- | --- |
-| `text` | Required | str | Assignment |
+| `text` | `null` | str; defaults to command.label | Assignment |
+| `command` | `null` | Command; mutually exclusive with on_click | Constructor only |
 | `disabled` | `false` | bool | Assignment |
 | `variant` | `"secondary"` | primary · secondary · outline · ghost · danger | Constructor only |
 | `icon` | `""` | Lucide name | Constructor only |
@@ -76,7 +77,48 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L283) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L314) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+
+## DropdownMenu
+
+A Kit button with nested commands, checks and shortcut hints.
+
+### Runnable example
+
+```python
+import gpyui as ui
+
+save = ui.Command("Save", lambda: print("Save requested"), shortcut="mod+s")
+sidebar = ui.Command("Show sidebar", lambda: print("Sidebar requested"), checked=True)
+control = ui.DropdownMenu("Actions", [save, ui.MenuSeparator(), ui.Menu("View", [sidebar])])
+
+app = ui.Application(ui.Column([control]), title="DropdownMenu", width=640, height=340)
+app.run()
+```
+
+Run this in a fresh Python process on a desktop with the native build installed.
+
+### Properties
+
+| Property | Default | Type / accepted values | Update |
+| --- | --- | --- | --- |
+| `text` | Required | str | Assignment |
+| `items` | Required | Iterable[Command | Menu | MenuSeparator] | Assignment |
+| `disabled` | `false` | bool | Assignment |
+
+All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](https://gtrefalt.github.io/gpyui/reference/core/).
+
+### Events and state
+
+Menu activation calls the selected `Command.on_execute` callback with current native input values. See [commands and menus](../commands-and-menus.md).
+
+### Contract and limits
+
+Items are Command, Menu or MenuSeparator models. Reassign items to update an open menu. Shared enabled/checked state and callbacks are owned by Command; see the commands guide.
+
+All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
+
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/commands.py#L201) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Link
 

@@ -1,7 +1,7 @@
 # Component coverage and Python API
 
-The goal remains full GPUI Kit access from Python. This pass adds 67 control
-classes to the original four: **71 controls**, plus native notifications through
+The goal remains full GPUI Kit access from Python. The library exposes
+**72 controls**, reusable command/menu models and native notifications through
 `Application.notify`. Layout helpers use GPUI directly; the themed component
 wrappers construct actual Kit components. There are no placeholder classes for
 unimplemented Kit families.
@@ -41,6 +41,15 @@ blocks. `Row`, `Container` and `Scroll` also accept a positional children list.
 | [Dialog](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/dialog/dialog.rs), [Sheet](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/sheet.rs), [Notification](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/notification.rs) | `Dialog`, `Sheet`, `app.notify(...)` | Python contents, queued native open/close, native dismissal mirrored to value; one dialog and one sheet per window |
 | [Tooltip](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/tooltip.rs), [Popover](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/popover.rs), [HoverCard](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/hover_card.rs), [Clipboard](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/clipboard.rs) | `Tooltip`, `Popover`, `HoverCard`, `Clipboard` | Native hover/popup/copy behavior and Python-composed popup contents |
 | [Message](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/message.rs), [Bubble](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/bubble.rs), [Marker](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/marker.rs), [Attachment](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/attachment.rs), [Text](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/text/compat.rs) | `Message`, `Bubble`, `Marker`, `Attachment`, `Markdown`, `Html` | Native content presentation and rich text selection |
+
+## Commands and menu coverage (0.3.0)
+
+`Command`, `Menu` and `MenuSeparator` are application-owned models in addition to
+72 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
+menus use Kit's real menu builders. Commands provide shared enabled/checked
+state, async callbacks and platform-aware shortcuts. macOS uses system application
+menus, Windows/Linux use Kit AppMenuBar; OS-native context menus fall back to
+Kit on Linux. See [commands and menus](guide/commands.md).
 
 ## Values, updates and constraints
 
@@ -87,7 +96,7 @@ These are real gaps, not aliases to generic containers:
 
 | Upstream area | Next implementation |
 | --- | --- |
-| `menu`, `native_menu`, `command` | Structured command/action protocol, menus, shortcut routing and command palette |
+| `command` | Command palette UI, user-editable keymaps and sequential chords; reusable commands, menus and window shortcuts are implemented |
 | `dock` | Stable panel identities, persistence, drag/detach behavior and multiwindow lifecycle |
 | `form`, `setting`, `questionnaire` | Typed schemas, validation, conditional fields and submission lifecycle |
 | `searchable_list`, virtual list | Python data model with native virtualization and queued async search; full List delegate |

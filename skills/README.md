@@ -5,11 +5,11 @@ through **gpyui's Python API**, with actual GPUI Kit controls:
 
 | Skill | Use it for |
 | --- | --- |
-| [gpyui](gpyui/SKILL.md) | Installation, all 71 component contracts/examples, composition, State, events, asyncio, lifecycle, styling and runnable applications |
+| [gpyui](gpyui/SKILL.md) | Installation, all 72 component contracts/examples, composition, State, events, asyncio, lifecycle, styling and runnable applications |
 | [gpyui-design-guides](gpyui-design-guides/SKILL.md) | Desktop task hierarchy, panes, forms, spacing, semantic colors, data views, interaction states, copy and design review |
 
 They are inspired by [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills),
-with original guidance adapted to the Python binding. They target gpyui 0.2.0,
+with original guidance adapted to the Python binding. They target gpyui 0.3.0,
 and clearly distinguish Python support from unbound upstream capabilities.
 
 ## Install with the skills CLI

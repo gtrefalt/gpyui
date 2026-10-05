@@ -26,7 +26,8 @@ Run this in a fresh Python process on a desktop with the native build installed.
 
 | Property | Default | Type / accepted values | Update |
 | --- | --- | --- | --- |
-| `text` | Required | str | Assignment |
+| `text` | `null` | str; defaults to command.label | Assignment |
+| `command` | `null` | Command; mutually exclusive with on_click | Constructor only |
 | `disabled` | `false` | bool | Assignment |
 | `variant` | `"secondary"` | primary · secondary · outline · ghost · danger | Constructor only |
 | `icon` | `""` | Lucide name | Constructor only |
@@ -41,4 +42,4 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L283) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/controls.py#L314) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/view.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

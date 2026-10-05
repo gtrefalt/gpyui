@@ -91,7 +91,7 @@ Use Label or Alert for durable error information and `app.notify()` for a brief
 runtime confirmation. A notification cannot replace a persistent validation
 message the user needs while correcting input.
 
-For awaited work, disable the relevant Button, change the status text before
+For awaited work, disable the shared Command (or the relevant Button), change the status text before
 awaiting, and restore the button in `finally`. Button has no Python `loading`
 property; pair it with status text or a supported progress control. Loading must
 correspond to real pending work. Do not block the asyncio callback loop.
@@ -101,14 +101,16 @@ Use Dialog for a focused confirmation and Sheet for contextual details. Both
 accept prebuilt children, expose Boolean `value` and support `open()`/`close()`.
 Show the affected object and consequence in a destructive confirmation, with
 specific action text and an obvious cancel path. Do not use vague "OK" buttons
-for deletion. Test actual native dismissal/focus behavior; custom focus and
-keyboard bindings are not exposed in Python. Tooltip and HoverCard may provide
+for deletion. Test actual native dismissal/focus behavior; custom
+focus APIs are not exposed in Python. Tooltip and HoverCard may provide
 help but cannot be the only source of critical instructions.
 
 Keep command actions as Button; reserve Link for external URLs or email.
-`Kbd` only displays a shortcut, so do not label an action with a shortcut unless
-that shortcut actually works. Initial menu and navigation wrappers expose
-selection, not arbitrary nested command routing.
+`Kbd` only displays a shortcut. Register real shortcuts through `Command`, using
+`mod` for platform-aware Ctrl/Command. Reuse commands across buttons and nested
+menus so enabled/checked state agrees. Navigation selection is separate from
+command routing. Keep destructive shortcuts deliberate and avoid overriding
+native editing shortcuts.
 
 ## Design data views
 

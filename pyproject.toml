@@ -1,6 +1,6 @@
 [project]
 name = "gpyui"
-version = "0.2.0"
+version = "0.3.0"
 description = "Native Python UI controls powered by GPUI and GPUI Kit"
 readme = "README.md"
 license = "MIT"

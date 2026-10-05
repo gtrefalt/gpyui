@@ -1,7 +1,7 @@
 # Agent skills
 
 Give your coding agent the context to build native desktop apps with gpyui.
-The skills include the **Python** API for all 71 controls, composition and State
+The skills include the **Python** API for all 72 controls, composition and State
 conventions, asyncio/lifecycle guidance, runnable applications and desktop design
 rules. They are inspired by
 [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills),
@@ -54,7 +54,7 @@ The profile recipe writes `profile.json` in the working directory.
 > app. Bind the fields to State, save asynchronously, show validation and errors,
 > and verify actual editing and button activation on a desktop.
 
-The references target gpyui 0.2.0; agents should verify their installed version.
+The references target gpyui 0.3.0; agents should verify their installed version.
 They explicitly cover the current one-window and startup-theme
 limits. Rust Kit documentation is useful background but does not imply a Python
 API exists. The component references are generated from the same source contracts

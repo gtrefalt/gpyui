@@ -28,10 +28,16 @@ FIELDS = {
     "Label": {"text": ("", "str", "Assignment")},
     "TextInput": {"value": ("", "str", "Assignment"), "placeholder": ("", "str", "Assignment")},
     "Button": {
-        "text": ("Required", "str", "Assignment"),
+        "text": (None, "str; defaults to command.label", "Assignment"),
+        "command": (None, "Command; mutually exclusive with on_click", "Constructor only"),
         "disabled": (False, "bool", "Assignment"),
         "variant": ("secondary", "primary · secondary · outline · ghost · danger", "Constructor only"),
         "icon": ("", "Lucide name", "Constructor only"),
+    },
+    "DropdownMenu": {
+        "text": ("Required", "str", "Assignment"),
+        "items": ("Required", "Iterable[Command | Menu | MenuSeparator]", "Assignment"),
+        "disabled": (False, "bool", "Assignment"),
     },
 }
 
@@ -153,7 +159,12 @@ def component_page(name):
         "## Events and state",
         "",
     ]
-    if events:
+    if name == "DropdownMenu":
+        lines += [
+            "Menu activation calls the selected `Command.on_execute` callback with current native input values. "
+            "See [commands and menus](../guide/commands.md)."
+        ]
+    elif events:
         for event in events:
             text = {
                 "change": "Runs after native value and Python mirror/bound State change.",
@@ -197,13 +208,20 @@ def component_page(name):
 
 def generated_files():
     names = [name for group in GROUPS.values() for name in group]
-    actual = {"Column", "Label", "TextInput", "Button", *(cls.__name__ for cls in ui.widgets.COMPONENTS)}
+    actual = {
+        "Column",
+        "Label",
+        "TextInput",
+        "Button",
+        "DropdownMenu",
+        *(cls.__name__ for cls in ui.widgets.COMPONENTS),
+    }
     assert len(names) == len(set(names)) and set(names) == set(SAMPLES) == actual
     pages = {f"docs/components/{slug(name)}.md": component_page(name) for name in names}
     lines = [
         "# Components",
         "",
-        "Browse all **71 Python controls**. Each page includes a native preview, "
+        "Browse all **72 Python controls**. Each page includes a native preview, "
         "an executable Python example, accepted properties and events. These are real GPUI/Kit controls, "
         "not browser replicas.",
         "",
@@ -299,6 +317,7 @@ def skill_references():
                         "guide/layout": "../composition.md",
                         "guide/events": "../state-and-events.md",
                         "guide/state": "../state-and-events.md",
+                        "guide/commands": "../commands-and-menus.md",
                     }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
                     + (
                         "#dynamic-composition"

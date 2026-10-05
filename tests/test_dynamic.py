@@ -16,7 +16,7 @@ class RecordingBridge:
     def submit(self, patches):
         self.calls.append(("submit", json.loads(patches)))
 
-    def reconcile(self, tree, roots, patches):
+    def reconcile(self, tree, roots, patches, config=None):
         self.calls.append(("reconcile", json.loads(tree), json.loads(roots), json.loads(patches)))
 
 
@@ -25,6 +25,8 @@ def mounted(app):
     app._worker_ident = threading.get_ident()
     app._loop = asyncio.get_running_loop()
     app._bridge = RecordingBridge()
+    for command in app.commands:
+        command._app = app
     for root in app.children:
         app._register(root)
     return app._bridge

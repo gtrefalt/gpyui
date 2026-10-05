@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0 — 2026-10-05
+
+- Add reusable Command objects with shared enabled/checked state, bindings, queued
+  execution and platform-aware window shortcuts. Keep Python callbacks on asyncio.
+- Add Kit DropdownMenu, nested context menus, separators and application menus.
+  macOS uses the system application menu; Windows/Linux use Kit AppMenuBar.
+- Refresh open drawn menus without replacing native editing controls. Validate
+  command ownership, shortcut conflicts and menu updates before enqueueing.
+- Add a light-theme notes editor with real async saving, native screenshots,
+  command documentation and updated app-building agent skills.
+- Exercise commands in installed-wheel smoke tests on every release platform
+  and pointer/keyboard/menu/editing regression tests on Linux/X11.
+
 ## 0.2.0 — 2026-10-05
 
 - Add runtime child insertion, replacement, reordering and removal to containers

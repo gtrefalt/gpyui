@@ -25,6 +25,16 @@ Native activation invokes Python callbacks.
 
 <div class="component-card" markdown>
 
+[![Native DropdownMenu component](../../screenshots/components/dropdown-menu.png?v=5441e8218e26)](../dropdown-menu.md)
+
+**[DropdownMenu](../dropdown-menu.md)**
+
+A Kit button with nested commands, checks and shortcut hints.
+
+</div>
+
+<div class="component-card" markdown>
+
 [![Native Link component](../../screenshots/components/link.png?v=a5d439863218)](../link.md)
 
 **[Link](../link.md)**
