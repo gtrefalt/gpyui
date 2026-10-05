@@ -1,6 +1,6 @@
 # Components
 
-Browse all **71 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
+Browse all **72 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
 
 Use the site search to find a control by name. [Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.
 
@@ -109,6 +109,16 @@ A native text label.
 **[Button](button.md)**
 
 Native activation invokes Python callbacks.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native DropdownMenu component](../screenshots/components/dropdown-menu.png?v=5441e8218e26)](dropdown-menu.md)
+
+**[DropdownMenu](dropdown-menu.md)**
+
+A Kit button with nested commands, checks and shortcut hints.
 
 </div>
 

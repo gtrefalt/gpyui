@@ -11,7 +11,7 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.2.0's Python capabilities, including the current
+GPUI Kit. It describes gpyui 0.3.0's Python capabilities, including the current
 one-window and startup-theme limits.
 
 ## Reading map
@@ -35,7 +35,7 @@ one-window and startup-theme limits.
 - Keep the primary action visible and concrete. Include empty, loading, failure
   and cancellation behavior when they apply to the workflow.
 - Use runtime visibility and child updates to change screens while retaining
-  editing controls. Global keyboard shortcuts, custom focus APIs and docking
+  editing controls. OS-global hotkeys, custom focus APIs and docking
   remain outside the Python surface.
 
 ## Inspiration

@@ -1,5 +1,6 @@
 use crate::{
     bridge::Transport,
+    commands::{self, Actions, ContextMenuSpec, InvokeCommand, MenuEntry, Popups, UiConfig},
     kit::{NativeKit, NativeState, Props, TableData},
     protocol::{Command, Control, Node, Patch},
 };
@@ -8,14 +9,16 @@ use gpui_kit::{
     component::{
         ActiveTheme,
         button::Button,
-        input::{Input, InputEvent, InputState},
+        input::{AnyInputState, Input, InputEvent, InputState},
         label::Label,
     },
     *,
 };
 use serde_json::{Value, json};
 use std::{
+    cell::RefCell,
     collections::{BTreeMap, HashMap, HashSet},
+    rc::Rc,
     sync::Arc,
 };
 
@@ -23,7 +26,13 @@ enum NativeControl {
     Column(Vec<u64>),
     Label(SharedString),
     Input(Entity<InputState>),
+    DropdownMenu {
+        text: SharedString,
+        items: Vec<MenuEntry>,
+        disabled: bool,
+    },
     Button {
+        command: Option<u64>,
         text: SharedString,
         disabled: bool,
         variant: String,
@@ -42,12 +51,23 @@ pub(crate) struct NativeView {
     attached: HashSet<u64>,
     displayed: HashSet<u64>,
     opened: HashMap<String, u64>,
+    actions: Actions,
+    bound_actions: HashSet<u64>,
+    menus: Vec<MenuEntry>,
+    menus_dirty: bool,
+    popups_dirty: bool,
+    rendered: bool,
+    menu_bar: Option<Entity<gpui_kit::component::menu::AppMenuBar>>,
+    popups: Popups,
+    context_menus: HashMap<u64, ContextMenuSpec>,
+    focus: FocusHandle,
     _commands: Task<()>,
 }
 
 impl NativeView {
     pub(crate) fn new(
         nodes: Vec<Node>,
+        config: UiConfig,
         commands: Receiver<Command>,
         transport: Arc<Transport>,
         window: &mut Window,
@@ -73,8 +93,20 @@ impl NativeView {
             attached: HashSet::new(),
             displayed: HashSet::new(),
             opened: HashMap::new(),
+            actions: Rc::new(RefCell::new(HashMap::new())),
+            bound_actions: HashSet::new(),
+            menus: Vec::new(),
+            menus_dirty: true,
+            popups_dirty: true,
+            rendered: false,
+            menu_bar: None,
+            popups: Rc::new(RefCell::new(HashMap::new())),
+            context_menus: HashMap::new(),
+            focus: cx.focus_handle(),
             _commands: task,
         };
+        window.focus(&view.focus, cx);
+        view.configure(config, cx);
         view.mount(nodes, window, cx);
         view.refresh(window, cx);
         view
@@ -94,6 +126,9 @@ impl NativeView {
                 continue;
             }
             let mut subscriptions = Vec::new();
+            if let Some(menu) = node.context_menu {
+                self.context_menus.insert(node.id, menu);
+            }
             self.visible.insert(node.id, node.visible);
             self.styles.insert(node.id, node.style);
             let control = match node.control {
@@ -103,12 +138,23 @@ impl NativeView {
                     NativeControl::Column(ids)
                 }
                 Control::Label { text } => NativeControl::Label(text.into()),
+                Control::DropdownMenu {
+                    text,
+                    items,
+                    disabled,
+                } => NativeControl::DropdownMenu {
+                    text: text.into(),
+                    items,
+                    disabled,
+                },
                 Control::Button {
+                    command,
                     text,
                     disabled,
                     variant,
                     icon,
                 } => NativeControl::Button {
+                    command,
                     text: text.into(),
                     disabled,
                     variant,
@@ -475,7 +521,7 @@ impl NativeView {
             .collect()
     }
     fn snapshot(&self, cx: &App) -> BTreeMap<u64, Value> {
-        self.controls
+        let mut snapshot: BTreeMap<u64, Value> = self.controls
             .iter()
             .map(|(id, control)| {
                 let mut value = match control {
@@ -486,9 +532,10 @@ impl NativeView {
                     NativeControl::Input(input) => {
                         json!({"type":"input", "value":input.read(cx).value().as_str()})
                     }
-                    NativeControl::Button { text, disabled, .. } => {
-                        json!({"type":"button", "text":text.as_str(), "disabled":disabled})
+                    NativeControl::Button { text, disabled, command, .. } => {
+                        json!({"type":"button", "text":text.as_str(), "disabled":*disabled || command.is_some_and(|id| !self.actions.borrow()[&id].enabled), "command":command})
                     }
+                    NativeControl::DropdownMenu { text, items, disabled } => json!({"type":"dropdown_menu", "text":text.as_str(), "items":items, "disabled":disabled}),
                     NativeControl::Kit(kit) => {
                         let mut props = kit.props.clone();
                         props.insert("type".into(), json!(kit.kind));
@@ -499,16 +546,22 @@ impl NativeView {
                         Value::Object(props)
                     }
                 };
+                value["context_menu"] = json!(self.context_menus.get(id));
                 value["visible"] = json!(self.visible[id]);
                 value["attached"] = json!(self.attached.contains(id));
                 value["displayed"] = json!(self.displayed.contains(id));
                 (*id, value)
             })
-            .collect()
+            .collect();
+        for (id, command) in self.actions.borrow().iter() {
+            snapshot.insert(*id, json!({"type":"command", "label":command.label, "shortcut":command.shortcut, "enabled":command.enabled, "checked":command.checked}));
+        }
+        snapshot
     }
     fn apply(&mut self, command: Command, window: &mut Window, cx: &mut Context<Self>) {
         let focused = self.focused_control(window, cx);
         match command {
+            Command::Execute(id) => self.invoke(id, None, cx),
             Command::Close => cx.quit(),
             Command::Notify {
                 message,
@@ -544,12 +597,15 @@ impl NativeView {
                 roots,
                 patches,
                 retained,
+                config,
             } => {
+                self.configure(config, cx);
                 self.mount(nodes, window, cx);
                 self.roots = roots;
                 self.controls.retain(|id, _| retained.contains(id));
                 self.styles.retain(|id, _| retained.contains(id));
                 self.visible.retain(|id, _| retained.contains(id));
+                self.context_menus.retain(|id, _| retained.contains(id));
                 self.subscriptions.retain(|id, _| retained.contains(id));
                 self.apply_patches(patches, window, cx);
                 self.refresh(window, cx);
@@ -575,6 +631,28 @@ impl NativeView {
             value,
         } in patches
         {
+            if let Some(command) = self.actions.borrow_mut().get_mut(&id) {
+                self.menus_dirty = true;
+                self.popups_dirty = true;
+                if property == "enabled" {
+                    command.enabled = value.as_bool().expect("validated enabled");
+                } else {
+                    command.checked = value.as_bool().expect("validated checked");
+                }
+                continue;
+            }
+            if property == "context_menu" {
+                self.popups_dirty = true;
+                if value.is_null() {
+                    self.context_menus.remove(&id);
+                } else {
+                    self.context_menus.insert(
+                        id,
+                        serde_json::from_value(value).expect("validated context menu"),
+                    );
+                }
+                continue;
+            }
             if property == "visible" {
                 self.visible
                     .insert(id, value.as_bool().expect("validated visibility"));
@@ -604,11 +682,164 @@ impl NativeView {
                         input.set_placeholder(text, window, cx);
                     }
                 }),
+                NativeControl::DropdownMenu {
+                    text,
+                    items,
+                    disabled,
+                } => {
+                    self.popups_dirty = true;
+                    match property.as_str() {
+                        "text" => *text = value.as_str().expect("validated text").to_owned().into(),
+                        "items" => {
+                            *items = serde_json::from_value(value).expect("validated menu items")
+                        }
+                        _ => *disabled = value.as_bool().expect("validated disabled"),
+                    }
+                }
                 NativeControl::Column(_) => unreachable!("columns have no component properties"),
                 NativeControl::Kit(kit) => kit.apply(&property, value, window, cx),
             }
         }
     }
+    fn configure(&mut self, config: UiConfig, cx: &mut Context<Self>) {
+        let retained: HashSet<_> = config.commands.iter().map(|command| command.id).collect();
+        self.actions
+            .borrow_mut()
+            .retain(|id, _| retained.contains(id));
+        for command in config.commands {
+            if self.bound_actions.insert(command.id) && !command.shortcut.is_empty() {
+                cx.bind_keys([KeyBinding::new(
+                    &command.shortcut,
+                    InvokeCommand { id: command.id },
+                    Some("Gpyui"),
+                )]);
+            }
+            if !self.actions.borrow().contains_key(&command.id) {
+                self.menus_dirty = true;
+                self.popups_dirty = true;
+            }
+            self.actions
+                .borrow_mut()
+                .entry(command.id)
+                .or_insert(command);
+        }
+        if self.menus != config.menus {
+            self.menus_dirty = true;
+        }
+        self.menus = config.menus;
+    }
+
+    pub(crate) fn invoke(&mut self, id: u64, source: Option<u64>, cx: &mut Context<Self>) {
+        if !self
+            .actions
+            .borrow()
+            .get(&id)
+            .is_some_and(|command| command.enabled)
+        {
+            return;
+        }
+        if let Some(source) = source {
+            if !self.displayed.contains(&source) {
+                return;
+            }
+            let allowed = match self.controls.get(&source) {
+                Some(NativeControl::Button {
+                    command: Some(command),
+                    disabled,
+                    ..
+                }) => *command == id && !disabled,
+                Some(NativeControl::DropdownMenu {
+                    items, disabled, ..
+                }) => !disabled && commands::has_command(items, id),
+                _ => false,
+            } || self
+                .context_menus
+                .get(&source)
+                .is_some_and(|menu| commands::has_command(&menu.items, id));
+            if !allowed {
+                return;
+            }
+        }
+        if !self
+            .transport
+            .emit(json!({"event":"command", "id":id, "source":source, "values":self.values(cx)}))
+        {
+            cx.quit();
+        }
+    }
+
+    fn refresh_menus(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        if self.menus_dirty {
+            // AppMenuBar::reload replaces popup entities. Dismiss an active
+            // application menu through Kit first so its focus target survives.
+            if self.rendered
+                && window
+                    .context_stack()
+                    .iter()
+                    .any(|context| context.contains("AppMenuBar"))
+                && let Some(focus) = window.focused(cx)
+            {
+                focus.dispatch_action(&gpui_kit::base::actions::Cancel, window, cx);
+            }
+            commands::application_menus(&self.menus, &self.actions, &mut self.menu_bar, cx);
+            self.menus_dirty = false;
+        }
+        let popups: Vec<_> = self
+            .popups
+            .borrow()
+            .iter()
+            .filter_map(|(key, popup)| popup.upgrade().map(|popup| (*key, popup)))
+            .collect();
+        for ((id, context), popup) in popups {
+            let entries = if context {
+                self.context_menus
+                    .get(&id)
+                    .filter(|menu| !menu.native)
+                    .map(|menu| menu.items.clone())
+            } else {
+                match self.controls.get(&id) {
+                    Some(NativeControl::DropdownMenu {
+                        items,
+                        disabled: false,
+                        ..
+                    }) => Some(items.clone()),
+                    _ => None,
+                }
+            };
+            let Some(entries) = entries.filter(|_| self.displayed.contains(&id)) else {
+                // Use Kit's Cancel action before the old dispatch node disappears,
+                // preserving its native focus restoration and submenu dismissal.
+                let focus = popup.read(cx).focus_handle(cx);
+                focus.dispatch_action(&gpui_kit::base::actions::Cancel, window, cx);
+                // Also close menus created but not painted yet (no dispatch node).
+                popup.update(cx, |_, cx| cx.emit(DismissEvent));
+                self.popups.borrow_mut().remove(&(id, context));
+                continue;
+            };
+            if !self.popups_dirty {
+                continue;
+            }
+            let view = cx.weak_entity();
+            let actions = self.actions.clone();
+            let focus = popup.read(cx).focus_handle(cx);
+            let focused = focus.contains_focused(window, cx);
+            popup.update(cx, |popup, cx| {
+                popup.rebuild(window, cx, |popup, window, cx| {
+                    commands::build_popup(popup, &entries, &actions, id, &view, window, cx)
+                })
+            });
+            if focused {
+                // Rebuilding closes any old submenu; keep keyboard navigation
+                // on the retained root instead of a discarded submenu entity.
+                focus.focus(window, cx);
+            }
+        }
+        self.popups
+            .borrow_mut()
+            .retain(|_, popup| popup.upgrade().is_some());
+        self.popups_dirty = false;
+    }
+
     fn focused_control(&self, window: &Window, cx: &App) -> Option<u64> {
         self.controls.iter().find_map(|(id, control)| {
             let focus = match control {
@@ -663,6 +894,7 @@ impl NativeView {
         }
         self.attached = attached;
         self.displayed = displayed;
+        self.refresh_menus(window, cx);
         let carousels: Vec<_> = self
             .controls
             .iter()
@@ -820,22 +1052,45 @@ impl NativeView {
             cx.quit();
         }
     }
+    fn context_inputs(&self, id: u64, inputs: &mut Vec<AnyInputState>) {
+        match &self.controls[&id] {
+            NativeControl::Input(input) => inputs.push(AnyInputState::Input(input.clone())),
+            NativeControl::Column(children) => {
+                for id in children {
+                    self.context_inputs(*id, inputs);
+                }
+            }
+            NativeControl::Kit(kit) => {
+                match &kit.state {
+                    NativeState::Textarea(state) => {
+                        inputs.push(AnyInputState::Textarea(state.clone()))
+                    }
+                    NativeState::Editor(state) => inputs.push(AnyInputState::Editor(state.clone())),
+                    NativeState::Number(state) => inputs.push(AnyInputState::Input(state.clone())),
+                    _ => {}
+                }
+                for id in &kit.children {
+                    self.context_inputs(*id, inputs);
+                }
+            }
+            _ => {}
+        }
+    }
+
     pub(crate) fn render_control(&self, id: u64, cx: &Context<Self>) -> AnyElement {
         let element = match &self.controls[&id] {
-            NativeControl::Column(children) => {
-                return crate::kit::apply_style(
-                    div().id(("column", id)).flex().flex_col().gap_3(),
-                    &self.styles[&id],
-                    cx,
-                )
-                .children(
-                    children
-                        .iter()
-                        .filter(|id| self.visible[id])
-                        .map(|id| self.render_control(*id, cx)),
-                )
-                .into_any_element();
-            }
+            NativeControl::Column(children) => crate::kit::apply_style(
+                div().id(("column", id)).flex().flex_col().gap_3(),
+                &self.styles[&id],
+                cx,
+            )
+            .children(
+                children
+                    .iter()
+                    .filter(|id| self.visible[id])
+                    .map(|id| self.render_control(*id, cx)),
+            )
+            .into_any_element(),
             NativeControl::Label(text) => div()
                 .id(("label", id))
                 .child(Label::new(text.clone()))
@@ -844,7 +1099,27 @@ impl NativeView {
                 .id(("input", id))
                 .w_full()
                 .into_any_element(),
+            NativeControl::DropdownMenu {
+                text,
+                items,
+                disabled,
+            } => {
+                use gpui_kit::component::{Disableable, menu::DropdownMenu};
+                let entries = items.clone();
+                let actions = self.actions.clone();
+                let view = cx.weak_entity();
+                let popups = self.popups.clone();
+                Button::new(("dropdown-menu", id))
+                    .label(text.clone())
+                    .disabled(*disabled)
+                    .dropdown_menu(move |popup, window, cx| {
+                        popups.borrow_mut().insert((id, false), cx.weak_entity());
+                        commands::build_popup(popup, &entries, &actions, id, &view, window, cx)
+                    })
+                    .into_any_element()
+            }
             NativeControl::Button {
+                command,
                 text,
                 disabled,
                 variant,
@@ -854,7 +1129,9 @@ impl NativeView {
                 use gpui_kit::{component::button::ButtonVariants, prelude::FluentBuilder};
                 Button::new(("button", id))
                     .label(text.clone())
-                    .disabled(*disabled)
+                    .disabled(
+                        *disabled || command.is_some_and(|id| !self.actions.borrow()[&id].enabled),
+                    )
                     .map(|b| match variant.as_str() {
                         "primary" => b.primary(),
                         "outline" => b.outline(),
@@ -867,12 +1144,19 @@ impl NativeView {
                             gpui_kit::component::Icon::default().path(format!("icons/{icon}.svg")),
                         )
                     })
-                    .on_click(cx.listener(move |view, _, _, cx| {
-                        if !view
-                            .transport
-                            .emit(json!({"event":"click", "id":id, "values":view.values(cx)}))
-                        {
-                            cx.quit();
+                    .on_click(cx.listener({
+                        let command = *command;
+                        move |view, _, _, cx| {
+                            if let Some(command) = command {
+                                view.invoke(command, Some(id), cx);
+                                return;
+                            }
+                            if !view
+                                .transport
+                                .emit(json!({"event":"click", "id":id, "values":view.values(cx)}))
+                            {
+                                cx.quit();
+                            }
                         }
                     }))
                     .into_any_element()
@@ -888,18 +1172,107 @@ impl NativeView {
                 cx,
             ),
         };
-        if matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll"))
+        let element = if matches!(&self.controls[&id], NativeControl::Column(_))
+            || matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll"))
         {
             element
         } else {
             crate::kit::styled(id, element, &self.styles[&id], cx)
+        };
+        if let Some(menu) = self.context_menus.get(&id) {
+            use gpui_kit::component::{menu::ContextMenuExt, native_menu::NativeMenu};
+            let entries = menu.items.clone();
+            let actions = self.actions.clone();
+            let view = cx.weak_entity();
+            let popups = self.popups.clone();
+            let layout = self.styles[&id]
+                .iter()
+                .filter(|(key, _)| {
+                    matches!(
+                        key.as_str(),
+                        "width"
+                            | "height"
+                            | "min_width"
+                            | "min_height"
+                            | "flex"
+                            | "full_width"
+                            | "full_height"
+                    )
+                })
+                .map(|(key, value)| (key.clone(), value.clone()))
+                .collect();
+            let host = crate::kit::apply_style(
+                div()
+                    .id(("context-menu-host", id))
+                    .flex()
+                    .flex_col()
+                    .child(element),
+                &layout,
+                cx,
+            );
+            if menu.native {
+                host.capture_any_mouse_down(move |event, window, cx| {
+                    if event.button != MouseButton::Right {
+                        return;
+                    }
+                    // Stop the native input's default editing menu from replacing
+                    // this explicitly assigned application context menu.
+                    cx.stop_propagation();
+                    NativeMenu::from(Menu::new("").items(commands::gpui_items(&entries, &actions)))
+                        .show(event.position, window, cx);
+                })
+                .into_any_element()
+            } else {
+                let mut inputs = Vec::new();
+                self.context_inputs(id, &mut inputs);
+                host.capture_any_mouse_down(move |event, _, cx| {
+                    if event.button != MouseButton::Right {
+                        return;
+                    }
+                    // The assigned Kit context menu opens during bubbling. Suppress
+                    // each underlying editor's default menu for this press only;
+                    // its Kit input builder restores it on the next render.
+                    for input in &inputs {
+                        match input {
+                            AnyInputState::Input(state) => state.update(cx, |state, _| {
+                                state.on_context_menu(Rc::new(|_, _, _, _, _| {}));
+                            }),
+                            AnyInputState::Textarea(state) => state.update(cx, |state, _| {
+                                state.on_context_menu(Rc::new(|_, _, _, _, _| {}));
+                            }),
+                            AnyInputState::Editor(state) => state.update(cx, |state, _| {
+                                state.on_context_menu(Rc::new(|_, _, _, _, _| {}));
+                            }),
+                            AnyInputState::Otp(_) => {}
+                        }
+                    }
+                })
+                .context_menu(move |popup, window, cx| {
+                    popups.borrow_mut().insert((id, true), cx.weak_entity());
+                    commands::build_popup(popup, &entries, &actions, id, &view, window, cx)
+                })
+                .into_any_element()
+            }
+        } else {
+            element
         }
     }
 }
 
 impl Render for NativeView {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        self.rendered = true;
         div()
+            .key_context("Gpyui")
+            .track_focus(&self.focus)
+            .on_action(
+                cx.listener(|view, action: &InvokeCommand, _, cx| view.invoke(action.id, None, cx)),
+            )
+            .children(
+                self.menu_bar
+                    .as_ref()
+                    .map(|bar| div().h(px(28.)).w_full().child(bar.clone())),
+            )
             .size_full()
             .p_6()
             .flex()

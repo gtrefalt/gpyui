@@ -20,6 +20,8 @@ app.run()
 | `width` | `480` | Finite width, at least 240 pixels |
 | `height` | `300` | Finite height, at least 160 pixels |
 | `theme` | `"light"` | Initial `light` or `dark` appearance |
+| `commands` | `()` | Explicit Command registration, including shortcut-only actions |
+| `menus` | `()` | Menu roots; macOS system bar or Kit in-window bar |
 | `on_start` | `None` | Zero/one-argument sync/async tracked startup callback |
 | `on_error` | `None` | Callback receiving an exception |
 
@@ -53,6 +55,16 @@ never replayed from a tree description.
 The native snapshot barrier does not wait for GPU presentation. While the app
 runs, mutate controls/State on the callback loop. External worker threads can
 use `app.call_soon(lambda: setattr(label, "text", result))`.
+
+## Commands and application menus
+
+`commands` exposes a read-only tuple of registered commands. `add_command(*commands)`
+registers additional actions before startup or on the callback loop. `menus`
+exposes a tuple of Menu roots and supports replacement by assignment. Commands
+referenced by controls are also discovered during mounting and runtime updates.
+Snapshots include command entries with `type="command"`, `label`, `shortcut`
+(normalized native spelling), `enabled` and `checked`.
+See [commands and menus](../guide/commands.md) for ownership and execution.
 
 ## Native notifications
 

@@ -27,7 +27,7 @@ documentation for the animated walkthrough.
 
 ## Why gpyui?
 
-- **Native components:** 71 Python controls spanning inputs, tables, charts,
+- **Native components:** 72 Python controls spanning inputs, tables, charts,
   navigation, dialogs and feedback, backed by GPUI Kit.
 - **Python composition:** build layouts with `Column`, `Row`, containers and
   context managers, or pass an explicit tree of controls.
@@ -35,6 +35,8 @@ documentation for the animated walkthrough.
   controls with `State` and bindings.
 - **Async events:** use regular functions or `async def` callbacks; property
   changes are queued and batched for native updates.
+- **Shared commands:** use the same Python action from buttons, nested menus and
+  platform-aware keyboard shortcuts.
 - **Light and dark themes:** choose an appearance and style controls with
   semantic colors, spacing and dimensions.
 
@@ -93,6 +95,7 @@ with real native previews, properties, events and runnable examples for every
 control, plus guides for styling, application lifecycle and release builds.
 
 Try the [trading dashboard](https://gtrefalt.github.io/gpyui/examples/trading/),
+[notes editor](https://gtrefalt.github.io/gpyui/examples/notes/),
 [component gallery](https://gtrefalt.github.io/gpyui/examples/gallery/) or
 [async binding example](https://github.com/gtrefalt/gpyui/blob/main/examples/async_binding.py).
 

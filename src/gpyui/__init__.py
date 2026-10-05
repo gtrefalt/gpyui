@@ -1,6 +1,7 @@
 """Native Python controls rendered by GPUI Kit."""
 
 from .application import Application, ApplicationClosedError
+from .commands import Command, DropdownMenu, Menu, MenuSeparator
 from .controls import Button, Column, Control, Event, Label, TextInput
 from .state import State
 from .widgets import (
@@ -74,6 +75,10 @@ from .widgets import (
 )
 
 __all__ = [
+    "Command",
+    "Menu",
+    "MenuSeparator",
+    "DropdownMenu",
     "Application",
     "ApplicationClosedError",
     "Button",

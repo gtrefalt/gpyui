@@ -16,7 +16,7 @@ Download the correct architecture (`linux_x86_64` or `linux_aarch64`) and use,
 from your uv project:
 
 ```bash
-uv add /path/to/gpyui-0.2.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.3.0-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install gpyui` or `pip install /path/to/wheel.whl` in a

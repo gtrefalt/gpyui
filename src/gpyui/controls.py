@@ -11,6 +11,7 @@ from .state import State
 
 if TYPE_CHECKING:
     from .application import Application
+    from .commands import Command, Menu, MenuSeparator
 
 _ids = itertools.count(1)
 _containers: ContextVar[tuple[Any, ...]] = ContextVar("gpyui_containers", default=())
@@ -20,7 +21,7 @@ _containers: ContextVar[tuple[Any, ...]] = ContextVar("gpyui_containers", defaul
 class Event:
     """An activation or native value change, delivered on the Python asyncio loop."""
 
-    sender: Control | Application
+    sender: Control | Application | Command
     name: str
     value: Any = None
 
@@ -54,6 +55,8 @@ class Control:
         self._bindings: list[Callable[[], None]] = []
         self._handlers: dict[str, Handler] = {}
         self._style: dict[str, Any] = {}
+        self._context_items: tuple[Command | Menu | MenuSeparator, ...] | None = None
+        self._context_native = False
         self._visible = True
         self._disposed = False
         if stack := _containers.get():
@@ -80,7 +83,35 @@ class Control:
             **self._properties,
             "style": self._style,
             "visible": self.visible,
+            "context_menu": self._context_spec(),
         }
+
+    def _context_spec(self) -> dict[str, Any] | None:
+        from .commands import menu_specs
+
+        return (
+            None
+            if self._context_items is None
+            else {"items": menu_specs(self._context_items), "native": self._context_native}
+        )
+
+    def context_menu(
+        self, items: Iterable[Command | Menu | MenuSeparator] | None, *, native: bool = False
+    ) -> Self:
+        """Attach a Kit right-click menu; None removes it. Native popups are opt-in."""
+        from .commands import menu_commands, validate_items
+
+        self._ensure_alive()
+        if not isinstance(native, bool):
+            raise TypeError("native requires bool")
+        value = None if items is None else validate_items(items)
+        if self._app is not None:
+            self._app._check_mutation()
+            self._app._register_commands(menu_commands(value or ()))
+        self._context_items, self._context_native = value, native
+        if self._app is not None:
+            self._app._queue(self.id, "context_menu", self._context_spec())
+        return self
 
     def _ensure_alive(self) -> None:
         if self._disposed:
@@ -283,20 +314,38 @@ class TextInput(Control):
 class Button(Control):
     def __init__(
         self,
-        text: str,
+        text: str | None = None,
         *,
+        command: Command | None = None,
         on_click: Callable[..., Any] | None = None,
         disabled: bool = False,
         variant: str = "secondary",
         icon: str = "",
     ):
+        from .commands import Command
         from .widgets import choice
 
+        if command is not None and not isinstance(command, Command):
+            raise TypeError("command requires Command")
+        if command is not None and on_click is not None:
+            raise TypeError("use command or on_click, not both")
+        if text is None:
+            if command is None:
+                raise TypeError("Button requires text or command")
+            text = command.label
+        self._command = command
         if not isinstance(disabled, bool):
             raise TypeError("disabled requires bool")
         handler = Handler(on_click) if on_click is not None else None
         variant = choice("primary", "secondary", "outline", "ghost", "danger")(variant)
-        super().__init__("button", text=_text(text), disabled=disabled, variant=variant, icon=_text(icon))
+        super().__init__(
+            "button",
+            text=_text(text),
+            disabled=disabled,
+            variant=variant,
+            icon=_text(icon),
+            command=None if command is None else command.id,
+        )
         if handler is not None:
             self._handlers["click"] = handler
 
@@ -310,7 +359,7 @@ class Button(Control):
 
     @property
     def disabled(self) -> bool:
-        return self._properties["disabled"]
+        return self._properties["disabled"] or (self._command is not None and not self._command.enabled)
 
     @disabled.setter
     def disabled(self, value: bool) -> None:

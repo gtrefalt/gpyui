@@ -1,6 +1,6 @@
 ---
 name: gpyui
-description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 71 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
+description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 72 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
 ---
 
 # Build apps with gpyui
@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe **gpyui 0.2.0**. Read the installed version's API when
+These references describe **gpyui 0.3.0**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -27,9 +27,11 @@ it in the library before depending on it in application code.
 4. Read [styling](references/styling.md) and use `gpyui-design-guides` when changing
    a visible screen. The companion skill is optional to install; the Python
    styling contract is bundled here.
-5. Start from the [application recipes](references/recipes.md) rather than
+5. Read [commands and menus](references/commands-and-menus.md) for reusable actions,
+   shortcuts, context menus or an application menu bar.
+6. Start from the [application recipes](references/recipes.md) rather than
    assembling unfamiliar API calls. Adapt them to the user's task.
-6. Validate the tree and business logic without a native window, then run the
+7. Validate the tree and business logic without a native window, then run the
    app on a desktop. Verify real editing, selection, scrolling, loading, errors
    and shutdown. Construction checks do not prove native interaction.
 
@@ -56,7 +58,7 @@ it in the library before depending on it in application code.
   vocabulary, not CSS. No `.pack()`, `.grid()`, `.classes()`,
   `.on(...)`, raw Rust builders or implicit reactive rendering.
 - Keep scope honest: one native window and startup theme.
-  Kbd displays a shortcut but does not register it. Navigation selects an index
+  Kbd displays a shortcut; Command.shortcut registers a window-scoped action. Navigation selects an index
   but does not own pages; implement page changes with visibility or child updates. Initial wrappers do not expose full Kit
   docking, custom table delegates, multi-series chart configuration or editor
   language-server hooks.

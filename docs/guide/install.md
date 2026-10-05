@@ -24,7 +24,7 @@ On Linux, download the wheel matching your architecture from
 in `linux_x86_64.whl` or `linux_aarch64.whl`. From your uv project, install the downloaded file:
 
 ```bash
-uv add /path/to/gpyui-0.2.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.3.0-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install /path/to/wheel.whl` in a virtual environment.

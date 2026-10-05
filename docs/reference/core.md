@@ -12,6 +12,7 @@ Use concrete controls rather than constructing `Control` directly.
 | `disposed` | Read-only boolean indicating permanent disposal |
 | `dispose()` | Detach and permanently release the entire subtree; idempotent |
 | `style(**properties)` | Validate/merge native styles and return the same control |
+| `context_menu(items, native=False)` | Assign Command/Menu/MenuSeparator items; None removes the menu |
 | `update()` | Flush the owning application's pending changes, if mounted |
 | `unbind()` | Remove this control's binding subscriptions |
 
@@ -41,9 +42,9 @@ See [runtime composition](../guide/layout.md#runtime-children-and-visibility).
 
 | Field | Value |
 | --- | --- |
-| `sender` | The originating Control, or Application for startup |
-| `name` | `start`, `click`, `change`, `release` or `resize` |
-| `value` | Component-specific native value; absent for ordinary click/start |
+| `sender` | The originating Control, Command, or Application for startup |
+| `name` | `start`, `command`, `click`, `change`, `release` or `resize` |
+| `value` | Component-specific native value; absent for ordinary click/start/command |
 
 ```python
 from gpyui import Slider

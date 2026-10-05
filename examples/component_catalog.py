@@ -14,7 +14,7 @@ class Sample:
 
 GROUPS = {
     "Layout": ("Column", "Row", "Container", "Scroll", "GroupBox", "Toolbar", "StatusBar", "Resizable"),
-    "Text and buttons": ("Label", "Button", "Link", "Clipboard", "Icon", "Kbd", "Separator"),
+    "Text and buttons": ("Label", "Button", "DropdownMenu", "Link", "Clipboard", "Icon", "Kbd", "Separator"),
     "Inputs": ("TextInput", "TextArea", "NumberInput", "OtpInput", "Editor"),
     "Selection": (
         "Checkbox",
@@ -80,6 +80,13 @@ SAMPLES = {
     "Button": Sample(
         "Native activation invokes Python callbacks.",
         'status = ui.Label("Choose Save")\ncontrol = ui.Button("Save", variant="primary", icon="save", on_click=lambda: setattr(status, "text", "Saved from Python"))',
+    ),
+    "DropdownMenu": Sample(
+        "A Kit button with nested commands, checks and shortcut hints.",
+        'save = ui.Command("Save", lambda: print("Save requested"), shortcut="mod+s")\nsidebar = ui.Command("Show sidebar", lambda: print("Sidebar requested"), checked=True)\ncontrol = ui.DropdownMenu("Actions", [save, ui.MenuSeparator(), ui.Menu("View", [sidebar])])',
+        "Items are Command, Menu or MenuSeparator models. Reassign items to update an open menu. "
+        "Shared enabled/checked state and callbacks are owned by Command; see the commands guide.",
+        action="click",
     ),
     "Link": Sample(
         "A native link with optional Python activation.",

@@ -1,3 +1,4 @@
+use crate::commands::UiConfig;
 use crate::protocol::{self, Command, ControlType, Node, Patch};
 use async_channel::{Receiver, Sender};
 use gpui_kit::*;
@@ -45,23 +46,33 @@ impl Transport {
     }
 }
 
+type NativeStartup = (Vec<Node>, UiConfig, Receiver<Command>);
+
 /// Thread-safe transport containing no Python callbacks or GPUI handles.
 #[pyclass]
 pub(crate) struct Bridge {
     transport: Arc<Transport>,
     event_receiver: Receiver<Value>,
-    native: Mutex<Option<(Vec<Node>, Receiver<Command>)>>,
+    native: Mutex<Option<NativeStartup>>,
     schema: Mutex<HashMap<u64, ControlType>>,
     retired: Mutex<HashSet<u64>>,
+    config: Mutex<UiConfig>,
 }
 
 #[pymethods]
 impl Bridge {
     #[new]
-    fn new(tree_json: &str) -> PyResult<Self> {
+    #[pyo3(signature = (tree_json, config_json=""))]
+    fn new(tree_json: &str, config_json: &str) -> PyResult<Self> {
+        let config: UiConfig = if config_json.is_empty() {
+            UiConfig::default()
+        } else {
+            serde_json::from_str(config_json)
+                .map_err(|error| PyValueError::new_err(error.to_string()))?
+        };
         let nodes: Vec<Node> =
             serde_json::from_str(tree_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
-        let schema = protocol::schema(&nodes).map_err(PyValueError::new_err)?;
+        let schema = protocol::schema(&nodes, &config).map_err(PyValueError::new_err)?;
         protocol::validate_roots(
             &nodes,
             &nodes.iter().map(|node| node.id).collect::<Vec<_>>(),
@@ -77,9 +88,10 @@ impl Bridge {
                 error: Mutex::new(None),
             }),
             event_receiver,
-            native: Mutex::new(Some((nodes, receiver))),
+            native: Mutex::new(Some((nodes, config.clone(), receiver))),
             schema: Mutex::new(schema),
             retired: Mutex::new(HashSet::new()),
+            config: Mutex::new(config),
         })
     }
     /// Validate the entire batch before enqueueing any update.
@@ -91,14 +103,27 @@ impl Bridge {
         self.send(Command::Batch(patches))
     }
     /// Atomically validate/enqueue topology and properties before changing schema.
-    fn reconcile(&self, tree_json: &str, roots_json: &str, batch_json: &str) -> PyResult<()> {
+    #[pyo3(signature = (tree_json, roots_json, batch_json, config_json=None))]
+    fn reconcile(
+        &self,
+        tree_json: &str,
+        roots_json: &str,
+        batch_json: &str,
+        config_json: Option<&str>,
+    ) -> PyResult<()> {
+        let mut current = self.config.lock().expect("config lock poisoned");
+        let config: UiConfig = if let Some(value) = config_json {
+            serde_json::from_str(value).map_err(|error| PyValueError::new_err(error.to_string()))?
+        } else {
+            current.clone()
+        };
         let nodes: Vec<Node> =
             serde_json::from_str(tree_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
         let roots: Vec<u64> =
             serde_json::from_str(roots_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
         let patches: Vec<Patch> =
             serde_json::from_str(batch_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
-        let mut next = protocol::schema(&nodes).map_err(PyValueError::new_err)?;
+        let mut next = protocol::schema(&nodes, &config).map_err(PyValueError::new_err)?;
         protocol::validate_roots(&nodes, &roots).map_err(PyValueError::new_err)?;
         let mut schema = self.schema.lock().expect("schema lock poisoned");
         let mut retired = self.retired.lock().expect("retired lock poisoned");
@@ -122,10 +147,21 @@ impl Bridge {
             roots,
             patches,
             retained,
+            config: config.clone(),
         })?;
+        *current = config;
         retired.extend(schema.keys().filter(|id| !next.contains_key(id)));
         *schema = next;
         Ok(())
+    }
+    fn execute(&self, id: u64) -> PyResult<()> {
+        if !matches!(
+            self.schema.lock().expect("schema lock poisoned").get(&id),
+            Some(ControlType::Action { .. })
+        ) {
+            return Err(PyValueError::new_err("unknown command"));
+        }
+        self.send(Command::Execute(id))
     }
     fn snapshot(&self, token: u64) -> PyResult<()> {
         self.send(Command::Snapshot(token))
@@ -204,7 +240,7 @@ impl Bridge {
                 "only one native Application.run() is supported per process",
             ));
         }
-        let (nodes, commands) = self
+        let (nodes, config, commands) = self
             .native
             .lock()
             .expect("native lock poisoned")
@@ -241,6 +277,7 @@ impl Bridge {
                             cx.new(|cx| {
                                 crate::view::NativeView::new(
                                     nodes,
+                                    config,
                                     commands,
                                     view_transport,
                                     window,
@@ -248,7 +285,12 @@ impl Bridge {
                                 )
                             })
                         }) {
-                            Ok(_) => {
+                            Ok((_, view)) => {
+                                let view = view.downgrade();
+                                cx.on_action(move |action: &crate::commands::InvokeCommand, cx| {
+                                    _ = view
+                                        .update(cx, |view, cx| view.invoke(action.id, None, cx));
+                                });
                                 if !transport.emit(json!({"event": "ready"})) {
                                     cx.quit();
                                 }

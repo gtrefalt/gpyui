@@ -10,6 +10,7 @@ from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, cast
 
+from .commands import Command, DropdownMenu, Menu, menu_commands, menu_specs, validate_items
 from .controls import Column, Control, Event, Handler, _containers
 from .tree import walk
 
@@ -37,6 +38,8 @@ class Application:
         width: float = 480,
         height: float = 300,
         theme: str = "light",
+        commands: Iterable[Command] = (),
+        menus: Iterable[Menu] = (),
         on_start: Callable[..., Any] | None = None,
         on_error: Callable[[Exception], None] | None = None,
     ):
@@ -53,6 +56,9 @@ class Application:
         self._phase = "new"
         self._pending: dict[tuple[int, str], Any] = {}
         self._tree_dirty = False
+        self._actions_dirty = False
+        self._commands: dict[int, Command] = {}
+        self._menus: tuple[Menu, ...] = ()
         self._batch_depth = 0
         self._flush_scheduled = False
         self._bridge: Any = None
@@ -64,6 +70,8 @@ class Application:
         self._snapshots: dict[int, asyncio.Future[dict[int, dict[str, Any]]]] = {}
         self._tokens = itertools.count(1)
         self._errors: list[Exception] = []
+        self.add_command(*commands)
+        self.menus = menus
         self.add(*controls)
 
     @property
@@ -73,6 +81,72 @@ class Application:
     @children.setter
     def children(self, controls: Iterable[Control]) -> None:
         self.set_children(controls)
+
+    @property
+    def commands(self) -> tuple[Command, ...]:
+        return tuple(self._commands.values())
+
+    @property
+    def menus(self) -> tuple[Menu, ...]:
+        return self._menus
+
+    @menus.setter
+    def menus(self, menus: Iterable[Menu]) -> None:
+        value = validate_items(menus)
+        if any(not isinstance(menu, Menu) for menu in value):
+            raise TypeError("application menus require Menu roots")
+        if self._phase != "new":
+            self._check_mutation()
+        self._register_commands(menu_commands(value))
+        self._menus = cast("tuple[Menu, ...]", value)
+        if self._phase != "new":
+            self._actions_dirty = True
+            self._schedule_flush()
+
+    def add_command(self, *commands: Command) -> Application:
+        if self._phase != "new":
+            self._check_mutation()
+        self._register_commands(commands)
+        return self
+
+    def _validate_commands(self, commands: Iterable[Command]) -> dict[int, Command]:
+        combined = dict(self._commands)
+        for command in commands:
+            if not isinstance(command, Command):
+                raise TypeError("commands require Command")
+            combined[command.id] = command
+        keys = {}
+        for command in combined.values():
+            if command._app is not None and command._app is not self:
+                raise ValueError("a command can belong to only one application")
+            if command._key:
+                if command._key in keys and keys[command._key] != command.id:
+                    raise ValueError(f"duplicate shortcut: {command.shortcut}")
+                keys[command._key] = command.id
+        if len(combined) > 1024:
+            raise ValueError("application exceeds 1,024 registered commands")
+        return combined
+
+    def _register_commands(self, commands: Iterable[Command]) -> None:
+        combined = self._validate_commands(commands)
+        changed = combined.keys() != self._commands.keys()
+        self._commands = combined
+        if self._phase != "new":
+            for command in combined.values():
+                command._app = self
+            if changed:
+                self._actions_dirty = True
+                self._schedule_flush()
+
+    def _control_commands(self, control: Control) -> Iterator[Command]:
+        if command := getattr(control, "_command", None):
+            yield command
+        if isinstance(control, DropdownMenu):
+            yield from menu_commands(control.items)
+        yield from menu_commands(control._context_items or ())
+
+    def _config(self) -> dict[str, Any]:
+        return {"commands": [command._spec() for command in self.commands], "menus": menu_specs(self.menus)}
 
     @property
     def errors(self) -> tuple[Exception, ...]:
@@ -104,6 +178,7 @@ class Application:
         for node in walk(control):
             node._app = self
             self._controls[node.id] = node
+            self._register_commands(self._control_commands(node))
 
     def _validate_tree_change(self, parent: Column | Application, children: tuple[Control, ...]) -> None:
         roots = children if parent is self else self.children
@@ -122,6 +197,9 @@ class Application:
 
         for root in roots:
             visit(root, 0)
+        self._validate_commands(
+            command for node in active.values() for command in self._control_commands(node)
+        )
         owned = set(self._controls) | set(active)
         for child in children:
             owned.update(node.id for node in walk(child))
@@ -176,21 +254,23 @@ class Application:
     def update(self) -> None:
         """Submit coalesced properties and children. Await snapshot() to observe applied state."""
         self._check_mutation()
-        if self._pending or self._tree_dirty:
+        if self._pending or self._tree_dirty or self._actions_dirty:
             patches = [
                 {"id": control_id, "property": name, "value": value}
                 for (control_id, name), value in self._pending.items()
             ]
-            if self._tree_dirty:
+            if self._tree_dirty or self._actions_dirty:
                 self._bridge.reconcile(
                     json.dumps(self._forests()),
                     json.dumps([control.id for control in self.children]),
                     json.dumps(patches),
+                    json.dumps(self._config()),
                 )
             else:
                 self._bridge.submit(json.dumps(patches))
             self._pending.clear()
             self._tree_dirty = False
+            self._actions_dirty = False
 
     @contextmanager
     def batch(self) -> Iterator[None]:
@@ -301,6 +381,20 @@ class Application:
                         future = self._snapshots.get(event["token"])
                         if future is not None and not future.done():
                             future.set_result({int(k): v for k, v in event["nodes"].items()})
+                    elif name == "command":
+                        command = self._commands.get(event["id"])
+                        if command is None or not command.enabled:
+                            continue
+                        source = event.get("source")
+                        if source is not None:
+                            control = self._controls.get(source)
+                            if control is None or not control._is_displayed():
+                                continue
+                        for control_id, value in event.get("values", {}).items():
+                            if mirrored := self._controls.get(int(control_id)):
+                                cast("TextInput | KitControl", mirrored)._receive_native(value)
+                        self._dispatch(command._handler, Event(command, "command"))
+                        await asyncio.sleep(0)
                     elif name in {"click", "change", "release", "resize"}:
                         control = self._controls.get(event["id"])
                         if control is None:
@@ -342,11 +436,25 @@ class Application:
             raise RuntimeError("Application.run() can only be called once")
         from ._core import Bridge
 
-        self._bridge = Bridge(json.dumps([c._spec() for c in self.children]))
-
+        commands = self._validate_commands(
+            command
+            for root in self.children
+            for node in walk(root)
+            for command in self._control_commands(node)
+        )
+        config = {
+            "commands": [command._spec() for command in commands.values()],
+            "menus": menu_specs(self.menus),
+        }
+        # Validate the native contract before claiming controls or committing the
+        # discovered commands. A failed start leaves the unmounted tree editable.
+        self._bridge = Bridge(json.dumps([c._spec() for c in self.children]), json.dumps(config))
+        self._commands = commands
         for control in self.children:
             self._register(control)
         self._phase = "starting"
+        for command in self.commands:
+            command._app = self
         started = threading.Event()
         worker_failures: list[BaseException] = []
 
@@ -369,6 +477,8 @@ class Application:
             self._phase = "closed"
             for control in self._controls.values():
                 control.unbind()
+            for command in self.commands:
+                command.unbind()
             if worker.is_alive():
                 raise RuntimeError("Python callback did not stop; synchronous handlers must not block")
         if worker_failures:
