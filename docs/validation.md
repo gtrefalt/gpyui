@@ -3,6 +3,30 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Dynamic composition (0.2.0)
+
+Real X11/Vulkan interaction tests cover TextInput, TextArea and Editor. While
+keyboard editing continues, Python inserts siblings, reorders children and moves
+the editing control to another parent. Tests assert unchanged text and retained
+caret, selection, focus and undo history. Native navigation deliberately ends a
+typing transaction before checking separate undo steps, matching Kit's actual
+undo manager rather than relying on a timer.
+
+Hide/show, ancestor visibility, detach/reattach, page replacement, runtime button
+activation, binding continuity and explicit disposal are also checked. Hidden
+inputs stop receiving keyboard edits; disposed IDs disappear from snapshots.
+Window close cancels the polling coroutine and leaves no callback/executor thread.
+
+The cross-platform installed-wheel smoke test now exercises dynamic children,
+root moves, visibility, retained state and disposal on every release platform.
+Editing interaction remains verified on Linux/X11; platform smoke tests do not
+prove OS keyboard interaction on macOS or Windows.
+
+Python tests additionally check atomic ownership validation, cross-app/thread
+rejection, bindings and overlay limits. Real bridge tests check immutable
+identity, malformed trees, retired IDs and queue-overload schema rollback.
+The historical validation results below describe earlier milestones.
+
 ## Zensical documentation
 
 Zensical 0.0.67 and Ruff 0.16.10 are pinned in the docs dependency group and
@@ -209,7 +233,7 @@ window/state/lifecycle smoke tests on macOS and Windows. See the
 
 Still outside this evidence: Wayland, hardware GPUs, high-DPI/multiple monitors,
 AT-SPI interaction on a full desktop, IME/composition, manylinux portability,
-multiwindow, dynamic topology or high-volume performance. Coordinates are used
+multiwindow or high-volume performance. Coordinates are used
 as an Xvfb fallback because this environment lacks a desktop accessibility bus;
 screenshots substantiate rendered facts and snapshots substantiate native state.
 

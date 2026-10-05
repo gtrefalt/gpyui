@@ -18,7 +18,8 @@ with app, Column().style(gap=12, padding=24):
 `state.subscribe(callback)` returns an idempotent unsubscribe function.
 `bind_value` is two-way on controls exposing both `value` and `change`.
 `Label.bind_text` is one-way, with `str` as its default transform.
-`control.unbind()` disposes bindings; application shutdown unbinds its controls.
+`control.unbind()` removes bindings. Hiding or detaching retains them;
+`control.dispose()` and application shutdown unbind retained controls.
 
 Native changes update the Python mirror and bound State **before** `on_change`.
 Do not echo native text back through `.value` to keep it synchronized: that
@@ -58,6 +59,9 @@ universal `.on()` registration API.
 Button click events include input-value snapshots in the native queue, so
 reading a TextInput in a click callback sees the text associated with that
 activation. Native events and Python callbacks are queued; keep handlers short.
+Queued callbacks for hidden/detached controls are suppressed; events for disposed
+controls are ignored. Already-running callback tasks still require normal
+application cancellation/ownership handling.
 
 ## Async work
 
@@ -92,7 +96,11 @@ hold the batch across I/O awaits. It flushes on exit and provides no rollback.
 callback context; do not use them to build an unmounted tree.
 
 `await app.snapshot()` flushes and waits for applied native command state.
-The result is a mapping from integer control IDs to native properties. It is
+The result maps integer control IDs to native properties, including retained
+detached nodes. `visible` is the node's own flag; `attached` means under a live
+application root; `displayed` also accounts for hidden ancestors. Disposed IDs
+are absent. Structural changes and property patches in one batch apply together.
+It is
 not a GPU presentation fence and does not prove that pixels have been displayed.
 
 Collections are copied on assignment and read. Use `table.rows = new_rows` or

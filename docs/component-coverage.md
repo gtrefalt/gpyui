@@ -67,7 +67,9 @@ IDs must be unique, with a maximum of 10,000 items and 32 levels.
 Properties are mutable through assignment unless explicitly fixed: Slider
 range/step; Select/Combobox/Tree items; Table columns/column_width; OTP length;
 Resizable axis; Dialog/Sheet title. Collections are copied when assigned/read.
-The mounted control topology is still static. Accordion initially exposes one
+Dynamic roots and container children, visibility and explicit subtree disposal
+are supported. Reordering, moving, hiding and detaching preserve native control
+identity and editing state. Accordion initially exposes one
 open index and string item contents. Avatar initially exposes initials; Editor
 exposes editing without Python LSP/provider hooks. Chart animation/hover and
 resize geometry remain native. The initial theme is chosen when run starts.

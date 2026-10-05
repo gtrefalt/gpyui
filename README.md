@@ -115,7 +115,8 @@ installs agent instructions.
 
 gpyui is in early development. The component catalog has initial Python wrappers;
 specialized Kit APIs are still being exposed. Applications currently use one
-window and a static mounted control tree. See the
+window with dynamic children and visibility. Existing controls retain their native
+identity and editing state when moved or hidden. See the
 [coverage and roadmap](https://gtrefalt.github.io/gpyui/component-coverage/) for
 supported features and planned work.
 

@@ -189,8 +189,14 @@ class KitControl(Column):
                 raise TypeError("containers accept Control children")
             if child in _containers.get():
                 raise ValueError("control tree cannot contain a cycle")
-            if child._parent is not None or child._app is not None or child.id in seen:
+            child._ensure_alive()
+            if child._parent is not None or child.id in seen:
                 raise ValueError("a control can have only one parent")
+            if child._app is not None:
+                parent = _containers.get()[-1] if _containers.get() else None
+                app = parent._app if isinstance(parent, Control) else parent
+                if child._app is not app:
+                    raise ValueError("a control can belong to only one application")
             seen.add(child.id)
         self._children = []
         self._state: State[Any] | None = None
@@ -218,6 +224,7 @@ class KitControl(Column):
             return
         if name in self.readonly:
             raise AttributeError(f"{name} is fixed after construction")
+        self._ensure_alive()
         value = self.fields[name][1](copy.deepcopy(value))
         props = self._properties["props"]
         self._validate({**props, name: value})

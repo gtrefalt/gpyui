@@ -72,3 +72,60 @@ def test_missing_display_cleans_up_python_worker(monkeypatch):
     assert not any(t.name == "gpyui-asyncio" or t.name.startswith("asyncio_") for t in threading.enumerate())
     with pytest.raises(RuntimeError, match="only be called once"):
         app.run()
+
+
+def test_reconciliation_validates_new_controls_before_changing_schema():
+    bridge = Bridge('[{"id":1,"type":"column","children":[]}]')
+    tree = '[{"id":1,"type":"column","children":[{"id":2,"type":"input","value":"Ada","placeholder":""}]}]'
+    with pytest.raises(ValueError, match="invalid property"):
+        bridge.reconcile(tree, "[1]", '[{"id":2,"property":"visible","value":"invalid"}]')
+    with pytest.raises(ValueError, match="unknown control"):
+        bridge.submit('[{"id":2,"property":"value","value":"Not mounted"}]')
+    bridge.reconcile(tree, "[1]", '[{"id":2,"property":"visible","value":false}]')
+    bridge.submit('[{"id":2,"property":"value","value":"Grace"}]')
+    bridge.finish()
+
+
+@pytest.mark.parametrize(
+    "invalid_tree, roots, message",
+    [
+        ('[{"id":1,"type":"label","text":"Changed type"}]', "[1]", "changed type"),
+        ('[{"id":1,"type":"column","children":[]}]', "[2]", "unparented"),
+        ('[{"id":1,"type":"column","children":[]}]', "[1,1]", "unique"),
+        (
+            '[{"id":1,"type":"column","children":[{"id":1,"type":"label","text":"Duplicate"}]}]',
+            "[1]",
+            "unique",
+        ),
+    ],
+)
+def test_reconciliation_rejects_identity_and_topology_errors(invalid_tree, roots, message):
+    bridge = Bridge('[{"id":1,"type":"column","children":[]}]')
+    with pytest.raises(ValueError, match=message):
+        bridge.reconcile(invalid_tree, roots, "[]")
+    bridge.submit('[{"id":1,"property":"visible","value":false}]')
+    bridge.finish()
+
+
+def test_disposed_ids_are_rejected_but_detached_controls_remain_registered():
+    tree = '[{"id":1,"type":"column","children":[]},{"id":2,"type":"input","value":"Ada","placeholder":""}]'
+    bridge = Bridge(tree)
+    bridge.reconcile(tree, "[1]", "[]")
+    bridge.submit('[{"id":2,"property":"value","value":"Detached update"}]')
+    bridge.reconcile('[{"id":1,"type":"column","children":[]}]', "[1]", "[]")
+    with pytest.raises(ValueError, match="disposed"):
+        bridge.reconcile(tree, "[1,2]", "[]")
+    bridge.finish()
+
+
+def test_failed_enqueue_does_not_commit_future_tree_schema():
+    bridge = Bridge('[{"id":1,"type":"column","children":[]}]')
+    try:
+        for token in range(1024):
+            bridge.snapshot(token)
+        with pytest.raises(RuntimeError, match="queue unavailable"):
+            bridge.reconcile('[{"id":2,"type":"label","text":"New"}]', "[2]", "[]")
+        with pytest.raises(ValueError, match="unknown control"):
+            bridge.submit('[{"id":2,"property":"text","value":"New schema was not committed"}]')
+    finally:
+        bridge.finish()

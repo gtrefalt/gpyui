@@ -137,13 +137,22 @@ def component_page(name):
     if container:
         lines += [
             "",
-            "Accepts `children=[...]`, a `with` block, and `add(...)` before mounting. "
-            "Each child has one parent. The mounted topology is fixed.",
+            "Accepts `children=[...]`, a `with` block, and runtime `add`, `insert`, `remove`, "
+            "`clear`, `set_children` or assignment to `children`. Each child has one parent. "
+            "Reuse existing instances to preserve native state; see "
+            "[runtime composition](../guide/layout.md#runtime-children-and-visibility).",
             "",
             "Construct explicit child lists outside a composition context, as in the example. "
             "Inside a `with` block, construct the parent first and then its children.",
         ]
-    lines += ["", "## Events and state", ""]
+    lines += [
+        "",
+        "All controls support `visible` and `dispose()`. Hiding or detaching retains native state; "
+        "disposal permanently releases it. See [Control](../reference/core.md).",
+        "",
+        "## Events and state",
+        "",
+    ]
     if events:
         for event in events:
             text = {
@@ -282,14 +291,20 @@ def skill_references():
             )
             page = re.sub(r"^(#+) ", r"\1# ", page, flags=re.MULTILINE)
             page = re.sub(
-                r"\]\(\.\./([^)]*?)\.md\)",
+                r"\]\(\.\./([^)]*?)\.md(#[^)]*)?\)",
                 lambda match: (
                     "]("
                     + {
                         "guide/styling": "../styling.md",
+                        "guide/layout": "../composition.md",
                         "guide/events": "../state-and-events.md",
                         "guide/state": "../state-and-events.md",
                     }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
+                    + (
+                        "#dynamic-composition"
+                        if match[1] == "guide/layout" and match[2]
+                        else (match[2] or "")
+                    )
                     + ")"
                 ),
                 page,

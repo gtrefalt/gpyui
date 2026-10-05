@@ -7,7 +7,7 @@ use pyo3::{
 };
 use serde_json::{Value, json};
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     sync::{
         Arc, Mutex,
         atomic::{AtomicBool, Ordering},
@@ -51,7 +51,8 @@ pub(crate) struct Bridge {
     transport: Arc<Transport>,
     event_receiver: Receiver<Value>,
     native: Mutex<Option<(Vec<Node>, Receiver<Command>)>>,
-    schema: HashMap<u64, ControlType>,
+    schema: Mutex<HashMap<u64, ControlType>>,
+    retired: Mutex<HashSet<u64>>,
 }
 
 #[pymethods]
@@ -61,6 +62,11 @@ impl Bridge {
         let nodes: Vec<Node> =
             serde_json::from_str(tree_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
         let schema = protocol::schema(&nodes).map_err(PyValueError::new_err)?;
+        protocol::validate_roots(
+            &nodes,
+            &nodes.iter().map(|node| node.id).collect::<Vec<_>>(),
+        )
+        .map_err(PyValueError::new_err)?;
         let (commands, receiver) = async_channel::bounded(QUEUE_CAPACITY);
         let (events, event_receiver) = async_channel::bounded(QUEUE_CAPACITY);
         Ok(Self {
@@ -72,15 +78,54 @@ impl Bridge {
             }),
             event_receiver,
             native: Mutex::new(Some((nodes, receiver))),
-            schema,
+            schema: Mutex::new(schema),
+            retired: Mutex::new(HashSet::new()),
         })
     }
     /// Validate the entire batch before enqueueing any update.
     fn submit(&self, batch_json: &str) -> PyResult<()> {
         let patches: Vec<Patch> =
             serde_json::from_str(batch_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
-        protocol::validate_batch(&patches, &self.schema).map_err(PyValueError::new_err)?;
+        let schema = self.schema.lock().expect("schema lock poisoned");
+        protocol::validate_batch(&patches, &schema).map_err(PyValueError::new_err)?;
         self.send(Command::Batch(patches))
+    }
+    /// Atomically validate/enqueue topology and properties before changing schema.
+    fn reconcile(&self, tree_json: &str, roots_json: &str, batch_json: &str) -> PyResult<()> {
+        let nodes: Vec<Node> =
+            serde_json::from_str(tree_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let roots: Vec<u64> =
+            serde_json::from_str(roots_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let patches: Vec<Patch> =
+            serde_json::from_str(batch_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let mut next = protocol::schema(&nodes).map_err(PyValueError::new_err)?;
+        protocol::validate_roots(&nodes, &roots).map_err(PyValueError::new_err)?;
+        let mut schema = self.schema.lock().expect("schema lock poisoned");
+        let mut retired = self.retired.lock().expect("retired lock poisoned");
+        for (id, kind) in &mut next {
+            if retired.contains(id) {
+                return Err(PyValueError::new_err(format!("control {id} was disposed")));
+            }
+            if let Some(existing) = schema.get(id) {
+                if !protocol::validate_identity(existing, kind) {
+                    return Err(PyValueError::new_err(format!(
+                        "control {id} changed type or constructor-only fields"
+                    )));
+                }
+                *kind = existing.clone();
+            }
+        }
+        protocol::validate_batch(&patches, &next).map_err(PyValueError::new_err)?;
+        let retained = next.keys().copied().collect();
+        self.send(Command::Reconcile {
+            nodes,
+            roots,
+            patches,
+            retained,
+        })?;
+        retired.extend(schema.keys().filter(|id| !next.contains_key(id)));
+        *schema = next;
+        Ok(())
     }
     fn snapshot(&self, token: u64) -> PyResult<()> {
         self.send(Command::Snapshot(token))

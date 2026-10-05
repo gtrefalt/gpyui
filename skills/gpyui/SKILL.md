@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe **gpyui 0.1.1**. Read the installed version's API when
+These references describe **gpyui 0.2.0**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -37,7 +37,7 @@ it in the library before depending on it in application code.
 
 - Install dependencies with `uv add` and launch with `uv run python app.py`.
   The alternative is `pip install` in a virtual environment; see platform setup.
-- Build the entire tree before `app.run()`. Use one composition method at a
+- Build the initial tree before `app.run()`; update children on the callback loop. Use one composition method at a
   time: context-managed children, or explicit child lists built outside a
   context. A control has one parent.
 - Call `app.run()` once, on the main thread, outside an existing asyncio loop.
@@ -53,11 +53,11 @@ it in the library before depending on it in application code.
 - Reassign collections; changing a returned `rows`, `items` or `data` copy
   submits no update. Bound streaming history and update rate.
 - Use semantic style colors and pixel dimensions. `.style()` accepts a limited
-  vocabulary, not CSS. No `.pack()`, `.grid()`, `.classes()`, `.visible`,
+  vocabulary, not CSS. No `.pack()`, `.grid()`, `.classes()`,
   `.on(...)`, raw Rust builders or implicit reactive rendering.
-- Keep scope honest: one native window, static mounted topology, startup theme.
+- Keep scope honest: one native window and startup theme.
   Kbd displays a shortcut but does not register it. Navigation selects an index
-  but does not route or swap a subtree. Initial wrappers do not expose full Kit
+  but does not own pages; implement page changes with visibility or child updates. Initial wrappers do not expose full Kit
   docking, custom table delegates, multi-series chart configuration or editor
   language-server hooks.
 

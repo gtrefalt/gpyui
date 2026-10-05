@@ -1,12 +1,14 @@
 use serde::Deserialize;
 use serde_json::Value;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Clone, Deserialize)]
 pub(crate) struct Node {
     pub(crate) id: u64,
     #[serde(default)]
     pub(crate) style: serde_json::Map<String, Value>,
+    #[serde(default = "visible_by_default")]
+    pub(crate) visible: bool,
     #[serde(flatten)]
     pub(crate) control: Control,
 }
@@ -40,12 +42,16 @@ pub(crate) enum Control {
     },
 }
 
-#[derive(Clone)]
+fn visible_by_default() -> bool {
+    true
+}
+
+#[derive(Clone, PartialEq)]
 pub(crate) enum ControlType {
     Column,
     Label,
     Input,
-    Button,
+    Button { variant: String, icon: String },
     Kit(String, serde_json::Map<String, Value>),
 }
 
@@ -59,6 +65,12 @@ pub(crate) struct Patch {
 
 pub(crate) enum Command {
     Batch(Vec<Patch>),
+    Reconcile {
+        nodes: Vec<Node>,
+        roots: Vec<u64>,
+        patches: Vec<Patch>,
+        retained: HashSet<u64>,
+    },
     Snapshot(u64),
     Close,
     Notify {
@@ -69,13 +81,23 @@ pub(crate) enum Command {
 }
 
 pub(crate) fn schema(nodes: &[Node]) -> Result<HashMap<u64, ControlType>, String> {
-    fn visit(nodes: &[Node], out: &mut HashMap<u64, ControlType>) -> Result<(), String> {
+    fn visit(
+        nodes: &[Node],
+        out: &mut HashMap<u64, ControlType>,
+        depth: usize,
+    ) -> Result<(), String> {
+        if depth > 64 {
+            return Err("control tree exceeds 64 levels".into());
+        }
         for node in nodes {
             let control = match &node.control {
                 Control::Column { .. } => ControlType::Column,
                 Control::Label { .. } => ControlType::Label,
                 Control::Input { .. } => ControlType::Input,
-                Control::Button { .. } => ControlType::Button,
+                Control::Button { variant, icon, .. } => ControlType::Button {
+                    variant: variant.clone(),
+                    icon: icon.clone(),
+                },
                 Control::Kit {
                     kind,
                     props,
@@ -118,24 +140,62 @@ pub(crate) fn schema(nodes: &[Node]) -> Result<HashMap<u64, ControlType>, String
                 return Err("tree exceeds 10,000 controls".into());
             }
             if let Control::Column { children } | Control::Kit { children, .. } = &node.control {
-                visit(children, out)?;
+                visit(children, out, depth + 1)?;
             }
         }
         Ok(())
     }
     let mut out = HashMap::new();
-    visit(nodes, &mut out)?;
-    for kind in ["dialog", "sheet"] {
-        if out
-            .values()
-            .filter(|t| matches!(t, ControlType::Kit(k, _) if k == kind))
-            .count()
-            > 1
+    visit(nodes, &mut out, 0)?;
+    Ok(out)
+}
+
+pub(crate) fn validate_roots(nodes: &[Node], roots: &[u64]) -> Result<(), String> {
+    let mut seen = HashSet::new();
+    let mut overlays = HashMap::<String, usize>::new();
+    fn count(node: &Node, overlays: &mut HashMap<String, usize>) {
+        if let Control::Kit { kind, .. } = &node.control
+            && matches!(kind.as_str(), "dialog" | "sheet")
         {
+            *overlays.entry(kind.clone()).or_default() += 1;
+        }
+        if let Control::Column { children } | Control::Kit { children, .. } = &node.control {
+            for child in children {
+                count(child, overlays);
+            }
+        }
+    }
+    for id in roots {
+        let node = nodes
+            .iter()
+            .find(|node| node.id == *id)
+            .ok_or_else(|| format!("root {id} must be an unparented control"))?;
+        if !seen.insert(id) {
+            return Err("root IDs must be unique".into());
+        }
+        count(node, &mut overlays);
+    }
+    for (kind, count) in overlays {
+        if count > 1 {
             return Err(format!("one {kind} per window is currently supported"));
         }
     }
-    Ok(out)
+    Ok(())
+}
+
+/// Existing IDs describe retained handles, not requests to rebuild their state.
+pub(crate) fn validate_identity(old: &ControlType, new: &ControlType) -> bool {
+    match (old, new) {
+        (ControlType::Kit(kind, initial), ControlType::Kit(next_kind, next))
+            if kind == next_kind =>
+        {
+            initial.iter().all(|(key, value)| {
+                crate::kit::validate_property(kind, initial, key, value)
+                    || next.get(key) == Some(value)
+            })
+        }
+        _ => old == new,
+    }
 }
 
 pub(crate) fn validate_batch(
@@ -149,16 +209,18 @@ pub(crate) fn validate_batch(
         let control = schema
             .get(&patch.id)
             .ok_or_else(|| format!("unknown control {}", patch.id))?;
-        let valid = if patch.property == "style" {
+        let valid = if patch.property == "visible" {
+            patch.value.is_boolean()
+        } else if patch.property == "style" {
             patch
                 .value
                 .as_object()
                 .is_some_and(|style| crate::kit::validate_style(style).is_ok())
         } else {
             match (control, patch.property.as_str()) {
-                (ControlType::Label | ControlType::Button, "text")
+                (ControlType::Label | ControlType::Button { .. }, "text")
                 | (ControlType::Input, "value" | "placeholder") => patch.value.is_string(),
-                (ControlType::Button, "disabled") => patch.value.is_boolean(),
+                (ControlType::Button { .. }, "disabled") => patch.value.is_boolean(),
                 (ControlType::Kit(kind, initial), property) => {
                     crate::kit::validate_property(kind, initial, property, &patch.value)
                 }

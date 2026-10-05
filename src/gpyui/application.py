@@ -6,11 +6,12 @@ import itertools
 import json
 import math
 import threading
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, cast
 
 from .controls import Column, Control, Event, Handler, _containers
+from .tree import walk
 
 if TYPE_CHECKING:
     from .controls import TextInput
@@ -26,7 +27,7 @@ class Application:
 
     Call run() on the main thread. Callbacks run on the owned asyncio loop;
     call_soon() marshals work from other Python threads. Native startup is
-    currently one run per process. The control tree is fixed after mounting.
+    currently one run per process. Structural updates retain controls by ID.
     """
 
     def __init__(
@@ -51,6 +52,7 @@ class Application:
         self._controls: dict[int, Control] = {}
         self._phase = "new"
         self._pending: dict[tuple[int, str], Any] = {}
+        self._tree_dirty = False
         self._batch_depth = 0
         self._flush_scheduled = False
         self._bridge: Any = None
@@ -68,21 +70,80 @@ class Application:
     def children(self) -> tuple[Control, ...]:
         return tuple(self._children)
 
+    @children.setter
+    def children(self, controls: Iterable[Control]) -> None:
+        self.set_children(controls)
+
     @property
     def errors(self) -> tuple[Exception, ...]:
         return tuple(self._errors)
 
     def add(self, *controls: Control) -> Application:
-        if self._phase != "new":
-            raise RuntimeError("the mounted tree is fixed for this milestone")
-        for control in controls:
-            if not isinstance(control, Control):
-                raise TypeError("applications accept Control children")
-            if control._parent is not None or control._app is not None:
-                raise ValueError("a control can have only one parent")
-            control._parent = self
-            self._children.append(control)
+        return self.set_children((*self._children, *controls))
+
+    def set_children(self, controls: Iterable[Control]) -> Application:
+        from .tree import set_children
+
+        set_children(self, controls)
         return self
+
+    def insert(self, index: int, control: Control) -> Application:
+        children = list(self.children)
+        children.insert(index, control)
+        return self.set_children(children)
+
+    def remove(self, *controls: Control) -> Application:
+        if any(control not in self._children for control in controls):
+            raise ValueError("control is not an application root")
+        return self.set_children(control for control in self._children if control not in controls)
+
+    def clear(self) -> Application:
+        return self.set_children(())
+
+    def _register(self, control: Control) -> None:
+        for node in walk(control):
+            node._app = self
+            self._controls[node.id] = node
+
+    def _validate_tree_change(self, parent: Column | Application, children: tuple[Control, ...]) -> None:
+        roots = children if parent is self else self.children
+        active: dict[int, Control] = {}
+
+        def visit(control: Control, depth: int) -> None:
+            if depth > 64:
+                raise ValueError("control tree exceeds 64 levels")
+            if control.id in active:
+                raise ValueError("a control can have only one parent")
+            control._ensure_alive()
+            active[control.id] = control
+            if isinstance(control, Column):
+                for child in children if control is parent else control.children:
+                    visit(child, depth + 1)
+
+        for root in roots:
+            visit(root, 0)
+        owned = set(self._controls) | set(active)
+        for child in children:
+            owned.update(node.id for node in walk(child))
+        if len(owned) > 10_000:
+            raise ValueError("application exceeds 10,000 retained controls; dispose detached controls")
+        for kind in ("dialog", "sheet"):
+            if sum(getattr(node, "native", None) == kind for node in active.values()) > 1:
+                raise ValueError(f"one {kind} per window is currently supported")
+        # Detached forests still cross the bridge and must obey its depth bound.
+        for control in self._controls.values():
+            if control._parent is None and control.id not in active:
+                visit(control, 0)
+
+    def _forests(self) -> list[dict[str, Any]]:
+        roots = [*self.children, *(control for control in self._controls.values() if control._parent is None)]
+        return [control._spec() for control in roots]
+
+    def _schedule_flush(self) -> None:
+        if not self._batch_depth and not self._flush_scheduled:
+            self._flush_scheduled = True
+            assert self._loop is not None
+            self._loop.call_soon(self._auto_flush)
 
     def __enter__(self) -> Application:
         _containers.set((*_containers.get(), self))
@@ -102,10 +163,7 @@ class Application:
 
     def _queue(self, control_id: int, name: str, value: Any) -> None:
         self._pending[(control_id, name)] = value
-        if not self._batch_depth and not self._flush_scheduled:
-            self._flush_scheduled = True
-            assert self._loop is not None
-            self._loop.call_soon(self._auto_flush)
+        self._schedule_flush()
 
     def _auto_flush(self) -> None:
         self._flush_scheduled = False
@@ -116,15 +174,23 @@ class Application:
                 self._report(error)
 
     def update(self) -> None:
-        """Submit coalesced properties. Await snapshot() to observe applied state."""
+        """Submit coalesced properties and children. Await snapshot() to observe applied state."""
         self._check_mutation()
-        if self._pending:
+        if self._pending or self._tree_dirty:
             patches = [
                 {"id": control_id, "property": name, "value": value}
                 for (control_id, name), value in self._pending.items()
             ]
-            self._bridge.submit(json.dumps(patches))
+            if self._tree_dirty:
+                self._bridge.reconcile(
+                    json.dumps(self._forests()),
+                    json.dumps([control.id for control in self.children]),
+                    json.dumps(patches),
+                )
+            else:
+                self._bridge.submit(json.dumps(patches))
             self._pending.clear()
+            self._tree_dirty = False
 
     @contextmanager
     def batch(self) -> Iterator[None]:
@@ -197,7 +263,7 @@ class Application:
 
     def _dispatch(self, handler: Handler, event: Event) -> None:
         async def invoke() -> None:
-            token = _containers.set(())  # Mounted topology cannot be changed by callbacks.
+            token = _containers.set(())  # Each callback starts with an independent composition context.
             try:
                 result = handler(event)
                 if inspect.isawaitable(result):
@@ -236,14 +302,17 @@ class Application:
                         if future is not None and not future.done():
                             future.set_result({int(k): v for k, v in event["nodes"].items()})
                     elif name in {"click", "change", "release", "resize"}:
-                        control = self._controls[event["id"]]
+                        control = self._controls.get(event["id"])
+                        if control is None:
+                            continue
                         # Rust includes values only for native input/Kit controls.
                         for control_id, value in event.get("values", {}).items():
-                            cast("TextInput | KitControl", self._controls[int(control_id)])._receive_native(
-                                value
-                            )
+                            if mirrored := self._controls.get(int(control_id)):
+                                cast("TextInput | KitControl", mirrored)._receive_native(value)
                         if name == "change":
                             cast("TextInput | KitControl", control)._receive_native(event["value"])
+                        if not control._is_displayed():
+                            continue
                         if handler := control._handlers.get(name):
                             self._dispatch(handler, Event(control, name, event.get("value")))
                             # Begin this callback with its activation snapshot before
@@ -275,15 +344,8 @@ class Application:
 
         self._bridge = Bridge(json.dumps([c._spec() for c in self.children]))
 
-        def mount(control: Control) -> None:
-            control._app = self
-            self._controls[control.id] = control
-            if isinstance(control, Column):
-                for child in control.children:
-                    mount(child)
-
         for control in self.children:
-            mount(control)
+            self._register(control)
         self._phase = "starting"
         started = threading.Event()
         worker_failures: list[BaseException] = []
