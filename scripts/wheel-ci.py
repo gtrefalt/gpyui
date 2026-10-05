@@ -128,21 +128,33 @@ def venv_python():
 
 
 def install():
-    subprocess.run(["uv", "venv", ".venv", "--python", sys.executable], check=True)
     wheels = list(Path("dist").glob("*.whl"))
     assert len(wheels) == 1, wheels
+    # A separate, dependency-only project prevents building the source checkout.
+    project = Path("artifacts/wheel-test")
+    project.mkdir(parents=True, exist_ok=True)
+    (project / "pyproject.toml").write_text(
+        '[project]\nname = "gpyui-wheel-test"\nversion = "0.0.0"\n'
+        f'requires-python = "=={sys.version_info.major}.{sys.version_info.minor}.*"\n'
+        "dependencies = []\n\n[tool.uv]\npackage = false\n"
+    )
+    environment = {**os.environ, "UV_PROJECT_ENVIRONMENT": str(Path(".venv").absolute())}
+    environment.pop("VIRTUAL_ENV", None)
     subprocess.run(
         [
             "uv",
-            "pip",
-            "install",
+            "add",
+            "--project",
+            str(project),
+            "--no-workspace",
             "--python",
-            str(venv_python()),
-            str(wheels[0]),
+            sys.executable,
+            str(wheels[0].absolute()),
             "pytest>=8,<10",
             "python-xlib>=0.33,<1",
         ],
         check=True,
+        env=environment,
     )
     subprocess.run(
         [
@@ -199,7 +211,8 @@ def release():
         "",
         f"[Changelog](https://github.com/gtrefalt/gpyui/blob/v{project_version()}/CHANGELOG.md)",
         "",
-        "Download the wheel matching your OS and architecture; install with `uv pip install path/to/wheel.whl`.",
+        "In your uv project, install the wheel matching your OS and architecture with `uv add /path/to/wheel.whl`.",
+        "Alternatively, use `pip install /path/to/wheel.whl` in a virtual environment.",
         "CPython 3.12+ uses the stable abi3 interface; Windows ARM64 is tested on 3.13+.",
         "macOS requires 12.0+. Linux uses system X11, font and Vulkan libraries (glibc 2.28+); these are Linux-tagged wheels, not manylinux bundles.",
         "",

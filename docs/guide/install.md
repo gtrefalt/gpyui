@@ -10,16 +10,24 @@ runtime libraries and test coverage.
 On macOS 12+ and Windows, install from [PyPI](https://pypi.org/project/gpyui/):
 
 ```bash
-pip install gpyui
+uv init my-app
+cd my-app
+uv add gpyui
 ```
 
-With [uv](https://docs.astral.sh/uv/), use `uv pip install gpyui` in your virtual
-environment. Windows ARM64 is tested with Python 3.13+.
+In an existing [uv](https://docs.astral.sh/uv/) project, use `uv add gpyui`.
+Alternatively, use `pip install gpyui` in a virtual environment.
+Windows ARM64 is tested with Python 3.13+.
 
 On Linux, download the wheel matching your architecture from
 [GitHub Releases](https://github.com/gtrefalt/gpyui/releases). The filenames end
-in `linux_x86_64.whl` or `linux_aarch64.whl`. Install that downloaded file with
-`pip install path/to/wheel.whl` or `uv pip install path/to/wheel.whl`.
+in `linux_x86_64.whl` or `linux_aarch64.whl`. From your uv project, install the downloaded file:
+
+```bash
+uv add /path/to/gpyui-0.1.1-cp312-abi3-linux_x86_64.whl
+```
+
+Alternatively, use `pip install /path/to/wheel.whl` in a virtual environment.
 PyPI currently provides a source archive for Linux; installing it compiles Rust.
 
 For Debian/Ubuntu, install the desktop runtime libraries before opening a window:
@@ -73,8 +81,10 @@ app.run()
 ```
 
 ```bash
-python hello.py
+uv run python hello.py
 ```
+
+With pip, activate your virtual environment and run `python hello.py`.
 
 `run()` blocks the main thread until the native window closes. The native button
 queues a callback onto gpyui's Python asyncio worker. Assigning `greeting.text`

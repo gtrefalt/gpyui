@@ -15,26 +15,30 @@ hooks: tools
     {{ tools }} lefthook install
 
 # Run all Python lint, formatting and type checks.
-check: lint format-check typecheck
+check: lint format-check typecheck skills-check
     @just --fmt --check
     {{ tools }} lefthook validate
 
 # Check Python code and native-extension type stubs with Ruff.
 lint:
-    {{ tools }} ruff check src examples scripts tests
+    {{ tools }} ruff check src examples scripts tests skills
 
 # Check formatting without modifying files.
 format-check:
-    {{ tools }} ruff format --check src examples scripts tests
+    {{ tools }} ruff format --check src examples scripts tests skills
 
 # Apply safe lint fixes and format Python files.
 format:
-    {{ tools }} ruff check --fix src examples scripts tests
-    {{ tools }} ruff format src examples scripts tests
+    {{ tools }} ruff check --fix src examples scripts tests skills
+    {{ tools }} ruff format src examples scripts tests skills
 
 # Check the library, examples, scripts and tests with ty.
 typecheck:
     {{ tools }} ty check
+
+# Validate installed skill links and construct examples without native compilation.
+skills-check:
+    {{ tools }} python scripts/check-skills.py
 
 # Run Python and Rust bridge tests (requires the native build prerequisites).
 test:
