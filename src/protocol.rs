@@ -155,9 +155,30 @@ pub(crate) fn schema(
                                 | "dialog"
                                 | "sheet"
                                 | "resizable"
+                                | "form"
+                                | "field"
                         )
                     {
                         return Err(format!("{kind} does not accept children"));
+                    }
+                    if kind == "form" {
+                        let mut names = HashSet::new();
+                        for child in children {
+                            let Control::Kit { kind, props, .. } = &child.control else {
+                                return Err("Form accepts Field children".into());
+                            };
+                            if kind != "field" {
+                                return Err("Form accepts Field children".into());
+                            }
+                            let name = props
+                                .get("name")
+                                .and_then(Value::as_str)
+                                .filter(|v| !v.is_empty())
+                                .ok_or("Form fields require names")?;
+                            if !names.insert(name) {
+                                return Err("Form field names must be unique".into());
+                            }
+                        }
                     }
                     ControlType::Kit(kind.clone(), props.clone())
                 }

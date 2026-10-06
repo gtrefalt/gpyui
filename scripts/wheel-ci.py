@@ -110,6 +110,7 @@ def check_wheel(wheel, platform):
             "gpyui/application.py",
             "gpyui/controls.py",
             "gpyui/themes.py",
+            "gpyui/forms.py",
         ):
             assert required in names, required
         assert any(name.startswith("gpyui/_core.") and name.endswith((".so", ".pyd")) for name in names)

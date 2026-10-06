@@ -31,9 +31,11 @@ and `full_width=True` where containment requires them. Bound Scroll with a heigh
 or a flexible region in a bounded parent. Important commands should remain
 reachable when content grows.
 
-Group related form fields with visible Label controls, not placeholders alone.
-Use vertical labels by default; compose a Row when a short field genuinely fits
-beside its label. Put help and validation text near the field. NumberInput holds
+Group related fields with real Form/Field labels and required indicators. Use
+vertical labels by default, or Form(label_layout="horizontal") for a compact
+settings layout. Put help and actionable validation text in Field.help/error.
+Form supports columns and Field.col_span. Keep submit actions outside the Form.
+NumberInput holds
 text, including incomplete edits; validate at submission, without destroying
 native caret or undo behavior on each keystroke.
 
@@ -53,7 +55,7 @@ Each preset supports `mode="dark"`. Change `app.theme` on the callback loop to
 switch appearance while retaining editors. Check the app in both intended
 appearances; the documentation site's toggle does not change native previews.
 OS-inspired themes style real Kit controls; platform-owned decorations remain.
-The post-0.4.0 repository treatments distinguish compact macOS controls and green
+The 0.5.0 native treatments distinguish compact macOS controls and green
 toggles from roomier Windows 11 controls, larger checkboxes and underlined fields.
 Choose spacing to match that density rather than using large web-form gaps for
 small desktop controls. Default text is 13 px for macOS and 14 px for Windows.
@@ -100,12 +102,16 @@ as well. Badge is for a useful count or short classification, not every caption.
 
 A command should name the result: "Save profile", "Export report", "Delete
 project". Keep validation errors actionable: name the field and how to fix it.
-Use Label or Alert for durable error information and `app.notify()` for a brief
+Use Field.error for inline errors and Form.error or Alert for a durable summary;
+use `app.notify()` for a brief
 runtime confirmation. A notification cannot replace a persistent validation
 message the user needs while correcting input.
 
 For awaited work, disable the shared Command (or the relevant Button), change the status text before
-awaiting, and restore the button in `finally`. Button has no Python `loading`
+awaiting, and restore the button in `finally`. Form.submit_command manages busy,
+validation, async submission and restoration automatically; show loading text or
+a Spinner in the save callback, and reuse the same command for retry. Hide an
+entire Field for conditional omission while retaining its input. Button has no Python `loading`
 property; pair it with status text or a supported progress control. Loading must
 correspond to real pending work. Do not block the asyncio callback loop.
 Distinguish a fresh value from a stale or disconnected stream.

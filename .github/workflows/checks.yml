@@ -28,4 +28,4 @@ jobs:
       - name: Run Python tests without compiling the native extension
         env:
           PYTHONPATH: src
-        run: uv run --locked --only-group dev pytest -q tests/test_controls.py tests/test_commands.py tests/test_themes.py tests/test_notes.py tests/test_dynamic.py tests/test_market.py tests/test_wheel_ci.py tests/test_skills.py
+        run: uv run --locked --only-group dev pytest -q tests/test_controls.py tests/test_commands.py tests/test_themes.py tests/test_forms.py tests/test_settings.py tests/test_notes.py tests/test_dynamic.py tests/test_market.py tests/test_wheel_ci.py tests/test_skills.py

@@ -13,6 +13,8 @@ from gpyui import (
     Command,
     Dialog,
     DropdownMenu,
+    Field,
+    Form,
     Label,
     Menu,
     MenuSeparator,
@@ -131,6 +133,42 @@ async def started():
     action.enabled = True
     app.menus = []
     await app.snapshot()
+    # Real Kit Form/Field and Python async validation on every release platform.
+    saved_values = []
+
+    async def validate_name(value):
+        await asyncio.sleep(0.01)
+        return None if len(value) >= 3 else "Use at least three characters."
+
+    async def submit_settings(values):
+        await asyncio.sleep(0.01)
+        saved_values.append(values)
+
+    name_editor = TextInput("A")
+    name_field = Field(
+        "Name",
+        name="name",
+        control=name_editor,
+        required=True,
+        help="Display name",
+        validators=[validate_name],
+    )
+    settings_form = Form(on_submit=submit_settings, children=[name_field])
+    submit_button = Button(command=settings_form.submit_command)
+    app.add(settings_form, submit_button)
+    assert not await settings_form.submit()
+    state = await app.snapshot()
+    assert state[name_editor.id]["value"] == "A"
+    assert state[name_field.id]["error"] == "Use at least three characters."
+    assert not saved_values
+    name_editor.value = "Ada"
+    assert await settings_form.submit()
+    assert saved_values == [{"name": "Ada"}]
+    state = await app.snapshot()
+    assert state[name_field.id]["error"] == "" and state[submit_button.id]["disabled"] is False
+    settings_form.dispose()
+    submit_button.dispose()
+    await app.snapshot()
     # Exercise real preset application and Kit/Base consistency on every OS.
     for preset in ("macos", "windows", "shadcn-zinc", "shadcn-blue"):
         for mode in ("light", "dark"):
@@ -179,5 +217,5 @@ assert not any(t.name == "gpyui-asyncio" for t in threading.enumerate())
 Path("artifacts").mkdir(exist_ok=True)
 Path("artifacts/native-smoke.json").write_text(json.dumps(observed))
 print(
-    "Native window, dynamic children, visibility, retained input state, shared commands, menus, native themes, asyncio and shutdown verified."
+    "Native window, dynamic children, visibility, retained input state, shared commands, menus, forms/validation, native themes, asyncio and shutdown verified."
 )

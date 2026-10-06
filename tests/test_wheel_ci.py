@@ -33,6 +33,7 @@ def distributions(tmp_path, monkeypatch):
                     "application.py",
                     "controls.py",
                     "themes.py",
+                    "forms.py",
                     "_core.abi3.so",
                 ):
                     archive.writestr(f"gpyui/{entry}", "test fixture")

@@ -12,6 +12,8 @@ pub(crate) fn fields(kind: &str) -> Option<&'static [&'static str]> {
         "row" | "container" | "scroll" | "toolbar" | "status_bar" | "spinner" | "skeleton"
         | "bubble" => &[],
         "group_box" => &["title"],
+        "form" => &["label_layout", "columns", "label_width", "size", "error"],
+        "field" => &["label", "name", "help", "required", "error", "col_span"],
         "resizable" => &["vertical"],
         "tree" => &["items", "value"],
         "markdown" | "html" => &["text"],
@@ -64,7 +66,23 @@ fn integer(value: &Value) -> bool {
 
 fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
     match property {
-        "text" | "title" | "description" | "author" | "placeholder" | "href" => value.is_string(),
+        "text" | "title" | "description" | "author" | "placeholder" | "href" | "label" | "help"
+        | "error" => value.is_string(),
+        "name" if kind == "field" => value.as_str().is_some_and(|name| {
+            name.is_empty() || (!name.trim().is_empty() && name.chars().count() <= 128)
+        }),
+        "columns" | "col_span" if kind == "form" || kind == "field" => {
+            value.as_u64().is_some_and(|v| (1..=12).contains(&v))
+        }
+        "label_layout" => value
+            .as_str()
+            .is_some_and(|v| matches!(v, "vertical" | "horizontal")),
+        "label_width" => value
+            .as_f64()
+            .is_some_and(|v| v.is_finite() && (0. ..=1e9).contains(&v)),
+        "size" => value
+            .as_str()
+            .is_some_and(|v| matches!(v, "small" | "medium" | "large")),
         "key" => value.as_str().is_some_and(|s| Keystroke::parse(s).is_ok()),
         "name" => value.as_str().is_some_and(|s| {
             kind != "icon"
@@ -72,7 +90,7 @@ fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
                     && s.bytes()
                         .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-'))
         }),
-        "disabled" | "loading" | "vertical" => value.is_boolean(),
+        "disabled" | "loading" | "vertical" | "required" => value.is_boolean(),
         "minimum" | "maximum" | "step" => finite(value),
         "column_width" => finite(value) && value.as_f64().unwrap() >= 24.,
         "count" | "pages" | "length" => integer(value),
@@ -151,6 +169,7 @@ pub(crate) fn validate_property(
         || (kind == "otp_input" && property == "length")
         || (kind == "tree" && property == "items")
         || (kind == "resizable" && property == "vertical")
+        || (kind == "field" && property == "name")
     {
         return false;
     }
@@ -1068,6 +1087,71 @@ impl NativeKit {
     }
 }
 
+// Return the actual Kit Field so Form can supply layout/grid properties.
+pub(crate) fn form_field(
+    kit: &NativeKit,
+    children: Vec<AnyElement>,
+    style: &Map<String, Value>,
+    cx: &App,
+) -> c::form::Field {
+    let p = Props(&kit.props);
+    let help = p.s("help");
+    let error = p.s("error");
+    let field = c::form::Field::new()
+        .label(p.s("label"))
+        .required(p.b("required"))
+        .col_span(p.ix("col_span") as u16)
+        .children(children)
+        .when(!help.is_empty() || !error.is_empty(), |field| {
+            field.description_fn(move |_, cx| {
+                div()
+                    .flex()
+                    .flex_col()
+                    .gap_1()
+                    .when(!help.is_empty(), |el| {
+                        el.child(
+                            div()
+                                .text_color(cx.theme().muted_foreground)
+                                .child(help.clone()),
+                        )
+                    })
+                    .when(!error.is_empty(), |el| {
+                        el.child(div().text_color(cx.theme().danger).child(error.clone()))
+                    })
+            })
+        });
+    apply_style(field, style, cx)
+}
+
+pub(crate) fn form(
+    kit: &NativeKit,
+    fields: Vec<c::form::Field>,
+    style: &Map<String, Value>,
+    cx: &App,
+) -> AnyElement {
+    let p = Props(&kit.props);
+    let form = c::form::Form::new()
+        .label_layout(if p.s("label_layout") == "horizontal" {
+            Axis::Horizontal
+        } else {
+            Axis::Vertical
+        })
+        .columns(p.ix("columns"))
+        .label_width(px(p.n("label_width")))
+        .with_size(c::Size::from_str(&p.s("size")))
+        .children(fields)
+        .when(!p.s("error").is_empty(), |form| {
+            form.footer(
+                div()
+                    .w_full()
+                    .text_sm()
+                    .text_color(cx.theme().danger)
+                    .child(p.s("error")),
+            )
+        });
+    apply_style(form, style, cx).into_any_element()
+}
+
 pub(crate) fn date_value(value: &str) -> c::calendar::Date {
     c::calendar::Date::Single(if value.is_empty() {
         None
@@ -1164,11 +1248,11 @@ pub(crate) fn styled(
         .into_any_element()
 }
 
-pub(crate) fn apply_style(
-    el: Stateful<Div>,
+pub(crate) fn apply_style<T: Styled + FluentBuilder>(
+    el: T,
     style: &Map<String, Value>,
     cx: &App,
-) -> Stateful<Div> {
+) -> T {
     el.when(style.contains_key("flex"), |el| el.min_w_0().min_h_0())
         .map(|mut el| {
             for (key, value) in style {

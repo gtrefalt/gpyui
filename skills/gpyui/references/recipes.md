@@ -8,7 +8,8 @@ Do not point uv at the library checkout when you intend to use a released wheel.
 
 | Recipe | File | What to preserve |
 | --- | --- | --- |
-| Profile form | [profile.py](../scripts/profile.py) | State binding, submission-time snapshot, validation, to_thread I/O, recoverable failure, finally restoration |
+| Native settings (0.5.0) | [settings.py](../scripts/settings.py) | Real Form/Field, conditional fields, Python validation, shared submit, async atomic saving and one-time failure/retry |
+| Profile form (older API) | [profile.py](../scripts/profile.py) | State binding, submission-time snapshot, validation, to_thread I/O, recoverable failure, finally restoration |
 | Simulated stream | [dashboard.py](../scripts/dashboard.py) | on_start tracked coroutine, bounded deque, table/plot reassignment, synchronous batch, cancellation-safe teardown |
 | Confirmation | [dialog.py](../scripts/dialog.py) | Dialog mounted before run, specific affected object, explicit open/close and cancel command |
 
@@ -31,7 +32,7 @@ tracks dismissal through its change event.
 
 ## Verification
 
-All three scripts can be imported to construct the control tree without starting
+All four scripts can be imported to construct the control tree without starting
 a window, using `if __name__ == "__main__": app.run()`. That catches unsupported
 properties, invalid constructor values and parenting mistakes. Test domain logic
 and mocked I/O separately. Then launch each application in a fresh process on a

@@ -11,9 +11,8 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.4.0's Python capabilities, including native theme
-presets, runtime switching and the current one-window limit. The design guide
-also identifies the platform control refinements in the repository after 0.4.0.
+GPUI Kit. It describes gpyui 0.5.0's Python capabilities, including native themes,
+Form/Field validation, runtime switching and the current one-window limit.
 
 ## Reading map
 
@@ -32,6 +31,8 @@ also identifies the platform control refinements in the repository after 0.4.0.
 - Default to light appearance unless the user specifies otherwise.
 - Choose native Kit controls for their behavior; compose them around the task.
 - Use Button for in-app commands, Link for external resources.
+- Use Form/Field for labels, required indicators, help and inline validation.
+  Keep actions reachable, show async saving/retry and retain editors on errors.
 - Use semantic colors and supported pixel properties, with a consistent scale.
 - Keep the primary action visible and concrete. Include empty, loading, failure
   and cancellation behavior when they apply to the workflow.
