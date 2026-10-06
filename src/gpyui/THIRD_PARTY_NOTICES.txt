@@ -1,6 +1,6 @@
 THIRD-PARTY LICENSE NOTICES
 
-Generated from Cargo.lock SHA256 2b2370bcb32445b1f9c6a5982be75fdf422520086eedc25b9e568ed16dc63f77.
+Generated from Cargo.lock SHA256 b3c5babde483651c17a1ed7541752b8a6554a620ad774912c24bd48c46e921dc.
 This inventory includes build-time, optional and platform-specific packages in the lockfile.
 Their inclusion here does not imply every package is compiled into every wheel.
 License terms below apply to their respective components, not to gpyui authors' own code.
@@ -49,7 +49,7 @@ License text IDs: 23f18e03dc49df91, 62c7a1e35f564068
 
 addr2line 0.25.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/gimli-rs/addr2line
 Source archive: https://crates.io/api/v1/crates/addr2line/0.25.1/download
 License text IDs: a60eea8175145316, e99d88d232bf57d7
@@ -84,7 +84,7 @@ License text IDs: 01c266bced4a434d, 0f96a83840e146e4, 7e12e5df4bae12cb
 
 aligned 0.4.3
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-embedded-community/aligned
 Source archive: https://crates.io/api/v1/crates/aligned/0.4.3/download
 License text IDs: a60eea8175145316, 035e70219855119d
@@ -112,14 +112,14 @@ License text IDs: 216486f29671a426, 80f275e90d799911
 
 annotate-snippets 0.12.16
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/annotate-snippets-rs
 Source archive: https://crates.io/api/v1/crates/annotate-snippets/0.12.16/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 anstyle 1.0.14
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-cli/anstyle.git
 Source archive: https://crates.io/api/v1/crates/anstyle/1.0.14/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
@@ -175,7 +175,7 @@ License text IDs: a60eea8175145316, 4da95ec4ecb65b73
 
 as-raw-xcb-connection 1.0.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/psychon/as-raw-xcb-connection
 Source archive: https://crates.io/api/v1/crates/as-raw-xcb-connection/1.0.1/download
 License text IDs: cfc7749b96f63bd3, 9520ccef8aacc5e4
@@ -315,14 +315,14 @@ License text IDs: 50e6751797c50ded, a94bf521d21b7db9
 
 atspi-common 0.13.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/odilia-app/atspi
 Source archive: https://crates.io/api/v1/crates/atspi-common/0.13.0/download
 License text IDs: 50e6751797c50ded, a94bf521d21b7db9
 
 atspi-proxies 0.13.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/odilia-app/atspi
 Source archive: https://crates.io/api/v1/crates/atspi-proxies/0.13.0/download
 License text IDs: 50e6751797c50ded, a94bf521d21b7db9
@@ -343,7 +343,7 @@ License text IDs: 1e27e28eafbc439f
 
 av1-grain 0.2.5
 Declared license: BSD-2-Clause
-Authors: 
+Authors:
 Source: https://github.com/rust-av/av1-grain
 Source archive: https://crates.io/api/v1/crates/av1-grain/0.2.5/download
 License text IDs: acc9e236b0011c63
@@ -354,6 +354,20 @@ Authors: Kornel Lesiński <kornel@geekhood.net>
 Source: https://github.com/kornelski/avif-serialize
 Source archive: https://crates.io/api/v1/crates/avif-serialize/0.8.9/download
 License text IDs: 04556ac17ea72a59
+
+aws-lc-rs 1.18.1
+Declared license: ISC AND (Apache-2.0 OR ISC)
+Authors: AWS-LibCrypto
+Source: https://github.com/aws/aws-lc-rs
+Source archive: https://crates.io/api/v1/crates/aws-lc-rs/1.18.1/download
+License text IDs: b50b376e7d24a059
+
+aws-lc-sys 0.45.0
+Declared license: ISC AND (Apache-2.0 OR ISC) AND Apache-2.0 AND MIT AND BSD-3-Clause AND (Apache-2.0 OR ISC OR MIT) AND (Apache-2.0 OR ISC OR MIT-0)
+Authors: AWS-LC
+Source: https://github.com/aws/aws-lc-rs
+Source archive: https://crates.io/api/v1/crates/aws-lc-sys/0.45.0/download
+License text IDs: 728536b4160e051f
 
 backtrace 0.3.76
 Declared license: MIT OR Apache-2.0
@@ -476,7 +490,7 @@ License text IDs: 7f976f7e9cb2d87d
 
 blocking 1.7.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/smol-rs/blocking
 Source archive: https://crates.io/api/v1/crates/blocking/1.7.0/download
 License text IDs: a60eea8175145316, 23f18e03dc49df91
@@ -532,7 +546,7 @@ License text IDs: 01c266bced4a434d, 0f96a83840e146e4, 7e12e5df4bae12cb
 
 byteorder-lite 0.1.0
 Declared license: Unlicense OR MIT
-Authors: 
+Authors:
 Source: https://github.com/image-rs/byteorder-lite
 Source archive: https://crates.io/api/v1/crates/byteorder-lite/0.1.0/download
 License text IDs: 0f96a83840e146e4, 7e12e5df4bae12cb
@@ -546,7 +560,7 @@ License text IDs: 45f522cacecb1023
 
 bzip2 0.6.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/trifectatechfoundation/bzip2-rs
 Source archive: https://crates.io/api/v1/crates/bzip2/0.6.1/download
 License text IDs: a60eea8175145316, c8c6324cf2f0f076
@@ -581,7 +595,7 @@ License text IDs: 1f256ecad1928805
 
 cc 1.5.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/cc-rs
 Source archive: https://crates.io/api/v1/crates/cc/1.5.1/download
 License text IDs: a60eea8175145316, 378f5840b258e277
@@ -623,7 +637,7 @@ License text IDs: a9040321c3712d8f, b8c6939380a400f5
 
 chrono 0.4.45
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/chronotope/chrono
 Source archive: https://crates.io/api/v1/crates/chrono/0.4.45/download
 License text IDs: 946c9835d8034d24
@@ -641,6 +655,13 @@ Authors: Kyle Mayes <kyle@mayeses.com>
 Source: https://github.com/KyleMayes/clang-sys
 Source archive: https://crates.io/api/v1/crates/clang-sys/1.9.1/download
 License text IDs: cfc7749b96f63bd3
+
+cmake 0.1.58
+Declared license: MIT OR Apache-2.0
+Authors: Alex Crichton <alex@alexcrichton.com>
+Source: https://github.com/rust-lang/cmake-rs
+Source archive: https://crates.io/api/v1/crates/cmake/0.1.58/download
+License text IDs: a60eea8175145316, 378f5840b258e277
 
 cocoa 0.25.0
 Declared license: MIT OR Apache-2.0
@@ -683,6 +704,13 @@ Authors: nwin <nwin@users.noreply.github.com>
 Source: https://github.com/image-rs/color_quant.git
 Source archive: https://crates.io/api/v1/crates/color_quant/1.1.0/download
 License text IDs: 592dc80f1a865d20
+
+combine 4.6.8
+Declared license: MIT
+Authors: Markus Westerlind <marwes91@gmail.com>
+Source: https://github.com/Marwes/combine
+Source archive: https://crates.io/api/v1/crates/combine/4.6.8/download
+License text IDs: 9bbc1b3dc4674a9e
 
 compression-codecs 0.4.45
 Declared license: MIT OR Apache-2.0
@@ -861,28 +889,28 @@ License text IDs: c6596eb7be8581c1, 61d383b05b87d78f
 
 crossbeam-deque 0.8.8
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/crossbeam-rs/crossbeam
 Source archive: https://crates.io/api/v1/crates/crossbeam-deque/0.8.8/download
 License text IDs: a60eea8175145316, 5734ed989dfca1f6
 
 crossbeam-epoch 0.9.21
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/crossbeam-rs/crossbeam
 Source archive: https://crates.io/api/v1/crates/crossbeam-epoch/0.9.21/download
 License text IDs: a60eea8175145316, 5734ed989dfca1f6
 
 crossbeam-queue 0.3.14
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/crossbeam-rs/crossbeam
 Source archive: https://crates.io/api/v1/crates/crossbeam-queue/0.3.14/download
 License text IDs: a60eea8175145316, 5734ed989dfca1f6
 
 crossbeam-utils 0.8.23
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/crossbeam-rs/crossbeam
 Source archive: https://crates.io/api/v1/crates/crossbeam-utils/0.8.23/download
 License text IDs: a60eea8175145316, 5734ed989dfca1f6
@@ -1052,7 +1080,7 @@ License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
 either 1.18.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rayon-rs/either
 Source archive: https://crates.io/api/v1/crates/either/1.18.0/download
 License text IDs: a60eea8175145316, 7576269ea71f767b
@@ -1136,7 +1164,7 @@ License text IDs: 97d3424e347e8fa2
 
 equivalent 1.0.2
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/indexmap-rs/equivalent
 Source archive: https://crates.io/api/v1/crates/equivalent/1.0.2/download
 License text IDs: a60eea8175145316, 7365cc8878a1d7ce
@@ -1220,7 +1248,7 @@ License text IDs: 191c46fcf5206138
 
 find-msvc-tools 0.1.14
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/cc-rs
 Source archive: https://crates.io/api/v1/crates/find-msvc-tools/0.1.14/download
 License text IDs: a60eea8175145316, 378f5840b258e277
@@ -1297,21 +1325,21 @@ License text IDs: b1181a40b2a7b25c
 
 font-types 0.11.3
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/font-types/0.11.3/download
 License text IDs: a14f7d685a79c0f4, 8a62fa27ffdccc3d
 
 font-types 0.12.5
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/font-types/0.12.5/download
 License text IDs: eba684204073ed71, 7b4c9a3946dfcea7
 
 fontconfig-parser 0.5.8
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/Riey/fontconfig-parser
 Source archive: https://crates.io/api/v1/crates/fontconfig-parser/0.5.8/download
 License text IDs: f421b8e542226295
@@ -1358,6 +1386,13 @@ Source: https://github.com/PistonDevelopers/freetype-sys.git
 Source archive: https://crates.io/api/v1/crates/freetype-sys/0.20.1/download
 License text IDs: 8911cb953a89daca
 
+fs_extra 1.3.0
+Declared license: MIT
+Authors: Denis Kurilenko <webdesus@gmail.com>
+Source: https://github.com/webdesus/fs_extra
+Source archive: https://crates.io/api/v1/crates/fs_extra/1.3.0/download
+License text IDs: 251ea8ccb1205ce5
+
 fsevent-sys 4.1.0
 Declared license: MIT
 Authors: Pierre Baillet <pierre@baillet.name>
@@ -1374,14 +1409,14 @@ License text IDs: a60eea8175145316, 60a7062291b01ba0
 
 futures 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-channel 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-channel/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
@@ -1395,21 +1430,21 @@ License text IDs: e4705ddab847449a, 24e5860bf589d850
 
 futures-core 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-core/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-executor 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-executor/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-io 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-io/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
@@ -1423,28 +1458,28 @@ License text IDs: a60eea8175145316, 23f18e03dc49df91, 6226d0632e2e1a80
 
 futures-macro 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-macro/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-sink 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-sink/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-task 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-task/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
 
 futures-util 0.3.34
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/futures-rs
 Source archive: https://crates.io/api/v1/crates/futures-util/0.3.34/download
 License text IDs: 275c491d6d116055, 6652c868f35dfe5e
@@ -1500,7 +1535,7 @@ License text IDs: 769f80b5bcb42ed0, 77257f3d2181236b
 
 gimli 0.32.3
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/gimli-rs/gimli
 Source archive: https://crates.io/api/v1/crates/gimli/0.32.3/download
 License text IDs: a60eea8175145316, 7b63ecd5f1902af1
@@ -1570,35 +1605,35 @@ License text IDs: f72143f7e9d9fb8b
 
 gpui-base 0.7.0
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/longbridge/gpui-kit
 Git source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 License text IDs: d1b0449e5478c574
 
 gpui-component 0.7.0
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/longbridge/gpui-kit
 Git source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 License text IDs: d1b0449e5478c574
 
 gpui-component-macros 0.7.0
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 Git source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 License text IDs: d1b0449e5478c574
 
 gpui-kit 0.7.0
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/longbridge/gpui-kit
 Git source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 License text IDs: d1b0449e5478c574, 8a9ccf144b2d5bf5
 
 gpui-kit-assets 0.7.0
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/longbridge/gpui-kit
 Git source: git+https://github.com/longbridge/gpui-kit?rev=3a142844d3661159964dce9e5512ca9a40286160#3a142844d3661159964dce9e5512ca9a40286160
 License text IDs: b495047bd93a9b06
@@ -1612,70 +1647,77 @@ License text IDs: 752daf2fb234ca4a
 
 gpui-pre-apple 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-apple/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-collections 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-collections/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-derive-refineable 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-derive-refineable/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-http-client 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-http-client/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
+gpui-pre-http-client-tls 0.3.7
+Declared license: Apache-2.0
+Authors:
+Source: https://github.com/zed-industries/zed
+Source archive: https://crates.io/api/v1/crates/gpui-pre-http-client-tls/0.3.7/download
+License text IDs: 752daf2fb234ca4a
+
 gpui-pre-linux 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-linux/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-macos 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-macos/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-macros 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-macros/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-perf 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-perf/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-platform 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-platform/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-refineable 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-refineable/0.3.7/download
 License text IDs: 752daf2fb234ca4a
@@ -1687,79 +1729,86 @@ Source: https://github.com/seanmonstar/reqwest
 Source archive: https://crates.io/api/v1/crates/gpui-pre-reqwest/0.12.15/download
 License text IDs: 751963a8b88c0e3a, 47d4e1803702728e
 
+gpui-pre-reqwest-client 0.3.7
+Declared license: Apache-2.0
+Authors:
+Source: https://github.com/zed-industries/zed
+Source archive: https://crates.io/api/v1/crates/gpui-pre-reqwest-client/0.3.7/download
+License text IDs: 752daf2fb234ca4a
+
 gpui-pre-scheduler 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-scheduler/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-shared-string 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-shared-string/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-sum-tree 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-sum-tree/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-util 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-util/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-util-macros 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-util-macros/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-web 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-web/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-wgpu 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-wgpu/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-windows 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-windows/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-zlog 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-zlog/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-ztracing 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-ztracing/0.3.7/download
 License text IDs: 752daf2fb234ca4a
 
 gpui-pre-ztracing-macro 0.3.7
 Declared license: Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/zed-industries/zed
 Source archive: https://crates.io/api/v1/crates/gpui-pre-ztracing-macro/0.3.7/download
 License text IDs: 752daf2fb234ca4a
@@ -1787,7 +1836,7 @@ License text IDs: a6cba85bc92e0cff, 508a77d2e7b51d98
 
 harfrust 0.5.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/harfbuzz/harfrust
 Source archive: https://crates.io/api/v1/crates/harfrust/0.5.2/download
 License text IDs: 3a7c3f0b887abb7c
@@ -1822,7 +1871,7 @@ License text IDs: a60eea8175145316, ff8f68cb076caf8c
 
 hashbrown 0.17.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/hashbrown
 Source archive: https://crates.io/api/v1/crates/hashbrown/0.17.1/download
 License text IDs: a60eea8175145316, ff8f68cb076caf8c
@@ -1843,14 +1892,14 @@ License text IDs: a60eea8175145316, 7b63ecd5f1902af1
 
 heck 0.5.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/withoutboats/heck
 Source archive: https://crates.io/api/v1/crates/heck/0.5.0/download
 License text IDs: a60eea8175145316, 7b63ecd5f1902af1
 
 hermit-abi 0.5.3
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/hermit-os/hermit-rs
 Source archive: https://crates.io/api/v1/crates/hermit-abi/0.5.3/download
 License text IDs: a60eea8175145316, 23f18e03dc49df91
@@ -1934,7 +1983,7 @@ License text IDs: 2d01890414494742
 
 hyper-rustls 0.27.10
 Declared license: Apache-2.0 OR ISC OR MIT
-Authors: 
+Authors:
 Source: https://github.com/rustls/hyper-rustls
 Source archive: https://crates.io/api/v1/crates/hyper-rustls/0.27.10/download
 License text IDs: a60eea8175145316, 7cfafc877eccc46c, 709e3175b4212f7b
@@ -2039,7 +2088,7 @@ License text IDs: 0d542e0c8804e39a, c77a4cf9da729987
 
 image-webp 0.2.4
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/image-rs/image-webp
 Source archive: https://crates.io/api/v1/crates/image-webp/0.2.4/download
 License text IDs: 0d542e0c8804e39a, c77a4cf9da729987
@@ -2067,14 +2116,14 @@ License text IDs: c71d239df91726fc, a2010f343487d3f7
 
 indexmap 2.14.2
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/indexmap-rs/indexmap
 Source archive: https://crates.io/api/v1/crates/indexmap/2.14.2/download
 License text IDs: a60eea8175145316, ecc269ef87fd38a1
 
 inotify 0.11.5
 Declared license: ISC
-Authors: 
+Authors:
 Source: https://github.com/hannobraun/inotify-rs
 Source archive: https://crates.io/api/v1/crates/inotify/0.11.5/download
 License text IDs: 7f78b31de4e7a3e2
@@ -2170,6 +2219,20 @@ Source: https://github.com/dtolnay/itoa
 Source archive: https://crates.io/api/v1/crates/itoa/1.0.18/download
 License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
+jni 0.22.4
+Declared license: MIT OR Apache-2.0
+Authors: jni team
+Source: https://github.com/jni-rs/jni-rs
+Source archive: https://crates.io/api/v1/crates/jni/0.22.4/download
+License text IDs: fea1d5bf3dd71605, a60eea8175145316
+
+jni-macros 0.22.4
+Declared license: MIT OR Apache-2.0
+Authors:
+Source: https://github.com/jni-rs/jni-rs
+Source archive: https://crates.io/api/v1/crates/jni-macros/0.22.4/download
+License text IDs: fea1d5bf3dd71605, a60eea8175145316
+
 jni-sys 0.3.1
 Declared license: MIT OR Apache-2.0
 Authors: Steven Fackler <sfackler@gmail.com>
@@ -2242,7 +2305,7 @@ License text IDs: cfc7749b96f63bd3, 23c23145f6eac25c
 
 kurbo 0.13.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/kurbo
 Source archive: https://crates.io/api/v1/crates/kurbo/0.13.1/download
 License text IDs: cfc7749b96f63bd3, 23c23145f6eac25c
@@ -2277,14 +2340,14 @@ License text IDs: e5d7cead4e816915
 
 libbz2-rs-sys 0.2.5
 Declared license: bzip2-1.0.6
-Authors: 
+Authors:
 Source: https://github.com/trifectatechfoundation/libbzip2-rs
 Source archive: https://crates.io/api/v1/crates/libbz2-rs-sys/0.2.5/download
 License text IDs: 54e1fd7bd53273e6
 
 libc 0.2.189
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-lang/libc
 Source archive: https://crates.io/api/v1/crates/libc/0.2.189/download
 License text IDs: 62c7a1e35f564068, 123a331b5dbf04c3
@@ -2319,7 +2382,7 @@ License text IDs: 8d073a6a80d1ef2d
 
 linebender_resource_handle 0.1.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/raw_resource_handle
 Source archive: https://crates.io/api/v1/crates/linebender_resource_handle/0.1.1/download
 License text IDs: a6cba85bc92e0cff, 508a77d2e7b51d98
@@ -2445,7 +2508,7 @@ License text IDs: 1299b4d9d15e9d67
 
 mach2 0.5.0
 Declared license: BSD-2-Clause OR MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/JohnTitor/mach2
 Source archive: https://crates.io/api/v1/crates/mach2/0.5.0/download
 License text IDs: 62c7a1e35f564068, 044983df14c97f2f, 3f9f0f7e5a5911a8
@@ -2480,7 +2543,7 @@ License text IDs: a60eea8175145316, 86dd7f026f916daf
 
 maybe-rayon 0.1.1
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/shssoichiro/maybe-rayon
 Source archive: https://crates.io/api/v1/crates/maybe-rayon/0.1.1/download
 License text IDs: 3b2dbf8684504281
@@ -2599,7 +2662,7 @@ License text IDs: f7715d38a3fa1b4a
 
 no_std_io2 0.9.4
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/wcampbell0x2a/no-std-io2
 Source archive: https://crates.io/api/v1/crates/no_std_io2/0.9.4/download
 License text IDs: c6596eb7be8581c1, f21c3bfdc47749b5
@@ -2788,105 +2851,105 @@ License text IDs: 7f976f7e9cb2d87d
 
 objc2-app-kit 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-app-kit/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-app-kit 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-app-kit/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-cloud-kit 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-cloud-kit/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-audio 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-audio/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-audio-types 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-audio-types/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-data 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-data/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-core-data 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-data/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-foundation 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-foundation/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-graphics 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-graphics/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-image 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-image/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-core-image 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-image/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-location 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-location/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-media 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-media/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-text 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-text/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-core-video 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-core-video/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
@@ -2900,63 +2963,63 @@ License text IDs: 7f976f7e9cb2d87d
 
 objc2-foundation 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-foundation/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-foundation 0.3.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-foundation/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-io-surface 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-io-surface/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-metal 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-metal/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-metal 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-metal/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-quartz-core 0.2.2
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-quartz-core/0.2.2/download
 License text IDs: e353f37b12aefbb9
 
 objc2-quartz-core 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-quartz-core/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-screen-capture-kit 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-screen-capture-kit/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
 
 objc2-user-notifications 0.3.2
 Declared license: Zlib OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/madsmtm/objc2
 Source archive: https://crates.io/api/v1/crates/objc2-user-notifications/0.3.2/download
 License text IDs: 7f976f7e9cb2d87d
@@ -2977,7 +3040,7 @@ License text IDs: b05785f9f18e6716
 
 object 0.37.3
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/gimli-rs/object
 Source archive: https://crates.io/api/v1/crates/object/0.37.3/download
 License text IDs: a60eea8175145316, 0b74dfa0bcee5c42
@@ -3161,21 +3224,21 @@ License text IDs: f71452d91682fdae
 
 pin-project 1.1.13
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/taiki-e/pin-project
 Source archive: https://crates.io/api/v1/crates/pin-project/1.1.13/download
 License text IDs: 0d542e0c8804e39a, 23f18e03dc49df91
 
 pin-project-internal 1.1.13
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/taiki-e/pin-project
 Source archive: https://crates.io/api/v1/crates/pin-project-internal/1.1.13/download
 License text IDs: 0d542e0c8804e39a, 23f18e03dc49df91
 
 pin-project-lite 0.2.17
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/taiki-e/pin-project-lite
 Source archive: https://crates.io/api/v1/crates/pin-project-lite/0.2.17/download
 License text IDs: 0d542e0c8804e39a, 23f18e03dc49df91
@@ -3231,21 +3294,21 @@ License text IDs: a60eea8175145316, cc02a53316678ca2
 
 polycool 0.4.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/linebender/kurbo
 Source archive: https://crates.io/api/v1/crates/polycool/0.4.0/download
 License text IDs: cfc7749b96f63bd3, 23c23145f6eac25c
 
 portable-atomic 1.15.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/taiki-e/portable-atomic
 Source archive: https://crates.io/api/v1/crates/portable-atomic/1.15.0/download
 License text IDs: 0d542e0c8804e39a, 23f18e03dc49df91
 
 portable-atomic-util 0.2.8
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/taiki-e/portable-atomic-util
 Source archive: https://crates.io/api/v1/crates/portable-atomic-util/0.2.8/download
 License text IDs: 0d542e0c8804e39a, 23f18e03dc49df91
@@ -3399,28 +3462,28 @@ License text IDs: c6596eb7be8581c1, 058f01fe181608d0
 
 quick-xml 0.41.0
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/tafia/quick-xml
 Source archive: https://crates.io/api/v1/crates/quick-xml/0.41.0/download
 License text IDs: f0cf9b1c62bbe3bd
 
 quinn 0.11.12
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/quinn-rs/quinn
 Source archive: https://crates.io/api/v1/crates/quinn/0.11.12/download
 License text IDs: c71d239df91726fc, 4b2d0aca6789fa39
 
 quinn-proto 0.11.19
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/quinn-rs/quinn
 Source archive: https://crates.io/api/v1/crates/quinn-proto/0.11.19/download
 License text IDs: c71d239df91726fc, 4b2d0aca6789fa39
 
 quinn-udp 0.5.16
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/quinn-rs/quinn
 Source archive: https://crates.io/api/v1/crates/quinn-udp/0.5.16/download
 License text IDs: c71d239df91726fc, 4b2d0aca6789fa39
@@ -3434,14 +3497,14 @@ License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
 r-efi 5.3.0
 Declared license: MIT OR Apache-2.0 OR LGPL-2.1-or-later
-Authors: 
+Authors:
 Source: https://github.com/r-efi/r-efi
 Source archive: https://crates.io/api/v1/crates/r-efi/5.3.0/download
 License text IDs: 074e6e32c86a4c0e
 
 r-efi 6.0.0
 Declared license: MIT OR Apache-2.0 OR LGPL-2.1-or-later
-Authors: 
+Authors:
 Source: https://github.com/r-efi/r-efi
 Source archive: https://crates.io/api/v1/crates/r-efi/6.0.0/download
 License text IDs: 074e6e32c86a4c0e
@@ -3553,35 +3616,35 @@ License text IDs: 0d542e0c8804e39a, 9c5a80639a57c1c9, ae895c8576e682f3
 
 raw-window-metal 1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rust-windowing/raw-window-metal
 Source archive: https://crates.io/api/v1/crates/raw-window-metal/1.1.0/download
 License text IDs: cfc7749b96f63bd3, f9c4c77baa382800
 
 rayon 1.12.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rayon-rs/rayon
 Source archive: https://crates.io/api/v1/crates/rayon/1.12.0/download
 License text IDs: a60eea8175145316, 0621878e61f0d0fd
 
 rayon-core 1.13.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rayon-rs/rayon
 Source archive: https://crates.io/api/v1/crates/rayon-core/1.13.0/download
 License text IDs: a60eea8175145316, 0621878e61f0d0fd
 
 read-fonts 0.37.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/read-fonts/0.37.0/download
 License text IDs: a14f7d685a79c0f4, 8a62fa27ffdccc3d
 
 read-fonts 0.41.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/read-fonts/0.41.0/download
 License text IDs: eba684204073ed71, 7b4c9a3946dfcea7
@@ -3658,14 +3721,14 @@ License text IDs: a60eea8175145316, 24b2f2eff5a7622e
 
 resvg 0.45.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/resvg
 Source archive: https://crates.io/api/v1/crates/resvg/0.45.1/download
 License text IDs: a6cba85bc92e0cff, f5d934dc281b44e0
 
 resvg 0.46.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/resvg
 Source archive: https://crates.io/api/v1/crates/resvg/0.46.0/download
 License text IDs: a6cba85bc92e0cff, f5d934dc281b44e0
@@ -3679,7 +3742,7 @@ License text IDs: 457b464bc0fba8a3
 
 ring 0.17.14
 Declared license: Apache-2.0 AND ISC
-Authors: 
+Authors:
 Source: https://github.com/briansmith/ring
 Source archive: https://crates.io/api/v1/crates/ring/0.17.14/download
 License text IDs: b3d734001a94efff, 005fc765ddc5115d, f025ccfb7dfb6bdf
@@ -3735,14 +3798,14 @@ License text IDs: d6fde6c28ecbccfc
 
 rust-i18n-macro 4.2.4
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/longbridge/rust-i18n
 Source archive: https://crates.io/api/v1/crates/rust-i18n-macro/4.2.4/download
 License text IDs: d6fde6c28ecbccfc
 
 rust-i18n-support 4.2.4
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/longbridge/rust-i18n
 Source archive: https://crates.io/api/v1/crates/rust-i18n-support/4.2.4/download
 License text IDs: d6fde6c28ecbccfc
@@ -3770,7 +3833,7 @@ License text IDs: 95bd3988beee069f, 30fefc3a7d6a0041
 
 rustc_version 0.4.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/djc/rustc-version-rs
 Source archive: https://crates.io/api/v1/crates/rustc_version/0.4.1/download
 License text IDs: a60eea8175145316, c9a75f18b9ab2927
@@ -3784,35 +3847,49 @@ License text IDs: a60eea8175145316, 268872b9816f90fd, 23f18e03dc49df91
 
 rustls 0.23.45
 Declared license: Apache-2.0 OR ISC OR MIT
-Authors: 
+Authors:
 Source: https://github.com/rustls/rustls
 Source archive: https://crates.io/api/v1/crates/rustls/0.23.45/download
 License text IDs: a60eea8175145316, 7cfafc877eccc46c, 709e3175b4212f7b
 
 rustls-native-certs 0.8.4
 Declared license: Apache-2.0 OR ISC OR MIT
-Authors: 
+Authors:
 Source: https://github.com/rustls/rustls-native-certs
 Source archive: https://crates.io/api/v1/crates/rustls-native-certs/0.8.4/download
 License text IDs: d75967ce788187f8, a60eea8175145316, 7cfafc877eccc46c, 709e3175b4212f7b
 
 rustls-pemfile 2.2.0
 Declared license: Apache-2.0 OR ISC OR MIT
-Authors: 
+Authors:
 Source: https://github.com/rustls/pemfile
 Source archive: https://crates.io/api/v1/crates/rustls-pemfile/2.2.0/download
 License text IDs: c5dae4585d8520d1, a60eea8175145316, 7cfafc877eccc46c, 709e3175b4212f7b
 
 rustls-pki-types 1.15.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rustls/pki-types
 Source archive: https://crates.io/api/v1/crates/rustls-pki-types/1.15.1/download
 License text IDs: 45fd05c4865e7c35, 9117d922e6671255
 
+rustls-platform-verifier 0.7.1
+Declared license: MIT OR Apache-2.0
+Authors:
+Source: https://github.com/rustls/rustls-platform-verifier
+Source archive: https://crates.io/api/v1/crates/rustls-platform-verifier/0.7.1/download
+License text IDs: c71d239df91726fc, 1c7cf76689c837a6
+
+rustls-platform-verifier-android 0.2.0
+Declared license: MIT OR Apache-2.0
+Authors:
+Source: https://github.com/rustls/rustls-platform-verifier
+Source archive: https://crates.io/api/v1/crates/rustls-platform-verifier-android/0.2.0/download
+License text IDs: 72af89a828df52a9, 154397a08d0cb342
+
 rustls-webpki 0.103.15
 Declared license: ISC
-Authors: 
+Authors:
 Source: https://github.com/rustls/webpki
 Source archive: https://crates.io/api/v1/crates/rustls-webpki/0.103.15/download
 License text IDs: 5b698ca13897be3a
@@ -3938,7 +4015,7 @@ License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
 serde-saphyr 1.3.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/bourumir-wyngs/serde-saphyr
 Source archive: https://crates.io/api/v1/crates/serde-saphyr/1.3.0/download
 License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
@@ -3994,14 +4071,14 @@ License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
 serde_spanned 0.6.9
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/serde_spanned/0.6.9/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 serde_spanned 1.1.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/serde_spanned/1.1.1/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
@@ -4076,6 +4153,13 @@ Source: https://github.com/mcountryman/simd-adler32
 Source archive: https://crates.io/api/v1/crates/simd-adler32/0.3.10/download
 License text IDs: 42a35170233e83e1
 
+simd_cesu8 1.2.0
+Declared license: Apache-2.0 OR MIT
+Authors: Sean C. Roach <me@seancroach.dev>
+Source: https://github.com/seancroach/simd_cesu8
+Source archive: https://crates.io/api/v1/crates/simd_cesu8/1.2.0/download
+License text IDs: a60eea8175145316, 23f18e03dc49df91
+
 simd_helpers 0.1.0
 Declared license: MIT
 Authors: Luca Barbato <lu_zero@gentoo.org>
@@ -4092,7 +4176,7 @@ License text IDs: 0cec06e0e55fbc3d, 1847e0e0698142ed
 
 simplecss 0.2.2
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/simplecss
 Source archive: https://crates.io/api/v1/crates/simplecss/0.2.2/download
 License text IDs: a60eea8175145316, 0b5f24524360e15b
@@ -4106,14 +4190,14 @@ License text IDs: c962ee4d1d05ddc1, cfc7749b96f63bd3, f9c4c77baa382800
 
 skrifa 0.40.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/skrifa/0.40.0/download
 License text IDs: a14f7d685a79c0f4, 8a62fa27ffdccc3d
 
 skrifa 0.44.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/googlefonts/fontations
 Source archive: https://crates.io/api/v1/crates/skrifa/0.44.0/download
 License text IDs: eba684204073ed71, 7b4c9a3946dfcea7
@@ -4309,14 +4393,14 @@ License text IDs: 7e98bed7f100747a
 
 svgtypes 0.15.3
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/svgtypes
 Source archive: https://crates.io/api/v1/crates/svgtypes/0.15.3/download
 License text IDs: a60eea8175145316, f3c9fe731c701ed7
 
 svgtypes 0.16.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/svgtypes
 Source archive: https://crates.io/api/v1/crates/svgtypes/0.16.1/download
 License text IDs: a60eea8175145316, f3c9fe731c701ed7
@@ -4533,7 +4617,7 @@ License text IDs: 253cd04c6714889d
 
 tokio-rustls 0.26.6
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/rustls/tokio-rustls
 Source archive: https://crates.io/api/v1/crates/tokio-rustls/0.26.6/download
 License text IDs: cc117d90b498b32b, e20fa2b8e0a2565f
@@ -4554,63 +4638,63 @@ License text IDs: 253cd04c6714889d
 
 toml 0.8.23
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml/0.8.23/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml 1.1.6+spec-1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml/1.1.6+spec-1.1.0/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_datetime 0.6.11
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_datetime/0.6.11/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_datetime 1.1.1+spec-1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_datetime/1.1.1+spec-1.1.0/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_edit 0.22.27
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_edit/0.22.27/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_edit 0.25.15+spec-1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_edit/0.25.15+spec-1.1.0/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_parser 1.1.3+spec-1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_parser/1.1.3+spec-1.1.0/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_write 0.1.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_write/0.1.2/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
 
 toml_writer 1.1.2+spec-1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/toml-rs/toml
 Source archive: https://crates.io/api/v1/crates/toml_writer/1.1.2+spec-1.1.0/download
 License text IDs: c6596eb7be8581c1, 6efb0476a1cc0850
@@ -4701,7 +4785,7 @@ License text IDs: 62c7a1e35f564068, 23f18e03dc49df91
 
 typenum 1.20.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/paholg/typenum
 Source archive: https://crates.io/api/v1/crates/typenum/1.20.1/download
 License text IDs: db11fec9946737df, 516b24e051bf5630, a825bd853ab71619
@@ -4820,14 +4904,14 @@ License text IDs: a60eea8175145316, b38f11f6096706e6
 
 usvg 0.45.1
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/resvg
 Source archive: https://crates.io/api/v1/crates/usvg/0.45.1/download
 License text IDs: a6cba85bc92e0cff, f5d934dc281b44e0
 
 usvg 0.46.0
 Declared license: Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/linebender/resvg
 Source archive: https://crates.io/api/v1/crates/usvg/0.46.0/download
 License text IDs: a6cba85bc92e0cff, f5d934dc281b44e0
@@ -4862,7 +4946,7 @@ License text IDs: 02b80951ce6c1dd2
 
 valuable 0.1.1
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/tokio-rs/valuable
 Source archive: https://crates.io/api/v1/crates/valuable/0.1.1/download
 License text IDs: ed60d479b8fd1f64
@@ -4939,7 +5023,7 @@ License text IDs: a60eea8175145316, 268872b9816f90fd, 23f18e03dc49df91
 
 wasip2 1.0.4+wasi-0.2.12
 Declared license: Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/bytecodealliance/wasi-rs
 Source archive: https://crates.io/api/v1/crates/wasip2/1.0.4+wasi-0.2.12/download
 License text IDs: a60eea8175145316, 268872b9816f90fd, 23f18e03dc49df91
@@ -5058,10 +5142,24 @@ License text IDs: a60eea8175145316, 378f5840b258e277
 
 web-time 1.1.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/daxpedda/web-time
 Source archive: https://crates.io/api/v1/crates/web-time/1.1.0/download
 License text IDs: 54a744942eb3fa63, f428305bbf2e70fb
+
+webpki-root-certs 1.0.9
+Declared license: CDLA-Permissive-2.0
+Authors:
+Source: https://github.com/rustls/webpki-roots
+Source archive: https://crates.io/api/v1/crates/webpki-root-certs/1.0.9/download
+License text IDs: e271993808fec50a
+
+webpki-roots 1.0.9
+Declared license: CDLA-Permissive-2.0
+Authors:
+Source: https://github.com/rustls/webpki-roots
+Source archive: https://crates.io/api/v1/crates/webpki-roots/1.0.9/download
+License text IDs: e271993808fec50a
 
 weezl 0.1.12
 Declared license: MIT OR Apache-2.0
@@ -5195,7 +5293,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows 0.62.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows/0.62.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5209,14 +5307,14 @@ License text IDs: b05785f9f18e6716
 
 windows-collections 0.2.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-collections/0.2.0/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-collections 0.3.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-collections/0.3.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5244,21 +5342,21 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-core 0.62.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-core/0.62.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-future 0.2.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-future/0.2.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-future 0.3.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-future/0.3.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5279,7 +5377,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-implement 0.60.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-implement/0.60.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5300,7 +5398,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-interface 0.59.3
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-interface/0.59.3/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5314,21 +5412,21 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-link 0.2.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-link/0.2.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-numerics 0.2.0
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-numerics/0.2.0/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-numerics 0.3.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-numerics/0.3.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5342,7 +5440,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-registry 0.6.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-registry/0.6.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5370,7 +5468,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-result 0.4.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-result/0.4.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5398,7 +5496,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-strings 0.5.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-strings/0.5.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5433,7 +5531,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-sys 0.61.2
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-sys/0.61.2/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5454,7 +5552,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-targets 0.53.5
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-targets/0.53.5/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5468,14 +5566,14 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-threading 0.2.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-threading/0.2.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows-version 0.1.7
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows-version/0.1.7/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5496,7 +5594,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_aarch64_gnullvm 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_aarch64_gnullvm/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5517,7 +5615,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_aarch64_msvc 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_aarch64_msvc/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5538,7 +5636,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_i686_gnu 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_i686_gnu/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5552,7 +5650,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_i686_gnullvm 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_i686_gnullvm/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5573,7 +5671,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_i686_msvc 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_i686_msvc/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5594,7 +5692,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_x86_64_gnu 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_x86_64_gnu/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5615,7 +5713,7 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_x86_64_gnullvm 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_x86_64_gnullvm/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
@@ -5636,21 +5734,21 @@ License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 windows_x86_64_msvc 0.53.1
 Declared license: MIT OR Apache-2.0
-Authors: 
+Authors:
 Source: https://github.com/microsoft/windows-rs
 Source archive: https://crates.io/api/v1/crates/windows_x86_64_msvc/0.53.1/download
 License text IDs: c16f8dcf1a368b83, c2cfccb812fe4821
 
 winnow 0.7.15
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/winnow-rs/winnow
 Source archive: https://crates.io/api/v1/crates/winnow/0.7.15/download
 License text IDs: cb5aedb296c5246d
 
 winnow 1.0.4
 Declared license: MIT
-Authors: 
+Authors:
 Source: https://github.com/winnow-rs/winnow
 Source archive: https://crates.io/api/v1/crates/winnow/1.0.4/download
 License text IDs: cb5aedb296c5246d
@@ -5888,14 +5986,14 @@ License text IDs: a60eea8175145316, 122dadfc2eb4de0f
 
 zerocopy 0.8.59
 Declared license: BSD-2-Clause OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/google/zerocopy
 Source archive: https://crates.io/api/v1/crates/zerocopy/0.8.59/download
 License text IDs: 9d185ac6703c4b04, 83c1763356e822ad, 1a2f5c12ddc934d5
 
 zerocopy-derive 0.8.59
 Declared license: BSD-2-Clause OR Apache-2.0 OR MIT
-Authors: 
+Authors:
 Source: https://github.com/google/zerocopy
 Source archive: https://crates.io/api/v1/crates/zerocopy-derive/0.8.59/download
 License text IDs: 9d185ac6703c4b04, 83c1763356e822ad, 1a2f5c12ddc934d5
@@ -5951,7 +6049,7 @@ License text IDs: f367c1b8e1aa2624
 
 zlib-rs 0.6.8
 Declared license: Zlib
-Authors: 
+Authors:
 Source: https://github.com/trifectatechfoundation/zlib-rs
 Source archive: https://crates.io/api/v1/crates/zlib-rs/0.6.8/download
 License text IDs: e72111c52b7d96eb
@@ -5965,7 +6063,7 @@ License text IDs: 23f18e03dc49df91
 
 zune-core 0.4.12
 Declared license: MIT OR Apache-2.0 OR Zlib
-Authors: 
+Authors:
 Source: registry+https://github.com/rust-lang/crates.io-index
 Source archive: https://crates.io/api/v1/crates/zune-core/0.4.12/download
 License text IDs: 074e6e32c86a4c0e
@@ -5973,14 +6071,14 @@ License text IDs: 074e6e32c86a4c0e
 
 zune-core 0.5.3
 Declared license: MIT OR Apache-2.0 OR Zlib
-Authors: 
+Authors:
 Source: https://github.com/etemesi254/zune-image
 Source archive: https://crates.io/api/v1/crates/zune-core/0.5.3/download
 License text IDs: c71d239df91726fc, d30047bca3b51663, d201d14804d3bcd3
 
 zune-inflate 0.2.54
 Declared license: MIT OR Apache-2.0 OR Zlib
-Authors: 
+Authors:
 Source: registry+https://github.com/rust-lang/crates.io-index
 Source archive: https://crates.io/api/v1/crates/zune-inflate/0.2.54/download
 License text IDs: 074e6e32c86a4c0e
@@ -9595,6 +9693,32 @@ LICENSE TEXT 1c7745cc26c7294b
 
 
 ========================================================================
+LICENSE TEXT 1c7cf76689c837a6
+========================================================================
+MIT License
+
+Copyright (c) 2022 1Password
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+========================================================================
 LICENSE TEXT 1cb6f4dee8c649f1
 ========================================================================
 Copyright (c) 2015 Elinor Berger
@@ -10420,6 +10544,32 @@ LICENSE TEXT 24e5860bf589d850
 The MIT License (MIT)
 
 Copyright (c) 2020 Yoshua Wuyts
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+========================================================================
+LICENSE TEXT 251ea8ccb1205ce5
+========================================================================
+MIT License
+
+Copyright (c) 2017 Denis Kurilenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -16976,6 +17126,327 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 
 ========================================================================
+LICENSE TEXT 728536b4160e051f
+========================================================================
+AWS Libcrypto (AWS-LC)
+
+AWS-LC is a fork of BoringSSL, which is itself a fork of OpenSSL.
+Content from these and other sources retains their original licensing,
+as described below. New files from AWS-LC are made available under the Apache-2.0 license OR the ISC
+license. These licenses are reproduced at the bottom of this file.
+
+```
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: Apache-2.0 OR ISC
+```
+
+
+================================================================================
+BoringSSL
+================================================================================
+
+BoringSSL is a Google-maintained fork of OpenSSL. Historically, code
+authored by Google for BoringSSL was licensed under the ISC License.
+BoringSSL has since relicensed upstream to Apache License 2.0. Existing
+AWS-LC code originating from BoringSSL retains its ISC license, while
+newer code taken from BoringSSL is licensed under Apache License 2.0.
+
+```
+Copyright (c) 2014-2024 Google Inc.
+SPDX-License-Identifier: ISC
+```
+
+Additional individual contributions to BoringSSL-derived code are
+covered under the ISC license:
+
+  - Brian Smith (Copyright 2016)
+  - Robert Nagy (Copyright 2022)
+  - Arm Ltd (Copyright 2020)
+
+```
+Copyright (c) 2025-2026 Google Inc.
+SPDX-License-Identifier: Apache-2.0
+```
+
+================================================================================
+OpenSSL
+================================================================================
+
+Code derived from the OpenSSL project is licensed under the
+Apache License, Version 2.0.
+
+```
+Copyright (c) 1998-2011 The OpenSSL Project. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+```
+
+Some OpenSSL-derived files also carry the original SSLeay copyright:
+
+```
+Copyright (c) 1995-1998 Eric Young (eay@cryptsoft.com). All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+```
+
+Portions of OpenSSL-derived code include contributions from:
+
+  - Sun Microsystems, Inc. (Copyright 2002)
+  - Nokia (Copyright 2005)
+  - Intel Corporation (Copyright 2012-2021)
+
+These contributions are covered under the Apache-2.0 license.
+
+================================================================================
+mlkem-native
+================================================================================
+
+Code from the mlkem-native project is licensed under Apache License 2.0 or MIT or ISC.
+
+```
+Copyright (c) The mlkem-native project authors.
+SPDX-License-Identifier: Apache-2.0 OR ISC OR MIT
+```
+
+================================================================================
+mldsa-native
+================================================================================
+
+Code from the mldsa-native project is licensed under Apache License 2.0 or MIT or ISC
+
+```
+Copyright (c) The mldsa-native project authors.
+SPDX-License-Identifier: Apache-2.0 OR ISC OR MIT
+```
+
+================================================================================
+Third-Party Libraries (compiled into libcrypto/libssl)
+================================================================================
+
+Fiat Cryptography
+-----------------
+Synthesizing Correct-by-Construction Code for Cryptographic Primitives.
+See third_party/fiat/LICENSE.
+
+```
+Copyright (c) 2015-2020 the fiat-crypto authors.
+SPDX-License-Identifier: MIT
+```
+
+s2n-bignum
+----------
+Integer arithmetic routines for cryptography.
+See third_party/s2n-bignum/s2n-bignum-imported/LICENSE.
+
+```
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: Apache-2.0 OR ISC OR MIT-0
+```
+
+Note: ML-KEM/SHA3 code within s2n-bignum is licensed as
+Apache-2.0 OR ISC OR MIT (with attribution), sourced from the
+mlkem-native project.
+
+Jitter Entropy RNG
+-------------------
+CPU Jitter Random Number Generator Library.
+See third_party/jitterentropy/jitterentropy-library/LICENSE.
+
+The Jitter Entropy library is dual-licensed under a BSD-style license
+and the GNU General Public License Version 2. Amazon expressly elects
+to distribute the package under the 3-Clause BSD License and NOT under
+GNU General Public License Version 2.
+
+```
+Copyright (C) 2017 - 2025, Stephan Mueller <smueller@chronox.de>.
+SPDX-License-Identifier: BSD-3-Clause
+```
+
+Keccak / AES Reference Implementations
+---------------------------------------
+Public domain (CC0) contributions.
+https://creativecommons.org/public-domain/cc0
+
+Code from sources and by authors listed in comments on top of the respective files.
+
+
+================================================================================
+Third-Party Libraries (NOT compiled into libcrypto/libssl)
+================================================================================
+
+The following are used for testing and build tooling only. Distributing
+code linked against AWS-LC (libcrypto/libssl) does NOT trigger these
+license obligations.
+
+Google Test
+-----------
+See third_party/googletest/LICENSE.
+
+```
+Copyright 2008 Google Inc.
+SPDX-License-Identifier: BSD-3-Clause
+```
+
+Go Standard Library
+-------------------
+Code in ssl/test/runner/ is derived from the Go standard library.
+
+```
+Copyright (c) The Go Authors. All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause
+```
+
+Wycheproof Test Vectors
+------------------------
+Project Wycheproof is a community managed repository of test vectors that can be used by cryptography library
+developers to test against known attacks, specification inconsistencies, and other various implementation bugs.
+
+See third_party/wycheproof_testvectors/LICENSE.
+
+```
+SPDX-License-Identifier: Apache-2.0
+```
+
+
+================================================================================
+Full License Texts
+================================================================================
+
+Apache License 2.0
+------------------
+Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+    1. Definitions.
+
+        "License" shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document.
+
+        "Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
+
+        "Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
+
+        "You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this License.
+
+        "Source" form shall mean the preferred form for making modifications, including but not limited to software source code, documentation source, and configuration files.
+
+        "Object" form shall mean any form resulting from mechanical transformation or translation of a Source form, including but not limited to compiled object code, generated documentation, and conversions to other media types.
+
+        "Work" shall mean the work of authorship, whether in Source or Object form, made available under the License, as indicated by a copyright notice that is included in or attached to the work (an example is provided in the Appendix below).
+
+        "Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or derived from) the Work and for which the editorial revisions, annotations, elaborations, or other modifications represent, as a whole, an original work of authorship. For the purposes of this License, Derivative Works shall not include works that remain separable from, or merely link (or bind by name) to the interfaces of, the Work and Derivative Works thereof.
+
+        "Contribution" shall mean any work of authorship, including the original version of the Work and any modifications or additions to that Work or Derivative Works thereof, that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition, "submitted" means any form of electronic, verbal, or written communication sent to the Licensor or its representatives, including but not limited to communication on electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor for the purpose of discussing and improving the Work, but excluding communication that is conspicuously marked or otherwise designated in writing by the copyright owner as "Not a Contribution."
+
+        "Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a Contribution has been received by Licensor and subsequently incorporated within the Work.
+    2. Grant of Copyright License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
+    3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except as stated in this section) patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Work, where such license applies only to those patent claims licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct or contributory patent infringement, then any patent licenses granted to You under this License for that Work shall terminate as of the date such litigation is filed.
+    4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications, and in Source or Object form, provided that You meet the following conditions:
+        (a) You must give any other recipients of the Work or Derivative Works a copy of this License; and
+        (b) You must cause any modified files to carry prominent notices stating that You changed the files; and
+        (c) You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding those notices that do not pertain to any part of the Derivative Works; and
+        (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works, in at least one of the following places: within a NOTICE text file distributed as part of the Derivative Works; within the Source form or documentation, if provided along with the Derivative Works; or, within a display generated by the Derivative Works, if and wherever such third-party notices normally appear. The contents of the NOTICE file are for informational purposes only and do not modify the License. You may add Your own attribution notices within Derivative Works that You distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such additional attribution notices cannot be construed as modifying the License.
+
+    You may add Your own copyright statement to Your modifications and may provide additional or different license terms and conditions for use, reproduction, or distribution of Your modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and distribution of the Work otherwise complies with the conditions stated in this License.
+    5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms and conditions of this License, without any additional terms or conditions. Notwithstanding the above, nothing herein shall supersede or modify the terms of any separate license agreement you may have executed with Licensor regarding such Contributions.
+    6. Trademarks. This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the NOTICE file.
+    7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
+    8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
+    9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability.
+
+END OF TERMS AND CONDITIONS
+
+APPENDIX: How to apply the Apache License to your work.
+
+To apply the Apache License to your work, attach the following boilerplate notice, with the fields enclosed by brackets "[]" replaced with your own identifying information. (Don't include the brackets!) The text should be enclosed in the appropriate comment syntax for the file format. We also recommend that a file or class name and description of purpose be included on the same "printed page" as the copyright notice for easier identification within third-party archives.
+
+Copyright [yyyy] [name of copyright owner]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+ISC License
+-----------
+Permission to use, copy, modify, and/or distribute this software for
+any purpose with or without fee is hereby granted, provided that the
+above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+
+MIT License
+-----------
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+BSD 3-Clause License
+--------------------
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived
+   from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+MIT No Attribution (MIT-0)
+--------------------------
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+========================================================================
 LICENSE TEXT 72af89a828df52a9
 ========================================================================
 ../LICENSE-MIT
@@ -20702,6 +21173,33 @@ PERFORMANCE OF THIS SOFTWARE.
 
 
 ========================================================================
+LICENSE TEXT 9bbc1b3dc4674a9e
+========================================================================
+The MIT License (MIT)
+
+Copyright (c) 2015 Markus Westerlind
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+
+========================================================================
 LICENSE TEXT 9c5a80639a57c1c9
 ========================================================================
 MIT License
@@ -23668,6 +24166,213 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
+
+
+========================================================================
+LICENSE TEXT b50b376e7d24a059
+========================================================================
+SPDX-License-Identifier: ISC AND (Apache-2.0 OR ISC)
+
+
+Apache 2.0 license
+-------------------------------------
+
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+
+ISC license
+-------------------------------------
+
+
+Copyright Amazon.com, Inc. or its affiliates.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
 ========================================================================
@@ -27408,6 +28113,72 @@ DEALINGS IN THE SOFTWARE.
 
 
 ========================================================================
+LICENSE TEXT e271993808fec50a
+========================================================================
+# Community Data License Agreement - Permissive - Version 2.0
+
+This is the Community Data License Agreement - Permissive, Version
+2.0 (the "agreement"). Data Provider(s) and Data Recipient(s) agree
+as follows:
+
+## 1. Provision of the Data
+
+1.1. A Data Recipient may use, modify, and share the Data made
+available by Data Provider(s) under this agreement if that Data
+Recipient follows the terms of this agreement.
+
+1.2. This agreement does not impose any restriction on a Data
+Recipient's use, modification, or sharing of any portions of the
+Data that are in the public domain or that may be used, modified,
+or shared under any other legal exception or limitation.
+
+## 2. Conditions for Sharing Data
+
+2.1. A Data Recipient may share Data, with or without modifications, so
+long as the Data Recipient makes available the text of this agreement
+with the shared Data.
+
+## 3. No Restrictions on Results
+
+3.1. This agreement does not impose any restriction or obligations
+with respect to the use, modification, or sharing of Results.
+
+## 4. No Warranty; Limitation of Liability
+
+4.1. All Data Recipients receive the Data subject to the following
+terms:
+
+THE DATA IS PROVIDED ON AN "AS IS" BASIS, WITHOUT REPRESENTATIONS,
+WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED
+INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE,
+NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+NO DATA PROVIDER SHALL HAVE ANY LIABILITY FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING
+WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE DATA OR RESULTS,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+## 5. Definitions
+
+5.1. "Data" means the material received by a Data Recipient under
+this agreement.
+
+5.2. "Data Provider" means any person who is the source of Data
+provided under this agreement and in reliance on a Data Recipient's
+agreement to its terms.
+
+5.3. "Data Recipient" means any person who receives Data directly
+or indirectly from a Data Provider and agrees to the terms of this
+agreement.
+
+5.4. "Results" means any outcome obtained by computational analysis
+of Data, including for example machine learning models and models'
+insights.
+
+
+========================================================================
 LICENSE TEXT e2e245f2b566d0bf
 ========================================================================
 Copyright (c) Jacob Pratt
@@ -29483,6 +30254,32 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+========================================================================
+LICENSE TEXT fea1d5bf3dd71605
+========================================================================
+The MIT License (MIT)
+
+Copyright (c) 2016 Prevoty, Inc. and jni-rs contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 
 ========================================================================

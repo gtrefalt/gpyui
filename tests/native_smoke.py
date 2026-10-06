@@ -5,6 +5,8 @@ import json
 import threading
 from pathlib import Path
 
+from image_helpers import animated_gif, png
+
 from gpyui import (
     Application,
     Button,
@@ -15,6 +17,7 @@ from gpyui import (
     DropdownMenu,
     Field,
     Form,
+    Image,
     Label,
     Menu,
     MenuSeparator,
@@ -169,6 +172,35 @@ async def started():
     settings_form.dispose()
     submit_button.dispose()
     await app.snapshot()
+    image_loaded = asyncio.Event()
+    image_failed = asyncio.Event()
+    image_results = []
+
+    async def loaded_image(event):
+        image_results.append(event.value)
+        image_loaded.set()
+
+    preview = Image(png(), on_load=loaded_image, on_error=lambda: image_failed.set()).style(
+        width=60, height=30
+    )
+    app.add(preview)
+    await asyncio.wait_for(image_loaded.wait(), 10)
+    assert image_results[-1] == {"width": 200, "height": 100, "frames": 1}
+    image_loaded.clear()
+    preview.source = animated_gif()
+    await asyncio.wait_for(image_loaded.wait(), 10)
+    assert image_results[-1]["frames"] == 2
+    preview.source = b"invalid image"
+    await asyncio.wait_for(image_failed.wait(), 10)
+    assert (await app.snapshot())[preview.id]["image"]["status"] == "error"
+    image_loaded.clear()
+    preview.source = png()
+    await asyncio.wait_for(image_loaded.wait(), 10)
+    image_loaded.clear()
+    preview.reload()
+    await asyncio.wait_for(image_loaded.wait(), 10)
+    preview.dispose()
+    assert preview.id not in await app.snapshot()
     # Exercise real preset application and Kit/Base consistency on every OS.
     for preset in ("macos", "windows", "shadcn-zinc", "shadcn-blue"):
         for mode in ("light", "dark"):

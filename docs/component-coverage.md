@@ -1,7 +1,7 @@
 # Component coverage and Python API
 
 The goal remains full GPUI Kit access from Python. The library exposes
-**74 controls**, reusable command/menu models and native notifications through
+**75 controls**, reusable command/menu models and native notifications through
 `Application.notify`. Layout helpers use GPUI directly; the themed component
 wrappers construct actual Kit components. There are no placeholder classes for
 unimplemented Kit families.
@@ -46,7 +46,7 @@ blocks. `Row`, `Container` and `Scroll` also accept a positional children list.
 ## Commands and menu coverage (0.3.0)
 
 `Command`, `Menu` and `MenuSeparator` are application-owned models in addition to
-74 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
+75 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
 menus use Kit's real menu builders. Commands provide shared enabled/checked
 state, async callbacks and platform-aware shortcuts. macOS uses system application
 menus, Windows/Linux use Kit AppMenuBar; OS-native context menus fall back to
@@ -93,7 +93,7 @@ success, warning, info and transparent.
 
 ## Theme coverage (0.4.0)
 
-Theme is an immutable application model, separate from the 74 controls. Native
+Theme is an immutable application model, separate from the 75 controls. Native
 macOS/Windows and shadcn Zinc/Blue presets support light/dark modes, semantic color
 overrides, radii, fonts and shadows. Runtime switching preserves native editors;
 awaited theme snapshots verify Kit and Base values. Platform decorations and
@@ -115,7 +115,7 @@ These are real gaps, not aliases to generic containers:
 | `searchable_list`, virtual list | Python data model with native virtualization and queued async search; full List delegate |
 | `message_scroller` | Native anchoring/follow behavior, streaming updates and history loading |
 | `chart`, `plot` | Radar/Sankey, multiple series and lower-level plot composition |
-| Existing families | Group variants, custom item renderers, images, input groups, date ranges, rich formatting, controlled popup lifecycle and complete builder options |
+| Existing families | Group variants, custom item renderers, image avatars, input groups, date ranges, rich formatting, controlled popup lifecycle and complete builder options |
 | `highlighter`, `history` | Provider hooks and explicit undo/redo commands; editing/history already run natively |
 
 Next: richer List/Table models with stable domain selection across updates,
@@ -124,3 +124,11 @@ shared Commands. Docking and multiwindow follow those milestones. Form submissio
 and menu keyboard routing already have real-window acceptance tests. Full Kit
 parity requires the remaining behaviors and wider platform testing;
 the current source-backed wrappers are the reusable foundation.
+
+## Images (unreleased)
+
+`Image` exposes Kit’s native `img()` for paths, HTTP(S) URLs, encoded bytes and
+bundled assets, with native GIF/WebP animation, fit modes, sizing, grayscale,
+loading/error text, queued callbacks and retry. Results are scoped to the current
+source and released on replacement/disposal. Image avatars, custom placeholders,
+shared caches and video streaming remain future work. See the [Images guide](guide/images.md).

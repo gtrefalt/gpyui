@@ -1,7 +1,7 @@
 # Agent skills
 
 Give your coding agent the context to build native desktop apps with gpyui.
-The skills include the **Python** API for all 74 controls, composition and State
+The skills include the **Python** API for all 75 controls, composition and State
 conventions, asyncio/lifecycle guidance, runnable applications and desktop design
 rules. They are inspired by
 [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills),

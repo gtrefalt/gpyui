@@ -35,6 +35,16 @@ Native initials generated from a name.
 
 <div class="component-card" markdown>
 
+[![Native Image component](../../screenshots/components/image.png?v=a192dfe0da56)](../image.md)
+
+**[Image](../image.md)**
+
+Full-color images decoded, cached and rendered natively.
+
+</div>
+
+<div class="component-card" markdown>
+
 [![Native Markdown component](../../screenshots/components/markdown.png?v=6504c1637d8e)](../markdown.md)
 
 **[Markdown](../markdown.md)**

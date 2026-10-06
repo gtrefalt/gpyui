@@ -1,5 +1,6 @@
 mod bridge;
 mod commands;
+mod images;
 mod kit;
 mod protocol;
 mod theme;

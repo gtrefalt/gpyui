@@ -124,7 +124,7 @@ for p in sorted(packages, key=lambda p: (p["name"], p["version"])):
         [
             p["name"] + " " + p["version"],
             "Declared license: " + str(p.get("license") or p.get("license_file")),
-            "Authors: " + ", ".join(p.get("authors", [])),
+            ("Authors: " + ", ".join(p.get("authors", []))).rstrip(),
             "Source: " + source,
             "Source archive: https://crates.io/api/v1/crates/" + p["name"] + "/" + p["version"] + "/download"
             if str(p.get("source", "")).startswith("registry+")

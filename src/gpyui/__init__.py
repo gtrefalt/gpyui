@@ -4,6 +4,7 @@ from .application import Application, ApplicationClosedError
 from .commands import Command, DropdownMenu, Menu, MenuSeparator
 from .controls import Button, Column, Control, Event, Label, TextInput
 from .forms import Field, Form, ValidationError
+from .images import Image, ImageSource
 from .state import State
 from .themes import Theme
 from .widgets import (
@@ -77,6 +78,8 @@ from .widgets import (
 )
 
 __all__ = [
+    "Image",
+    "ImageSource",
     "Field",
     "Form",
     "ValidationError",

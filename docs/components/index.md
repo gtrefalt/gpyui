@@ -1,6 +1,6 @@
 # Components
 
-Browse all **74 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
+Browse all **75 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
 
 Use the site search to find a control by name. [Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.
 
@@ -654,6 +654,16 @@ Native count badges.
 **[Avatar](avatar.md)**
 
 Native initials generated from a name.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Image component](../screenshots/components/image.png?v=a192dfe0da56)](image.md)
+
+**[Image](image.md)**
+
+Full-color images decoded, cached and rendered natively.
 
 </div>
 

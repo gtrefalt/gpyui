@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Add native Image with file/HTTP(S)/encoded-byte/bundled-asset sources, fit modes,
+  aspect ratio, rounded corners, grayscale and loading/error placeholders.
+- Add queued sync/async load/error callbacks, retry, stale-result guards and
+  scoped decoded-image ownership. Support animated GIF/WebP, preserving adjacent
+  native editors across image updates. Video streaming is a separate future API.
+- Add the light image viewer, native pixel/animation/retry/lifecycle tests,
+  installed-wheel smoke, component previews, image docs and agent guidance.
+
 ## 0.5.0 — 2026-10-06
 
 - Expose real native Kit Form/Field with label layouts, grid columns, labels,

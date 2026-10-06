@@ -27,7 +27,7 @@ documentation for the animated walkthrough.
 
 ## Why gpyui?
 
-- **Native components:** 74 Python controls spanning inputs, tables, charts,
+- **Native components:** 75 Python controls spanning inputs, images, tables, charts,
   navigation, dialogs and feedback, backed by GPUI Kit.
 - **Python composition:** build layouts with `Column`, `Row`, containers and
   context managers, or pass an explicit tree of controls.
@@ -42,6 +42,10 @@ documentation for the animated walkthrough.
   preserves native text, caret, selection and undo.
 - **Native themes:** macOS, Windows/Fluent and shadcn-inspired light/dark presets,
   custom palettes and live switching that preserves editor state.
+- **Images (unreleased):** native files, URLs and encoded bytes, GIF/WebP animation,
+  fit modes, loading/error callbacks and retry. See the
+  [image guide](https://gtrefalt.github.io/gpyui/guide/images/); video streaming
+  requires a separate native pipeline.
 
 ## Installation
 
