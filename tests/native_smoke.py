@@ -19,6 +19,7 @@ from gpyui import (
     Sheet,
     State,
     TextInput,
+    Theme,
 )
 
 message = State("Starting")
@@ -130,6 +131,29 @@ async def started():
     action.enabled = True
     app.menus = []
     await app.snapshot()
+    # Exercise real preset application and Kit/Base consistency on every OS.
+    for preset in ("macos", "windows", "shadcn-zinc", "shadcn-blue"):
+        for mode in ("light", "dark"):
+            app.theme = Theme(preset, mode=mode)
+            applied = await app.theme_snapshot()
+            assert applied["name"] == preset and applied["mode"] == mode
+            assert applied["colors"]["button_primary"] == applied["colors"]["primary"]
+            assert applied["base"]["primary"] == applied["colors"]["primary"]
+            assert applied["base"]["radius"] == applied["radius"]
+            assert (await app.snapshot())[field.id]["value"] == "Wheel test"
+            await asyncio.sleep(0.04)  # Present themed components on each target.
+    app.theme = Theme(
+        "windows",
+        mode="dark",
+        radius=9,
+        shadow=False,
+        colors={"primary": "#7c3aed", "primary_foreground": "#ffffff"},
+    )
+    applied = await app.theme_snapshot()
+    assert applied["radius"] == 9 and applied["shadow"] is False
+    app.theme = "light"
+    applied = await app.theme_snapshot()
+    assert applied["radius"] == 6 and applied["shadow"] is True and applied["font_size"] == 16
     observed.update(state)
     await asyncio.sleep(0.3)
     app.close()
@@ -149,5 +173,5 @@ assert not any(t.name == "gpyui-asyncio" for t in threading.enumerate())
 Path("artifacts").mkdir(exist_ok=True)
 Path("artifacts/native-smoke.json").write_text(json.dumps(observed))
 print(
-    "Native window, dynamic children, visibility, retained input state, shared commands, menus, asyncio and shutdown verified."
+    "Native window, dynamic children, visibility, retained input state, shared commands, menus, native themes, asyncio and shutdown verified."
 )

@@ -54,9 +54,8 @@ The profile recipe writes `profile.json` in the working directory.
 > app. Bind the fields to State, save asynchronously, show validation and errors,
 > and verify actual editing and button activation on a desktop.
 
-The references target gpyui 0.3.0; agents should verify their installed version.
-They explicitly cover the current one-window and startup-theme
-limits. Rust Kit documentation is useful background but does not imply a Python
+The references target gpyui 0.4.0; agents should verify their installed version.
+They cover native themes, runtime switching, and the current one-window limit. Rust Kit documentation is useful background but does not imply a Python
 API exists. The component references are generated from the same source contracts
 and specimens as this site's catalog, and CI checks runnable snippets and recipe
 logic without compiling the native extension.

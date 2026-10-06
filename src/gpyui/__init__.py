@@ -4,6 +4,7 @@ from .application import Application, ApplicationClosedError
 from .commands import Command, DropdownMenu, Menu, MenuSeparator
 from .controls import Button, Column, Control, Event, Label, TextInput
 from .state import State
+from .themes import Theme
 from .widgets import (
     Accordion,
     Alert,
@@ -87,6 +88,7 @@ __all__ = [
     "Event",
     "Label",
     "State",
+    "Theme",
     "TextInput",
     "Editor",
     "Html",

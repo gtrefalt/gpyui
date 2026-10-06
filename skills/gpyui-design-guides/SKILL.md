@@ -11,8 +11,8 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.3.0's Python capabilities, including the current
-one-window and startup-theme limits.
+GPUI Kit. It describes gpyui 0.4.0's Python capabilities, including native theme
+presets, runtime switching and the current one-window limit.
 
 ## Reading map
 

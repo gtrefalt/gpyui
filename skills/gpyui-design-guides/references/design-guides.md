@@ -47,9 +47,12 @@ discarded pages; detached pages otherwise retain native resources.
 
 ## Establish a visual language
 
-Default to `Application(theme="light")`. If dark is requested, choose it at
-startup; there is no bound runtime theme switch. Check the app in its intended
-appearance, rather than assuming the documentation site's theme changes it.
+Default to light appearance. Use `Application(theme="light")` or
+`Theme("macos")`, `Theme("windows")`, `Theme("shadcn-zinc")` or `Theme("shadcn-blue")`.
+Each preset supports `mode="dark"`. Change `app.theme` on the callback loop to
+switch appearance while retaining editors. Check the app in both intended
+appearances; the documentation site's toggle does not change native previews.
+OS-inspired themes style real Kit controls; platform-owned decorations remain.
 
 Use a consistent pixel scale, for example 8 for related controls, 12–16 between
 fields and 24 around a main form. Adjust based on density and window size. Apply
@@ -71,7 +74,10 @@ The exact styling surface is:
   `danger`, `success`, `warning`, `info`, `transparent`.
 
 Do not import CSS or Rust styling assumptions. There are no bound per-edge
-padding, margin, raw hex palette, font-family, animation or positioning APIs.
+padding, margin, raw hex per-control colors, animation or positioning APIs.
+Global `Theme` overrides accept hex colors, fonts, radii and shadows; check the
+technical theme reference before customizing, and keep foreground/surface pairs
+readable. Explicit fonts must be installed on the target desktop.
 Use matching semantic foreground/surface roles; check muted text and controls
 against the actual native background. ColorPicker's value may contain hex data,
 but `.style(color=...)` still requires a semantic token.

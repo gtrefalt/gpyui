@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from .commands import Command, DropdownMenu, Menu, menu_commands, menu_specs, validate_items
 from .controls import Column, Control, Event, Handler, _containers
+from .themes import Theme, _resolve_theme
 from .tree import walk
 
 if TYPE_CHECKING:
@@ -37,7 +38,7 @@ class Application:
         title: str = "gpyui",
         width: float = 480,
         height: float = 300,
-        theme: str = "light",
+        theme: str | Theme = "light",
         commands: Iterable[Command] = (),
         menus: Iterable[Menu] = (),
         on_start: Callable[..., Any] | None = None,
@@ -45,9 +46,8 @@ class Application:
     ):
         if not isinstance(title, str):
             raise TypeError("title requires str")
-        if theme not in {"light", "dark"}:
-            raise ValueError("theme requires 'light' or 'dark'")
-        self.theme = theme
+        self._theme = _resolve_theme(theme)
+        self._theme_dirty = False
         if not math.isfinite(width) or not math.isfinite(height) or width < 240 or height < 160:
             raise ValueError("window size must be finite and at least 240 x 160")
         self.title, self.width, self.height = title, width, height
@@ -68,11 +68,29 @@ class Application:
         self._on_error = on_error
         self._tasks: set[asyncio.Task[None]] = set()
         self._snapshots: dict[int, asyncio.Future[dict[int, dict[str, Any]]]] = {}
+        self._theme_snapshots: dict[int, asyncio.Future[dict[str, Any]]] = {}
         self._tokens = itertools.count(1)
         self._errors: list[Exception] = []
         self.add_command(*commands)
         self.menus = menus
         self.add(*controls)
+
+    @property
+    def theme(self) -> Theme:
+        """The requested immutable theme; assign a preset or Theme on the callback loop."""
+        return self._theme
+
+    @theme.setter
+    def theme(self, value: str | Theme) -> None:
+        resolved = _resolve_theme(value)
+        if self._phase != "new":
+            self._check_mutation()
+        if resolved == self._theme:
+            return
+        self._theme = resolved
+        if self._phase != "new":
+            self._theme_dirty = True
+            self._schedule_flush()
 
     @property
     def children(self) -> tuple[Control, ...]:
@@ -254,6 +272,9 @@ class Application:
     def update(self) -> None:
         """Submit coalesced properties and children. Await snapshot() to observe applied state."""
         self._check_mutation()
+        if self._theme_dirty:
+            self._bridge.set_theme(json.dumps(self._theme._spec()))
+            self._theme_dirty = False
         if self._pending or self._tree_dirty or self._actions_dirty:
             patches = [
                 {"id": control_id, "property": name, "value": value}
@@ -296,6 +317,19 @@ class Application:
             return await future
         finally:
             self._snapshots.pop(token, None)
+
+    async def theme_snapshot(self) -> dict[str, Any]:
+        """Flush and read the applied native theme, including Kit's Base projection."""
+        self._check_mutation()
+        self.update()
+        token = next(self._tokens)
+        future = asyncio.get_running_loop().create_future()
+        self._theme_snapshots[token] = future
+        try:
+            self._bridge.theme_snapshot(token)
+            return await future
+        finally:
+            self._theme_snapshots.pop(token, None)
 
     def close(self) -> None:
         """Request native shutdown, flushing pending properties first."""
@@ -381,6 +415,10 @@ class Application:
                         future = self._snapshots.get(event["token"])
                         if future is not None and not future.done():
                             future.set_result({int(k): v for k, v in event["nodes"].items()})
+                    elif name == "theme_snapshot":
+                        theme_future = self._theme_snapshots.get(event["token"])
+                        if theme_future is not None and not theme_future.done():
+                            theme_future.set_result(event["theme"])
                     elif name == "command":
                         command = self._commands.get(event["id"])
                         if command is None or not command.enabled:
@@ -414,7 +452,7 @@ class Application:
                             await asyncio.sleep(0)
         finally:
             self._phase = "closed"
-            for future in self._snapshots.values():
+            for future in itertools.chain(self._snapshots.values(), self._theme_snapshots.values()):
                 if not future.done():
                     future.set_exception(ApplicationClosedError("native window closed"))
             tasks = tuple(self._tasks)
@@ -470,7 +508,9 @@ class Application:
         try:
             if not started.wait(5):
                 raise RuntimeError("Python callback loop failed to start")
-            self._bridge.run(self.title, self.width, self.height, self.theme)
+            self._bridge.run(
+                self.title, self.width, self.height, self._theme.mode, json.dumps(self._theme._spec())
+            )
         finally:
             self._bridge.finish()
             worker.join(timeout=5)

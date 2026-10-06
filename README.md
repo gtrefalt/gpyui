@@ -37,8 +37,8 @@ documentation for the animated walkthrough.
   changes are queued and batched for native updates.
 - **Shared commands:** use the same Python action from buttons, nested menus and
   platform-aware keyboard shortcuts.
-- **Light and dark themes:** choose an appearance and style controls with
-  semantic colors, spacing and dimensions.
+- **Native themes:** macOS, Windows/Fluent and shadcn-inspired light/dark presets,
+  custom palettes and live switching that preserves editor state.
 
 ## Installation
 
@@ -89,6 +89,12 @@ button runs your Python callback and updates the label. Explore
 [async events](https://gtrefalt.github.io/gpyui/guide/events/) for larger apps.
 
 ## Documentation and examples
+
+Choose a native preset with `Application(theme=Theme("macos"))` or
+`Theme("windows", mode="dark")`. Customize colors, corner radii and typography;
+switch a running app by assigning `app.theme`. These are styles for Kit controls,
+with platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
+and the [appearance example](https://github.com/gtrefalt/gpyui/blob/main/examples/appearance.py).
 
 The [documentation](https://gtrefalt.github.io/gpyui/) includes a visual catalog
 with real native previews, properties, events and runnable examples for every

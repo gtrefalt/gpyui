@@ -14,6 +14,41 @@ def test_dependency_identity():
 
 
 @pytest.mark.parametrize(
+    "alteration",
+    [
+        {"unknown": True},
+        {"radius": 65},
+        {"font_size": 0},
+        {"shadow": "false"},
+        {"font_family": " "},
+        {"mode": "system"},
+        {"colors": {"not_a_color": "#ffffff"}},
+        {"colors": {"background": "#abc"}},
+        {"colors": {"background": "red"}},
+        {"colors": {"background": "#zzzzzz"}},
+    ],
+)
+def test_native_theme_validation_before_enqueue_or_start(alteration):
+    from gpyui import Theme
+
+    bridge = Bridge("[]")
+    invalid = json.dumps(Theme("macos")._spec() | alteration)
+    try:
+        with pytest.raises(ValueError):
+            bridge.set_theme(invalid)
+        with pytest.raises(ValueError):
+            bridge.run("Invalid theme", 600, 400, "light", invalid)
+        # Invalid changes consumed no queue slots and did not claim native startup.
+        bridge.set_theme(json.dumps(Theme("windows", mode="dark")._spec()))
+        for token in range(1023):
+            bridge.theme_snapshot(token)
+        with pytest.raises(RuntimeError, match="queue unavailable"):
+            bridge.theme_snapshot(1024)
+    finally:
+        bridge.finish()
+
+
+@pytest.mark.parametrize(
     "tree",
     [
         [{"id": 0, "type": "label", "text": "invalid"}],

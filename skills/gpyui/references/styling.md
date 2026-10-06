@@ -42,6 +42,10 @@ own variant contracts: read the catalog, do not transfer Button variants to Tag
 or Alert. Button has `disabled`, but not a Python `loading` property; combine a
 disabled button with a status Label or supported Progress/Marker component.
 
+Global `Theme` configuration supports hex palettes, fonts, radii and shadows,
+plus macOS, Windows and shadcn-inspired presets and runtime switching. See
+[native themes](themes.md). Hex values still do not belong in `.style()`.
+
 Light is the default application theme. Keep surfaces readable with semantic
 foreground/background pairs and show meaning in text as well as color. For a
 new screen, apply the companion `gpyui-design-guides` skill's layout, hierarchy

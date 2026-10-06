@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe **gpyui 0.3.0**. Read the installed version's API when
+These references describe **gpyui 0.4.0**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -29,6 +29,8 @@ it in the library before depending on it in application code.
    styling contract is bundled here.
 5. Read [commands and menus](references/commands-and-menus.md) for reusable actions,
    shortcuts, context menus or an application menu bar.
+   Read [native themes](references/themes.md) for macOS/Windows/shadcn presets,
+   custom colors and runtime switching without replacing editors.
 6. Start from the [application recipes](references/recipes.md) rather than
    assembling unfamiliar API calls. Adapt them to the user's task.
 7. Validate the tree and business logic without a native window, then run the
@@ -57,7 +59,7 @@ it in the library before depending on it in application code.
 - Use semantic style colors and pixel dimensions. `.style()` accepts a limited
   vocabulary, not CSS. No `.pack()`, `.grid()`, `.classes()`,
   `.on(...)`, raw Rust builders or implicit reactive rendering.
-- Keep scope honest: one native window and startup theme.
+- Keep scope honest: one native window. Theme presets and runtime switching are supported.
   Kbd displays a shortcut; Command.shortcut registers a window-scoped action. Navigation selects an index
   but does not own pages; implement page changes with visibility or child updates. Initial wrappers do not expose full Kit
   docking, custom table delegates, multi-series chart configuration or editor

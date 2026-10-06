@@ -561,6 +561,15 @@ impl NativeView {
     fn apply(&mut self, command: Command, window: &mut Window, cx: &mut Context<Self>) {
         let focused = self.focused_control(window, cx);
         match command {
+            Command::Theme(config) => {
+                crate::theme::apply(*config, cx);
+                cx.notify();
+            }
+            Command::ThemeSnapshot(token) => {
+                if !self.transport.emit(json!({"event":"theme_snapshot", "token":token, "theme":crate::theme::snapshot(cx)})) {
+                    cx.quit();
+                }
+            }
             Command::Execute(id) => self.invoke(id, None, cx),
             Command::Close => cx.quit(),
             Command::Notify {

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 — 2026-10-06
+
+- Add macOS-inspired and Windows/Fluent-inspired native light/dark themes, plus
+  shadcn-inspired Zinc and Blue presets and custom semantic color overrides.
+- Add immutable Theme descriptions with configurable radii, typography and
+  shadows. Preserve the default light/dark string API and platform font defaults.
+- Support callback-loop theme switching with coalesced updates. Synchronize Kit
+  component palettes and Base tokens without replacing native editing controls.
+- Add awaited native theme snapshots, a live appearance example, eight native
+  preview PNGs, source-grounded docs and updated application-building skills.
+- Verify native caret, selection and undo across theme switches, reject malformed
+  themes before enqueue/start, and apply every preset in installed-wheel smoke tests.
+
 ## 0.3.0 — 2026-10-05
 
 - Add reusable Command objects with shared enabled/checked state, bindings, queued

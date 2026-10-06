@@ -19,7 +19,7 @@ app.run()
 | `title` | `"gpyui"` | Window title string |
 | `width` | `480` | Finite width, at least 240 pixels |
 | `height` | `300` | Finite height, at least 160 pixels |
-| `theme` | `"light"` | Initial `light` or `dark` appearance |
+| `theme` | `"light"` | Theme object, preset name, or `light`/`dark` |
 | `commands` | `()` | Explicit Command registration, including shortcut-only actions |
 | `menus` | `()` | Menu roots; macOS system bar or Kit in-window bar |
 | `on_start` | `None` | Zero/one-argument sync/async tracked startup callback |
@@ -44,6 +44,7 @@ callback loop, using the same contracts as [containers](core.md).
 | `update()` | Flush coalesced property and child updates from the callback loop |
 | `batch()` | Context manager grouping synchronous assignments; no rollback |
 | `await snapshot()` | Flush and wait for applied native state, indexed by integer control IDs |
+| `await theme_snapshot()` | Flush and read applied Kit/Base colors, typography, radius and shadow |
 | `call_soon(callback, *args)` | Thread-safe handoff of short synchronous work to the callback loop |
 
 Snapshots include retained detached controls until disposal. Each node includes
@@ -55,6 +56,15 @@ never replayed from a tree description.
 The native snapshot barrier does not wait for GPU presentation. While the app
 runs, mutate controls/State on the callback loop. External worker threads can
 use `app.call_soon(lambda: setattr(label, "text", result))`.
+
+## Theme
+
+`app.theme` returns the requested immutable `Theme`. Assign a preset string or
+Theme before startup or from the running callback loop. Assignments coalesce in
+`batch()`, refresh native theme state and retain editor identity, selection and
+undo. Invalid descriptions fail before mutation. The applied native theme is
+available through `await theme_snapshot()`; queue errors leave an update pending
+for retry. See [native themes](../guide/themes.md) for presets and custom overrides.
 
 ## Commands and application menus
 
