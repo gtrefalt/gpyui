@@ -30,7 +30,7 @@ appearance. Existing `theme="light"` and `theme="dark"` select Kit's default the
 | `shadcn-zinc` | Neutral Zinc surfaces and contrasting primary actions | 16 px | 6 / 8 px |
 | `shadcn-blue` | Zinc surfaces with a blue primary action | 16 px | 6 / 8 px |
 
-The refined platform treatments are available in the repository after 0.4.0.
+The refined platform treatments are included in 0.5.0.
 macOS buttons and single-line fields use 24 px frames; Windows uses 32 px.
 Windows checkboxes and switches are larger, its slider thumb uses the accent,
 and its editor focus is an accent underline. macOS fields use a soft focus halo,

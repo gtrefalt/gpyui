@@ -49,6 +49,9 @@ def slug(name):
 def type_name(validator):
     names = {
         "text": "str",
+        "columns": "integer 1–12",
+        "field_name": "str; nonempty unique name within a Form",
+        "label_width": "nonnegative pixel number",
         "boolean": "bool",
         "number": "finite number",
         "integer": "nonnegative int",
@@ -159,7 +162,22 @@ def component_page(name):
         "## Events and state",
         "",
     ]
-    if name == "DropdownMenu":
+    if name == "Form":
+        lines += [
+            "`on_submit` accepts a sync/async callback with zero arguments or one copied values dict. "
+            "`submit_label` and `shortcut` configure the immutable `submit_command`, shared with Button and menus. "
+            "`await validate()` and `await submit()` return bool; `busy`, `errors` and `values()` expose Python state. "
+            "See [forms and validation](../guide/forms.md) for hidden fields, stale async validation and retry.",
+        ]
+    elif name == "Field":
+        lines += [
+            "`control=` accepts a prebuilt value control; alternatively compose children with a `with` block. "
+            "Validation requires exactly one bindable value control, including within nested layouts. "
+            "`validators=` is a constructor-only iterable of sync/async callables taking one raw value. "
+            "Return None/empty string for success or an error message. `control` and `validators` are read-only. "
+            "See [forms and validation](../guide/forms.md) for the full validation/submission contract.",
+        ]
+    elif name == "DropdownMenu":
         lines += [
             "Menu activation calls the selected `Command.on_execute` callback with current native input values. "
             "See [commands and menus](../guide/commands.md)."
@@ -214,6 +232,8 @@ def generated_files():
         "TextInput",
         "Button",
         "DropdownMenu",
+        "Form",
+        "Field",
         *(cls.__name__ for cls in ui.widgets.COMPONENTS),
     }
     assert len(names) == len(set(names)) and set(names) == set(SAMPLES) == actual
@@ -221,7 +241,7 @@ def generated_files():
     lines = [
         "# Components",
         "",
-        "Browse all **72 Python controls**. Each page includes a native preview, "
+        f"Browse all **{len(names)} Python controls**. Each page includes a native preview, "
         "an executable Python example, accepted properties and events. These are real GPUI/Kit controls, "
         "not browser replicas.",
         "",
@@ -318,6 +338,7 @@ def skill_references():
                         "guide/events": "../state-and-events.md",
                         "guide/state": "../state-and-events.md",
                         "guide/commands": "../commands-and-menus.md",
+                        "guide/forms": "../forms.md",
                     }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
                     + (
                         "#dynamic-composition"

@@ -15,6 +15,7 @@ class Sample:
 GROUPS = {
     "Layout": ("Column", "Row", "Container", "Scroll", "GroupBox", "Toolbar", "StatusBar", "Resizable"),
     "Text and buttons": ("Label", "Button", "DropdownMenu", "Link", "Clipboard", "Icon", "Kbd", "Separator"),
+    "Forms": ("Form", "Field"),
     "Inputs": ("TextInput", "TextArea", "NumberInput", "OtpInput", "Editor"),
     "Selection": (
         "Checkbox",
@@ -40,6 +41,19 @@ GROUPS = {
 DATA = '[["Mon", 12], ["Tue", 18], ["Wed", 15], ["Thu", 24], ["Fri", 28]]'
 
 SAMPLES = {
+    "Form": Sample(
+        "Native form layout with named fields, required indicators and Python validation.",
+        'control = ui.Form(on_submit=lambda values: print(values), children=[ui.Field("Display name", name="name", control=ui.TextInput("Ada"), required=True, help="Shown to your teammates."), ui.Field("Notifications", name="notifications", control=ui.Switch("Desktop notifications", value=True))])\nsave = ui.Button(command=control.submit_command, variant="outline")',
+        "Form accepts only uniquely named Field children. on_submit takes zero arguments or an active-values dict. "
+        "Use submit_command for buttons, menus and shortcuts; see the forms guide for validation, async saving and retry.",
+    ),
+    "Field": Sample(
+        "Kit field labels, help, required indicators and retained inline error messages.",
+        'control = ui.Field("Email address", name="email", control=ui.TextInput("ada@"), required=True, help="Used only for account updates.", error="Enter a complete email address.")',
+        "Python validators take one raw value and return None/empty string or an error message, synchronously or asynchronously. "
+        "A validated field contains exactly one bindable value control, possibly inside child layouts. "
+        "Field.error is rendered through Kit description_fn, not by replacing an editor.",
+    ),
     "Column": Sample(
         "Stack controls vertically.",
         'control = ui.Column([ui.Label("Project"), ui.TextInput("gpyui"), ui.Button("Create")]).style(gap=12)',

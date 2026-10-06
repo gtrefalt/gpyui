@@ -1,7 +1,7 @@
 # Component coverage and Python API
 
 The goal remains full GPUI Kit access from Python. The library exposes
-**72 controls**, reusable command/menu models and native notifications through
+**74 controls**, reusable command/menu models and native notifications through
 `Application.notify`. Layout helpers use GPUI directly; the themed component
 wrappers construct actual Kit components. There are no placeholder classes for
 unimplemented Kit families.
@@ -26,6 +26,7 @@ blocks. `Row`, `Container` and `Scroll` also accept a positional children list.
 | [Toolbar](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/toolbar.rs), [StatusBar](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/status_bar.rs) | `Toolbar`, `StatusBar` | Python-composed native content |
 | [Label](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/label.rs), [Button](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/button/button.rs) | `Label`, `Button` | Text; button disabled/click, constructor variant/icon |
 | [Input](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/mod.rs) | `TextInput`, `TextArea`, `NumberInput`, `OtpInput`, `Editor` | Native editing, value/change, explicit two-way binding; newer inputs also accept disabled |
+| [Form/Field](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/form/mod.rs) | `Form`, `Field` | Real Kit grid/labels/help/required markers; Python sync/async validation, inline errors and shared async submission; retained conditional editors |
 | [Checkbox](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/checkbox.rs), [Switch](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/switch.rs), [Radio](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/radio.rs), [Toggle](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/button/toggle.rs) | `Checkbox`, `Switch`, `Radio`, `Toggle`, `RadioGroup` | Boolean or index value, disabled, change/binding; standalone radios need Python grouping policy |
 | [Slider](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/slider.rs), [Rating](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/rating.rs) | `Slider`, `Rating` | Scalar slider range/step, 0–5 rating, change/binding; slider release event |
 | [Select](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/select.rs), [Combobox](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/combobox.rs) | `Select`, `Combobox` | String items, single selected value, disabled; native searchable combobox |
@@ -45,7 +46,7 @@ blocks. `Row`, `Container` and `Scroll` also accept a positional children list.
 ## Commands and menu coverage (0.3.0)
 
 `Command`, `Menu` and `MenuSeparator` are application-owned models in addition to
-72 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
+74 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
 menus use Kit's real menu builders. Commands provide shared enabled/checked
 state, async callbacks and platform-aware shortcuts. macOS uses system application
 menus, Windows/Linux use Kit AppMenuBar; OS-native context menus fall back to
@@ -92,11 +93,11 @@ success, warning, info and transparent.
 
 ## Theme coverage (0.4.0)
 
-Theme is an immutable application model, separate from the 72 controls. Native
+Theme is an immutable application model, separate from the 74 controls. Native
 macOS/Windows and shadcn Zinc/Blue presets support light/dark modes, semantic color
 overrides, radii, fonts and shadows. Runtime switching preserves native editors;
 awaited theme snapshots verify Kit and Base values. Platform decorations and
-materials remain outside the binding. Repository refinements after 0.4.0 add
+materials remain outside the binding. Refinements in 0.5.0 add
 platform sizing/treatment for Button, DropdownMenu, TextInput, TextArea, Select,
 Checkbox and Switch, plus slider thumb/track tokens. Other controls share the
 palette/radius; there is no claim of full AppKit/WinUI parity.
@@ -110,14 +111,16 @@ These are real gaps, not aliases to generic containers:
 | --- | --- |
 | `command` | Command palette UI, user-editable keymaps and sequential chords; reusable commands, menus and window shortcuts are implemented |
 | `dock` | Stable panel identities, persistence, drag/detach behavior and multiwindow lifecycle |
-| `form`, `setting`, `questionnaire` | Typed schemas, validation, conditional fields and submission lifecycle |
+| `setting`, `questionnaire` | Schema-driven settings/questionnaires; Form/Field, validation, conditional fields and submission lifecycle are implemented |
 | `searchable_list`, virtual list | Python data model with native virtualization and queued async search; full List delegate |
 | `message_scroller` | Native anchoring/follow behavior, streaming updates and history loading |
 | `chart`, `plot` | Radar/Sankey, multiple series and lower-level plot composition |
 | Existing families | Group variants, custom item renderers, images, input groups, date ranges, rich formatting, controlled popup lifecycle and complete builder options |
 | `highlighter`, `history` | Provider hooks and explicit undo/redo commands; editing/history already run natively |
 
-Next acceptance gates should prove menu keyboard routing, virtualized data
-updates and typed form submission with real windows before adding docking and
-multiwindow. Full Kit parity requires these behaviors and wider platform testing;
+Next: richer List/Table models with stable domain selection across updates,
+sorting/filtering and native virtualization; then a command palette backed by
+shared Commands. Docking and multiwindow follow those milestones. Form submission
+and menu keyboard routing already have real-window acceptance tests. Full Kit
+parity requires the remaining behaviors and wider platform testing;
 the current source-backed wrappers are the reusable foundation.

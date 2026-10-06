@@ -26,8 +26,8 @@ the light preset; `theme="light" | "dark"` selects the Kit default.
 macOS and Windows styles are inspired, cross-platform Kit themes, not AppKit or
 WinUI controls. Native title bars/system menus remain platform-owned. The presets
 prefer matching installed SF/Segoe families, with installed-font/Kit fallbacks.
-No proprietary fonts are bundled and Mica is not exposed. In the repository
-following 0.4.0, macOS uses 13 px text, 24 px button/field frames, green switches
+No proprietary fonts are bundled and Mica is not exposed. In 0.5.0,
+macOS uses 13 px text, 24 px button/field frames, green switches
 and soft editor focus halos; Windows uses 14 px text, 32 px frames, larger
 checkboxes/switches and an accent editor underline. Other components inherit
 shared theme colors/radii. App spacing remains Python-owned.

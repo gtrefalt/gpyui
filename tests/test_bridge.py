@@ -64,6 +64,65 @@ def test_native_tree_validation(tree):
         Bridge(json.dumps(tree))
 
 
+@pytest.mark.parametrize(
+    "alteration",
+    [
+        {"columns": 0},
+        {"columns": 13},
+        {"columns": True},
+        {"label_layout": "diagonal"},
+        {"label_width": -1},
+        {"size": "huge"},
+    ],
+)
+def test_native_form_properties_rejected_before_mount(alteration):
+    from gpyui import Field, Form, TextInput
+
+    spec = Form(children=[Field("Name", name="name", control=TextInput("Ada"))])._spec()
+    spec["props"].update(alteration)
+    with pytest.raises(ValueError):
+        Bridge(json.dumps([spec]))
+
+
+@pytest.mark.parametrize("alteration", ["wrong_child", "duplicate_name", "blank_name"])
+def test_native_form_rejects_invalid_child_tree(alteration):
+    from gpyui import Field, Form, TextInput
+
+    spec = Form(
+        children=[
+            Field("Name", name="name", control=TextInput("Ada")),
+            Field("Team", name="team", control=TextInput("Research")),
+        ]
+    )._spec()
+    if alteration == "wrong_child":
+        spec["children"][0] = {"id": 999, "type": "label", "text": "Not a Field"}
+    else:
+        spec["children"][1]["props"]["name"] = "name" if alteration == "duplicate_name" else " "
+    with pytest.raises(ValueError):
+        Bridge(json.dumps([spec]))
+
+
+def test_native_field_name_readonly_and_error_metadata_updates():
+    from gpyui import Field, Form, TextInput
+
+    field = Field("Name", name="name", control=TextInput("Ada"))
+    form = Form(children=[field])
+    bridge = Bridge(json.dumps([form._spec()]))
+    try:
+        with pytest.raises(ValueError):
+            bridge.submit(json.dumps([{"id": field.id, "property": "name", "value": "other"}]))
+        bridge.submit(
+            json.dumps(
+                [
+                    {"id": field.id, "property": "error", "value": "Invalid name"},
+                    {"id": form.id, "property": "columns", "value": 2},
+                ]
+            )
+        )
+    finally:
+        bridge.finish()
+
+
 def test_whole_batch_validated_before_enqueue():
     bridge = Bridge('[{"id":1,"type":"label","text":"original"}]')
     with pytest.raises(ValueError, match="unknown control"):

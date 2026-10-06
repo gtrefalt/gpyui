@@ -16,6 +16,7 @@ nav = [
     { "State and binding" = "guide/state.md" },
     { "Events and asyncio" = "guide/events.md" },
     { "Commands and menus" = "guide/commands.md" },
+    { "Forms and validation" = "guide/forms.md" },
     { "Style and theme" = "guide/styling.md" },
     { "Native theme presets" = "guide/themes.md" },
     { "Agent skills" = "agent-skills.md" },
@@ -44,6 +45,11 @@ nav = [
     { "Icon" = "components/icon.md" },
     { "Kbd" = "components/kbd.md" },
     { "Separator" = "components/separator.md" },
+  ] },
+  { "Forms" = [
+    { "Overview" = "components/forms/index.md" },
+    { "Form" = "components/form.md" },
+    { "Field" = "components/field.md" },
   ] },
   { "Inputs" = [
     { "Overview" = "components/inputs/index.md" },
@@ -140,6 +146,7 @@ nav = [
   { "Examples" = [
     { "Trading stream" = "examples/trading.md" },
     { "Notes editor" = "examples/notes.md" },
+    { "Settings editor" = "examples/settings.md" },
     { "Component gallery" = "examples/gallery.md" },
   ] },
   { "Project" = [

@@ -1,6 +1,6 @@
 # Components
 
-Browse all **72 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
+Browse all **74 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
 
 Use the site search to find a control by name. [Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.
 
@@ -169,6 +169,31 @@ Display a parsed native keyboard shortcut.
 **[Separator](separator.md)**
 
 A native divider, optionally with a label.
+
+</div>
+
+</div>
+
+## Forms
+
+<div class="component-grid" markdown>
+<div class="component-card" markdown>
+
+[![Native Form component](../screenshots/components/form.png?v=2e30a5bf9543)](form.md)
+
+**[Form](form.md)**
+
+Native form layout with named fields, required indicators and Python validation.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native Field component](../screenshots/components/field.png?v=51b4a400659a)](field.md)
+
+**[Field](field.md)**
+
+Kit field labels, help, required indicators and retained inline error messages.
 
 </div>
 

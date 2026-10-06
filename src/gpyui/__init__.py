@@ -3,6 +3,7 @@
 from .application import Application, ApplicationClosedError
 from .commands import Command, DropdownMenu, Menu, MenuSeparator
 from .controls import Button, Column, Control, Event, Label, TextInput
+from .forms import Field, Form, ValidationError
 from .state import State
 from .themes import Theme
 from .widgets import (
@@ -76,6 +77,9 @@ from .widgets import (
 )
 
 __all__ = [
+    "Field",
+    "Form",
+    "ValidationError",
     "Command",
     "Menu",
     "MenuSeparator",

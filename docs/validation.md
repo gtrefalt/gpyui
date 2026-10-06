@@ -3,9 +3,31 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
-## Platform appearance refinement (unreleased)
+## Forms and validation (0.5.0)
 
-The repository passes 222 Python/bridge tests, Ruff, ty, Rust formatting/strict
+Local checks pass 258 Python/bridge tests, 21 native Linux/X11 cases, Ruff, ty,
+Rust formatting and strict Clippy. Strict Zensical checks validate 112 built
+pages. Both installable skills validate 201 links and 87 examples/recipes.
+
+The settings acceptance test opens a real light native Form/Field window. It
+asserts current-input shortcut submission, inline errors with unchanged caret,
+selection replacement, native undo/redo and history retained across conditional
+hide/show. It verifies shared disabled state during async saving, duplicate-save
+prevention, expected I/O failure, pointer activation of Retry, correct JSON and
+clean cancellation/worker shutdown when the window closes during saving.
+
+Python tests cover required/raw-value policy, sync/async validators, stale values,
+visibility and editor replacement, copied payloads, named server errors, expected
+I/O failures, retry, cancellation and thread/lifecycle boundaries. Rust bridge
+tests reject malformed Form metadata and child trees, and immutable Field-name
+updates before enqueueing. Installed-wheel smoke checks exercise real Form/Field
+and async validation/submission on every release target. The component catalog
+now has 74 generated references; both installable skills include forms guidance
+and a complete light settings recipe.
+
+## Platform appearance refinement (0.5.0)
+
+The theme refinement initially passed 222 Python/bridge tests, Ruff, ty, Rust formatting/strict
 Clippy and strict docs/skill validation. The 20-case native Linux/X11 suite
 includes macOS/Windows light/dark editing regression cases. The extended theme
 fixture also verifies Tab traversal and keyboard activation of the real Kit
@@ -16,8 +38,8 @@ The all-preset native smoke script passes locally. Final native captures show
 Windows indicators, accent/white slider thumbs and the differing editor focus
 treatments. Eight PNGs and both skills are refreshed.
 
-These changes are source-tested on Linux/X11, not yet a new PyPI release or a
-visual certification against AppKit/WinUI on those operating systems. Release
+These changes are source-tested on Linux/X11, with no claim of visual
+certification against AppKit/WinUI on those operating systems. Release
 wheel builds still run only for new version tags.
 
 ## Native themes (0.4.0)

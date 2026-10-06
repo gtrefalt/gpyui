@@ -18,7 +18,24 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
-## Native themes in 0.4.0
+## Forms and validation in 0.5.0
+
+Python Form and Field construct Kit's real typed builders. Rust owns grid/label
+layout, required indicators and descriptions; help and inline errors are rendered
+through Kit description_fn. Existing native input entities are reused when
+validation metadata changes. Python validators and save callbacks run through
+the existing owned asyncio loop and shared Command bridge.
+
+Each Form has one submit Command used by buttons, menus and shortcuts. Validation
+uses copied raw values and excludes hidden Fields. It guards concurrent work and
+discards stale async results when active Fields, editors, required flags or values
+change. Expected ValidationError and OSError failures show retryable feedback;
+programming errors and cancellation follow the existing lifecycle. Validation
+never replaces editor text, caret, selection or undo history. See
+[implementation evidence and acceptance](plans/forms-validation.md) and the
+[forms guide](guide/forms.md).
+
+## Native themes in 0.4.0 and refinements in 0.5.0
 
 Python exposes immutable Theme descriptions with macOS, Windows/Fluent and shadcn
 Zinc/Blue light/dark presets, custom colors, radii, typography and shadows. Rust
@@ -29,7 +46,7 @@ setting text values. Theme snapshots expose applied native state independently
 of the requested Python description. See the [source-grounded plan](plans/native-themes.md)
 and [theme guide](guide/themes.md) for verified APIs and limits.
 
-Platform refinements after 0.4.0 add Rust-owned appearance hints alongside Kit's
+Platform refinements in 0.5.0 add Rust-owned appearance hints alongside Kit's
 ThemeConfig: editor surface and checked-switch color. The original Kit Input,
 Textarea and Select entities render inside presentation-only frames, using their
 original focus handles. Kit sizing/style hooks give macOS and Windows distinct
@@ -294,6 +311,6 @@ form and a paper-order table. A seeded asyncio stream batches simulated quotes
 and trades every 650 ms; its callback is cancelled on native close. A native button invokes an async Python handler that appends
 an order, updates status and shows a Kit notification. It makes no network trades.
 
-Current limits: single window and basic builder options. Virtualized list delegates, typed forms,
+Current limits: single window and basic builder options. Virtualized list delegates, typed schemas,
 docking, multiwindow and additional plot families remain explicit implementation
 work. Acceptance gates for these next steps are recorded in the coverage guide.

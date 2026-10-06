@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.5.0 — 2026-10-06
+
+- Expose real native Kit Form/Field with label layouts, grid columns, labels,
+  help text, required indicators, inline errors and summary messages.
+- Add sync/async Python validators and shared async submit commands, copied raw
+  values, conditional field omission, stale-result guards and retryable save errors.
+  Preserve text, caret, selection and native undo on failed validation.
+- Add a light settings editor, real-window editing/save/retry/cancellation tests,
+  installed-wheel form smoke checks, native PNGs and form docs/agent skills.
+
 - Give macOS and Windows presets distinct native control density, field surfaces,
   focus treatments, checkbox/switch sizing and slider thumbs. Keep Kit interaction
   and editing entities intact; prefer matching installed SF/Segoe font families.

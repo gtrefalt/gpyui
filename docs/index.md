@@ -6,7 +6,7 @@ events in Python. [GPUI](https://www.gpui.rs/) and Kit retain the native window,
 rendering, focus, editing and component state in Rust.
 
 [Build your first app](guide/install.md){ .md-button .md-button--primary }
-[Explore 72 components](components/index.md){ .md-button }
+[Explore 74 components](components/index.md){ .md-button }
 
 ![Native trading workspace with a simulated market stream](screenshots/workspace-stream.gif)
 
@@ -48,7 +48,7 @@ Python example. The documentation search indexes all component names.
 
 !!! note "Current scope"
 
-    gpyui is a prototype with 72 controls and native notifications. Linux/X11 is
+    gpyui is a prototype with 74 controls and native notifications. Linux/X11 is
     tested, and macOS/Windows wheels have native smoke tests. One window and
     dynamic children and visibility are supported, preserving native editing state. The package is
     [available on PyPI](https://pypi.org/project/gpyui/) and licensed under MIT.

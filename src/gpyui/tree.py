@@ -44,6 +44,8 @@ def set_children(parent: Column | Application, controls: Iterable[Control]) -> N
         seen.add(child.id)
     if app is not None:
         app._validate_tree_change(parent, children)
+    if isinstance(parent, Column):
+        parent._validate_children(children)
     previous = tuple(parent._children)
     if previous == children:
         return

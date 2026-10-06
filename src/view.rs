@@ -1177,6 +1177,41 @@ impl NativeView {
                     }))
                     .into_any_element()
             }
+            NativeControl::Kit(kit) if kit.kind == "form" => {
+                let fields = kit
+                    .children
+                    .iter()
+                    .filter(|id| self.visible[id])
+                    .map(|id| {
+                        let NativeControl::Kit(field) = &self.controls[id] else {
+                            unreachable!()
+                        };
+                        crate::kit::form_field(
+                            field,
+                            field
+                                .children
+                                .iter()
+                                .filter(|id| self.visible[id])
+                                .map(|id| self.render_control(*id, cx))
+                                .collect(),
+                            &self.styles[id],
+                            cx,
+                        )
+                    })
+                    .collect();
+                crate::kit::form(kit, fields, &self.styles[&id], cx)
+            }
+            NativeControl::Kit(kit) if kit.kind == "field" => crate::kit::form_field(
+                kit,
+                kit.children
+                    .iter()
+                    .filter(|id| self.visible[id])
+                    .map(|id| self.render_control(*id, cx))
+                    .collect(),
+                &self.styles[&id],
+                cx,
+            )
+            .into_any_element(),
             NativeControl::Kit(kit) => kit.render(
                 id,
                 kit.children
@@ -1189,7 +1224,7 @@ impl NativeView {
             ),
         };
         let element = if matches!(&self.controls[&id], NativeControl::Column(_))
-            || matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll"))
+            || matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll" | "form" | "field"))
         {
             element
         } else {

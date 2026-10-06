@@ -27,7 +27,7 @@ documentation for the animated walkthrough.
 
 ## Why gpyui?
 
-- **Native components:** 72 Python controls spanning inputs, tables, charts,
+- **Native components:** 74 Python controls spanning inputs, tables, charts,
   navigation, dialogs and feedback, backed by GPUI Kit.
 - **Python composition:** build layouts with `Column`, `Row`, containers and
   context managers, or pass an explicit tree of controls.
@@ -37,6 +37,9 @@ documentation for the animated walkthrough.
   changes are queued and batched for native updates.
 - **Shared commands:** use the same Python action from buttons, nested menus and
   platform-aware keyboard shortcuts.
+- **Forms and validation:** Kit Form/Field labels, help and inline errors,
+  sync/async Python validators and shared submission with retry. Failed validation
+  preserves native text, caret, selection and undo.
 - **Native themes:** macOS, Windows/Fluent and shadcn-inspired light/dark presets,
   custom palettes and live switching that preserves editor state.
 
@@ -109,8 +112,15 @@ control, plus guides for styling, application lifecycle and release builds.
 
 Try the [trading dashboard](https://gtrefalt.github.io/gpyui/examples/trading/),
 [notes editor](https://gtrefalt.github.io/gpyui/examples/notes/),
+[settings editor](https://gtrefalt.github.io/gpyui/examples/settings/),
 [component gallery](https://gtrefalt.github.io/gpyui/examples/gallery/) or
 [async binding example](https://github.com/gtrefalt/gpyui/blob/main/examples/async_binding.py).
+
+![A light native settings editor with conditional fields, validation and async saving](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/settings-light.png)
+
+The settings editor validates Python values, keeps conditional editors intact,
+and shares Save/Retry/keyboard submission through one async command. See
+[forms and validation](https://gtrefalt.github.io/gpyui/guide/forms/) for usage.
 
 ## Agent skills
 

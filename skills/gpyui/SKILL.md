@@ -1,6 +1,6 @@
 ---
 name: gpyui
-description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 72 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
+description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 74 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
 ---
 
 # Build apps with gpyui
@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe **gpyui 0.4.0**. Read the installed version's API when
+These references describe **gpyui 0.5.0**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -31,7 +31,9 @@ it in the library before depending on it in application code.
    shortcuts, context menus or an application menu bar.
    Read [native themes](references/themes.md) for macOS/Windows/shadcn presets,
    custom colors and runtime switching without replacing editors. The theme
-   reference also records repository refinements after the published 0.4.0.
+   reference records the platform control refinements included in 0.5.0.
+   Read [forms and validation](references/forms.md) for Field labels/help/errors,
+   Python validators, conditional editors and shared async submission/retry.
 6. Start from the [application recipes](references/recipes.md) rather than
    assembling unfamiliar API calls. Adapt them to the user's task.
 7. Validate the tree and business logic without a native window, then run the
@@ -55,6 +57,9 @@ it in the library before depending on it in application code.
   Create tracked startup tasks through `on_start`; cancellation must propagate.
 - Read `Event.value` for component changes. An index is not a domain ID, and
   `NumberInput.value` is an editing string, not a number.
+- Use real Form/Field for validation. Share `form.submit_command` across actions;
+  keep raw editor values intact and normalize the copied save payload. Hide Field
+  for conditional omission, and preserve cancellation of validators/save callbacks.
 - Reassign collections; changing a returned `rows`, `items` or `data` copy
   submits no update. Bound streaming history and update rate.
 - Use semantic style colors and pixel dimensions. `.style()` accepts a limited

@@ -186,6 +186,9 @@ class Column(Control):
         super().__init__("column")
         self.add(*children)
 
+    def _validate_children(self, children: tuple[Control, ...]) -> None:
+        """Container-specific contracts, checked before a tree mutation."""
+
     @property
     def children(self) -> tuple[Control, ...]:
         return tuple(self._children)
