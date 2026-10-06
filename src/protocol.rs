@@ -93,7 +93,7 @@ pub(crate) enum Command {
     },
     Execute(u64),
     Snapshot(u64),
-    Theme(Box<gpui_kit::component::ThemeConfig>),
+    Theme(Box<crate::theme::NativeTheme>),
     ThemeSnapshot(u64),
     Close,
     Notify {

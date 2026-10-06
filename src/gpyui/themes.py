@@ -37,6 +37,12 @@ COLOR_TOKENS = (
     "button_active",
     "popover",
     "sidebar",
+    "control_background",
+    "switch",
+    "switch_thumb",
+    "switch_checked",
+    "slider",
+    "slider_thumb",
 )
 PRESETS = ("default", "macos", "windows", "shadcn-zinc", "shadcn-blue")
 
@@ -66,7 +72,7 @@ def _palette(preset: str, mode: str) -> dict[str, str]:
             ]
             if dark
             else [
-                "#f5f5f7",
+                "#ececec",
                 "#1d1d1f",
                 "#006fdb",
                 "#ffffff",
@@ -104,7 +110,7 @@ def _palette(preset: str, mode: str) -> dict[str, str]:
             ]
             if dark
             else [
-                "#fafafa",
+                "#f3f3f3",
                 "#1b1b1b",
                 "#005fb8",
                 "#ffffff",
@@ -198,6 +204,31 @@ def _palette(preset: str, mode: str) -> dict[str, str]:
         popover=palette["background"],
         sidebar=palette["muted"],
     )
+    if preset == "macos":
+        palette.update(
+            control_background="#343434" if dark else "#ffffff",
+            popover="#2c2c2e" if dark else "#ffffff",
+            sidebar="#252527" if dark else "#e3e3e5",
+            switch="#626264" if dark else "#b8b8bb",
+            switch_thumb="#ffffff",
+            switch_checked="#30d158" if dark else "#34c759",
+            slider=palette["primary"],
+            slider_thumb="#ffffff",
+            button="#454547" if dark else "#ffffff",
+            button_hover="#525254" if dark else "#f5f5f5",
+            button_active="#38383a" if dark else "#e4e4e4",
+        )
+    elif preset == "windows":
+        palette.update(
+            control_background="#292929" if dark else "#ffffff",
+            popover="#2c2c2c" if dark else "#ffffff",
+            sidebar="#262626" if dark else "#ebebeb",
+            switch="#666666" if dark else "#8a8a8a",
+            switch_thumb="#ffffff",
+            switch_checked=palette["primary"],
+            slider=palette["primary"],
+            slider_thumb=palette["primary"],
+        )
     return palette
 
 
@@ -268,8 +299,11 @@ class Theme:
         overrides = dict(self.colors or {})
         # Derive hover/active/ring/caret from a replaced brand color, unless explicit.
         if "primary" in overrides:
-            for key in ("primary_hover", "primary_active", "ring", "caret"):
+            for key in ("primary_hover", "primary_active", "ring", "caret", "slider"):
                 palette.pop(key, None)
+            if self.preset == "windows":
+                palette.pop("switch_checked", None)
+                palette.pop("slider_thumb", None)
             palette["selection"] = overrides["primary"][:7] + "33"
         if "border" in overrides:
             palette.pop("input", None)
@@ -278,13 +312,15 @@ class Theme:
             "name": self.preset,
             "mode": self.mode,
             "colors": palette,
-            "radius": self.radius if self.radius is not None else (4 if self.preset == "windows" else 6),
+            "radius": self.radius
+            if self.radius is not None
+            else (4 if self.preset == "windows" else 5 if self.preset == "macos" else 6),
             "radius_lg": self.radius_lg
             if self.radius_lg is not None
             else (10 if self.preset == "macos" else 8),
             "font_size": self.font_size
             if self.font_size is not None
-            else (14 if self.preset in ("macos", "windows") else 16),
+            else (13 if self.preset == "macos" else 14 if self.preset == "windows" else 16),
             "font_family": self.font_family,
             "mono_font_size": self.mono_font_size,
             "mono_font_family": self.mono_font_family,

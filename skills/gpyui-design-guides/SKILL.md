@@ -12,7 +12,8 @@ For a new app or redesign, read the whole guide. For a small change, read
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
 GPUI Kit. It describes gpyui 0.4.0's Python capabilities, including native theme
-presets, runtime switching and the current one-window limit.
+presets, runtime switching and the current one-window limit. The design guide
+also identifies the platform control refinements in the repository after 0.4.0.
 
 ## Reading map
 

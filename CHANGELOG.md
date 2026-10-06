@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Give macOS and Windows presets distinct native control density, field surfaces,
+  focus treatments, checkbox/switch sizing and slider thumbs. Keep Kit interaction
+  and editing entities intact; prefer matching installed SF/Segoe font families.
+- Add customizable control surface, switch and slider color tokens. Restore all
+  preset hints on live switches and preserve explicit font/radius/height overrides.
+- Expose popover/sidebar semantic surfaces to Python layout styles.
+- Refresh native appearance PNGs, README, theme docs and both app-building skills.
+
 ## 0.4.0 — 2026-10-06
 
 - Add macOS-inspired and Windows/Fluent-inspired native light/dark themes, plus

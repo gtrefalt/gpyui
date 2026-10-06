@@ -96,7 +96,11 @@ Theme is an immutable application model, separate from the 72 controls. Native
 macOS/Windows and shadcn Zinc/Blue presets support light/dark modes, semantic color
 overrides, radii, fonts and shadows. Runtime switching preserves native editors;
 awaited theme snapshots verify Kit and Base values. Platform decorations and
-materials remain outside the binding. See [themes and previews](guide/themes.md).
+materials remain outside the binding. Repository refinements after 0.4.0 add
+platform sizing/treatment for Button, DropdownMenu, TextInput, TextArea, Select,
+Checkbox and Switch, plus slider thumb/track tokens. Other controls share the
+palette/radius; there is no claim of full AppKit/WinUI parity.
+See [themes and previews](guide/themes.md).
 
 ## Remaining catalog work
 

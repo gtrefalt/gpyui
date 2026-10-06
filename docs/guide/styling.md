@@ -36,7 +36,7 @@ components can retain their own themed internal appearance.
 
 `background`, `foreground`, `muted`, `muted_foreground`, `primary`,
 `primary_foreground`, `secondary`, `secondary_foreground`, `border`, `accent`,
-`accent_foreground`, `danger`, `success`, `warning`, `info`, `transparent`.
+`accent_foreground`, `danger`, `success`, `warning`, `info`, `transparent`, `popover`, `sidebar`.
 
 These resolve through Kit's current native theme. Arbitrary CSS, hex style colors
 and arbitrary builder properties are not accepted by `.style(...)`.

@@ -92,9 +92,16 @@ button runs your Python callback and updates the label. Explore
 
 Choose a native preset with `Application(theme=Theme("macos"))` or
 `Theme("windows", mode="dark")`. Customize colors, corner radii and typography;
-switch a running app by assigning `app.theme`. These are styles for Kit controls,
-with platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
+switch a running app by assigning `app.theme`. macOS uses compact controls, soft
+gray surfaces and green switches; Windows uses roomier Fluent controls, larger
+checkboxes and underlined text fields. These style real Kit controls, with
+platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
 and the [appearance example](https://github.com/gtrefalt/gpyui/blob/main/examples/appearance.py).
+
+| macOS-inspired | Windows 11-inspired |
+| --- | --- |
+| ![Compact macOS-style native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/macos-light.png) | ![Roomier Windows-style native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/windows-light.png) |
+
 
 The [documentation](https://gtrefalt.github.io/gpyui/) includes a visual catalog
 with real native previews, properties, events and runnable examples for every

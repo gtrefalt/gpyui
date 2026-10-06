@@ -26,6 +26,8 @@ def test_dependency_identity():
         {"colors": {"background": "#abc"}},
         {"colors": {"background": "red"}},
         {"colors": {"background": "#zzzzzz"}},
+        {"colors": {"control_background": "#bad"}},
+        {"colors": {"switch_checked": "green"}},
     ],
 )
 def test_native_theme_validation_before_enqueue_or_start(alteration):

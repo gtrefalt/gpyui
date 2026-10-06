@@ -62,6 +62,11 @@ def capture(preset, mode):
                 text=True,
             ).splitlines()[-1]
             subprocess.run(["xdotool", "windowfocus", "--sync", window], check=True)
+            if preset in ("macos", "windows"):
+                # Show the preset's real editor focus treatment on the common profile.
+                subprocess.run(
+                    ["xdotool", "mousemove", "--window", window, "340", "200", "click", "1"], check=True
+                )
             subprocess.run(["xdotool", "mousemove", "0", "0"], check=True)
             time.sleep(0.2)
             output = ROOT / "docs/screenshots/themes" / f"{preset}-{mode}.png"

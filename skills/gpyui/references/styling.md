@@ -15,7 +15,7 @@ are the accepted properties, not examples of an unrestricted CSS surface.
 
 Color tokens: `background`, `foreground`, `muted`, `muted_foreground`, `primary`,
 `primary_foreground`, `secondary`, `secondary_foreground`, `border`, `accent`,
-`accent_foreground`, `danger`, `success`, `warning`, `info`, `transparent`.
+`accent_foreground`, `danger`, `success`, `warning`, `info`, `transparent`, `popover`, `sidebar`.
 
 ```python
 from gpyui import Column, Label
@@ -44,7 +44,9 @@ disabled button with a status Label or supported Progress/Marker component.
 
 Global `Theme` configuration supports hex palettes, fonts, radii and shadows,
 plus macOS, Windows and shadcn-inspired presets and runtime switching. See
-[native themes](themes.md). Hex values still do not belong in `.style()`.
+[native themes](themes.md) for compact macOS and roomier Windows treatments,
+independent editor surfaces and switch/slider colors. Hex values still do not
+belong in `.style()`. Layout padding/gap are application choices, not preset effects.
 
 Light is the default application theme. Keep surfaces readable with semantic
 foreground/background pairs and show meaning in text as well as color. For a

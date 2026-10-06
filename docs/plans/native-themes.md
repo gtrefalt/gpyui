@@ -54,3 +54,33 @@ is required for this milestone.
 This milestone implements themes. Typed forms/validation, custom OS window
 decorations, multiwindow, platform visual materials and full builder parity remain
 separate work in the [coverage roadmap](../component-coverage.md).
+
+## Platform treatment refinement after 0.4.0
+
+The first captures exposed a gap: colors/radii alone left the actual controls
+nearly identical. No upstream revision change is needed. Verified hooks at the
+same pinned source are:
+
+- [button/button.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/button/button.rs): `Sizable` and `Styled` instance refinement reach the real
+  button after variant styling. Apply 24/32 px heights, padding, font and radius;
+  keep enabled/hover/active/keyboard handling in Kit.
+- [input/input.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/input.rs) and [input/textarea.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/textarea.rs): appearance-free rendering keeps the
+  original text state, context menu, accessibility and keyboard actions. Wrap
+  that renderer in a Rust presentation frame with the original focus handle,
+  full-height multiline containment and a halo / underline focus treatment.
+- [select.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/select.rs): `appearance(false)` removes the trigger frame while retaining
+  selection/search/menu state; `Sizable` controls trigger and popup density.
+- [sizing.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/sizing.rs): custom Size does **not** provide arbitrary input height: it uses
+  the six-rem-unit branch and scales text by 0.875 of the supplied pixel value.
+  Use Small/Medium and explicit frame heights rather than treating Size as height.
+- [checkbox.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/checkbox.rs), [switch.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/switch.rs): size enums change actual indicator/track geometry;
+  Switch.color overrides checked color independently from primary. Track/thumb
+  and slider colors have ThemeConfig keys in [theme/schema.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/schema.rs).
+- GPUI's text system exposes installed family names, enabling preset preferences
+  without bundling proprietary fonts or repeatedly trying missing families.
+
+Expose the six additional colors in Python and native snapshots, retaining strict
+validation on both sides. Store only renderer hints outside Kit's ThemeConfig;
+reset those hints before every Kit refresh, including switching to default.
+Verify actual editing across geometry changes and pointer/keyboard activation,
+not just a serialized palette. Layout gaps stay explicit Python application choices.

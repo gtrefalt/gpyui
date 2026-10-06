@@ -1,7 +1,7 @@
 //! Native Kit components. No Python callback is retained by this module.
 use crate::view::NativeView;
 use gpui_kit::{
-    component::{self as c, ActiveTheme, Disableable},
+    component::{self as c, ActiveTheme, Disableable, Sizable},
     prelude::FluentBuilder,
     *,
 };
@@ -252,6 +252,8 @@ pub(crate) fn validate_style(style: &Map<String, Value>) -> Result<(), String> {
                         | "warning"
                         | "info"
                         | "transparent"
+                        | "popover"
+                        | "sidebar"
                 )
             }),
             "align" => value
@@ -619,6 +621,10 @@ impl NativeKit {
                 .children(children)
                 .into_any_element(),
             "checkbox" => c::checkbox::Checkbox::new(eid)
+                .with_size(crate::theme::checkbox_size(cx))
+                .when(crate::theme::platform_controls(cx), |el| {
+                    el.text_size(cx.theme().font_size)
+                })
                 .label(p.s("text"))
                 .checked(p.b("value"))
                 .disabled(p.b("disabled"))
@@ -627,6 +633,8 @@ impl NativeKit {
                 )
                 .into_any_element(),
             "switch" => c::switch::Switch::new(eid)
+                .with_size(crate::theme::switch_size(cx))
+                .color(crate::theme::switch_color(cx))
                 .label(p.s("text"))
                 .checked(p.b("value"))
                 .disabled(p.b("disabled"))
@@ -711,12 +719,19 @@ impl NativeKit {
                 let NativeState::Select(state) = &self.state else {
                     unreachable!()
                 };
-                c::select::Select::new(state)
-                    .id(eid)
-                    .placeholder(p.s("placeholder"))
-                    .disabled(p.b("disabled"))
-                    .w_full()
-                    .into_any_element()
+                crate::theme::select(
+                    c::select::Select::new(state)
+                        .id(eid)
+                        .placeholder(p.s("placeholder"))
+                        .disabled(p.b("disabled"))
+                        .appearance(!crate::theme::field_frame(cx))
+                        .with_size(crate::theme::size(cx))
+                        .w_full(),
+                    state.focus_handle(cx),
+                    p.b("disabled"),
+                    style,
+                    cx,
+                )
             }
             "table" => {
                 let NativeState::Table(state) = &self.state else {
@@ -741,10 +756,17 @@ impl NativeKit {
                 let NativeState::Textarea(state) = &self.state else {
                     unreachable!()
                 };
-                c::input::Textarea::new(state)
-                    .disabled(p.b("disabled"))
-                    .h_full()
-                    .into_any_element()
+                crate::theme::field(
+                    c::input::Textarea::new(state)
+                        .disabled(p.b("disabled"))
+                        .appearance(!crate::theme::field_frame(cx))
+                        .h_full(),
+                    state.focus_handle(cx),
+                    p.b("disabled"),
+                    true,
+                    style,
+                    cx,
+                )
             }
             "number_input" => {
                 let NativeState::Number(state) = &self.state else {
@@ -1122,6 +1144,8 @@ fn color(token: &str, cx: &App) -> Hsla {
         "success" => t.success,
         "warning" => t.warning,
         "info" => t.info,
+        "popover" => t.popover,
+        "sidebar" => t.sidebar,
         _ => transparent_black(),
     }
 }

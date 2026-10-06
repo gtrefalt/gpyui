@@ -34,7 +34,7 @@ PRESETS = {
 def build_app(preset="macos", mode="light", *, on_start=None):
     """Construct the preview; changing appearance never reconstructs its inputs."""
     app = Application(
-        title="Appearance · gpyui", width=820, height=640, theme=Theme(preset, mode=mode), on_start=on_start
+        title="Appearance · gpyui", width=820, height=660, theme=Theme(preset, mode=mode), on_start=on_start
     )
 
     def apply_theme():
@@ -61,14 +61,14 @@ def build_app(preset="macos", mode="light", *, on_start=None):
                 ).style(full_width=True)
                 dark = Switch("Dark appearance", value=mode == "dark", on_change=apply_theme)
                 Label(
-                    "Colors, corners and typography\ncome from GPUI Kit's native\ntheme configuration."
+                    "Control sizes, surfaces and\ntypography follow the preset.\nEditing stays native."
                 ).style(color="muted_foreground", font_size=13)
                 Separator().style(full_width=True)
                 Label("TRY IT").style(bold=True, font_size=12, color="muted_foreground")
                 Label(
                     "Edit the profile, then switch\nstyles. Selection and undo\nhistory are preserved."
                 ).style(color="muted_foreground", font_size=13)
-            with Column().style(flex=1, full_width=True, gap=12):
+            with Column().style(flex=1, full_width=True, gap=12, background="popover", padding=16, radius=8):
                 Label("Profile preview").style(font_size=19, bold=True)
                 Label("Display name")
                 name = TextInput("Sam Taylor", placeholder="Your name").style(full_width=True)
@@ -82,6 +82,7 @@ def build_app(preset="macos", mode="light", *, on_start=None):
                 Slider(value=65).style(full_width=True)
                 with Row().style(gap=10):
                     Button("Show notification", variant="primary", on_click=notify)
+                    Button("Cancel", on_click=lambda: app.notify("No changes were saved."))
                     Button("Unavailable", variant="outline", disabled=True)
         Separator().style(full_width=True)
         status = Label(
