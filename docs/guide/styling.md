@@ -45,6 +45,10 @@ separate component-specific contract.
 
 ## Appearance
 
-Choose `Application(theme="light")` or `Application(theme="dark")` at startup.
-Runtime theme switching is not exposed yet. The documentation site's appearance
-toggle changes the website; native previews remain their captured appearance.
+Choose `Application(theme="light")` or `Application(theme="dark")`, or use
+`Theme("macos")`, `Theme("windows")`, `Theme("shadcn-zinc")` or `Theme("shadcn-blue")`.
+Each preset supports light/dark and custom colors, corner radii and typography.
+Assign `app.theme` from a running callback to switch without replacing editors.
+See [native theme presets](themes.md) for real previews and the complete contract.
+The documentation site's appearance toggle changes the website; native previews
+remain their captured appearance.

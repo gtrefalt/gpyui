@@ -16,7 +16,7 @@ Download the correct architecture (`linux_x86_64` or `linux_aarch64`) and use,
 from your uv project:
 
 ```bash
-uv add /path/to/gpyui-0.3.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.4.0-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install gpyui` or `pip install /path/to/wheel.whl` in a
@@ -55,8 +55,9 @@ if __name__ == "__main__":
 
 `Application(*controls, title="gpyui", width=480, height=300, theme="light",
 on_start=None, on_error=None)` accepts unparented roots. Size must be finite
-and at least 240 × 160 pixels. Theme is `light` or `dark` at startup; light is
-the default. Runtime theme switching is not exposed.
+and at least 240 × 160 pixels. Theme accepts `light`/`dark`, a preset name, or a
+Theme object; light is the default. Assign `app.theme` from running callbacks to
+switch without reconstructing controls. See [native themes](themes.md).
 
 `run()` blocks the main thread until the window closes. One native application
 may run per process, with one window. Python callbacks run on the separate,

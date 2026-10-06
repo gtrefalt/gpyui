@@ -1,6 +1,6 @@
 # Feedback
 
-Generated Python API reference for gpyui 0.3.0.
+Generated Python API reference for gpyui 0.4.0.
 
 ## Progress
 

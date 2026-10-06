@@ -1,6 +1,6 @@
 # Python component index
 
-Generated from gpyui 0.3.0's Python contracts and tested catalog specimens.
+Generated from gpyui 0.4.0's Python contracts and tested catalog specimens.
 Run `uv run --only-group docs python scripts/generate-docs.py` in the library checkout to regenerate.
 
 Read only the families relevant to the task. Each includes complete runnable examples,

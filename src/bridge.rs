@@ -166,6 +166,13 @@ impl Bridge {
     fn snapshot(&self, token: u64) -> PyResult<()> {
         self.send(Command::Snapshot(token))
     }
+    fn set_theme(&self, theme_json: &str) -> PyResult<()> {
+        let config = crate::theme::parse(theme_json).map_err(PyValueError::new_err)?;
+        self.send(Command::Theme(Box::new(config)))
+    }
+    fn theme_snapshot(&self, token: u64) -> PyResult<()> {
+        self.send(Command::ThemeSnapshot(token))
+    }
     #[pyo3(signature = (message, title="", variant="info"))]
     fn notify(&self, message: &str, title: &str, variant: &str) -> PyResult<()> {
         if !matches!(variant, "info" | "success" | "warning" | "danger") {
@@ -201,7 +208,7 @@ impl Bridge {
             serde_json::to_string(&events).map_err(|e| PyRuntimeError::new_err(e.to_string()))
         })
     }
-    #[pyo3(signature = (title, width, height, theme="light"))]
+    #[pyo3(signature = (title, width, height, theme="light", theme_json=None))]
     fn run(
         &self,
         py: Python<'_>,
@@ -209,7 +216,12 @@ impl Bridge {
         width: f32,
         height: f32,
         theme: &str,
+        theme_json: Option<&str>,
     ) -> PyResult<()> {
+        let theme_config = theme_json
+            .map(crate::theme::parse)
+            .transpose()
+            .map_err(PyValueError::new_err)?;
         let dark = match theme {
             "light" => false,
             "dark" => true,
@@ -263,6 +275,9 @@ impl Bridge {
                             None,
                             cx,
                         );
+                        if let Some(config) = theme_config {
+                            crate::theme::apply(config, cx);
+                        }
                         let options = WindowOptions {
                             window_bounds: Some(WindowBounds::centered(
                                 size(px(width), px(height)),

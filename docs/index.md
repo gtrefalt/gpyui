@@ -27,6 +27,12 @@ with app, Column():
 app.run()
 ```
 
+## Native appearance
+
+Use macOS, Windows/Fluent and shadcn-inspired light/dark presets, or customize a
+semantic palette. Switch themes without losing editor state. Explore the
+[theme previews and live example](guide/themes.md).
+
 ## Explore the library
 
 | Start here | What you can build |

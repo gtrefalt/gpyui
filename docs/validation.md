@@ -3,6 +3,30 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Native themes (0.4.0)
+
+Local checks pass 217 Python/bridge tests, Ruff, ty, Rust formatting and strict
+Clippy. Strict docs checks validate 106 built pages and 72 generated component
+references; the two agent skills construct 83 examples/recipes.
+
+The native suite passes 20 Linux/X11 interaction cases, including four new theme
+cases starting with macOS/Windows light/dark presets. XTest typing verifies caret
+position, selected-text replacement and undo across live palette, radius and
+typography changes in single-line and multiline editors. Native snapshots verify
+Kit primary/hover/active button colors, Base agreement and default restoration.
+Python tests check readable preset text contrast and validate custom descriptions;
+bridge tests reject malformed startup/runtime themes before claiming/enqueueing.
+
+The native wheel smoke script additionally applies all four presets in both modes
+and a custom palette, retaining edited values through each change. The local run
+passes; the release matrix runs that same script on Linux, macOS and Windows on
+x64/ARM64. Theme style inspection and pointer/keyboard evidence here come from
+Linux, not from a visual comparison with AppKit or WinUI.
+
+Eight real native appearance previews were captured and inspected for the public
+[theme guide](guide/themes.md). Reproduce them with `scripts/capture-themes.py`
+on X11. Window decorations and visual materials remain platform-owned.
+
 ## Shared commands and menus (0.3.0)
 
 The feature's local checks pass 157 Python/bridge tests, Ruff, ty, Rust formatting

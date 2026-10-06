@@ -81,7 +81,7 @@ are supported. Reordering, moving, hiding and detaching preserve native control
 identity and editing state. Accordion initially exposes one
 open index and string item contents. Avatar initially exposes initials; Editor
 exposes editing without Python LSP/provider hooks. Chart animation/hover and
-resize geometry remain native. The initial theme is chosen when run starts.
+resize geometry remain native. Native presets and custom themes can be applied at startup or switched at runtime.
 
 `.style(...)` supports width, height, min_width, min_height, padding, gap, radius,
 font_size, flex, full_width, full_height, border, bold, align and justify. Spacing
@@ -89,6 +89,14 @@ and dimensions are pixels. Background/color use semantic theme tokens:
 background, foreground, muted, muted_foreground, primary, primary_foreground,
 secondary, secondary_foreground, border, accent, accent_foreground, danger,
 success, warning, info and transparent.
+
+## Theme coverage (0.4.0)
+
+Theme is an immutable application model, separate from the 72 controls. Native
+macOS/Windows and shadcn Zinc/Blue presets support light/dark modes, semantic color
+overrides, radii, fonts and shadows. Runtime switching preserves native editors;
+awaited theme snapshots verify Kit and Base values. Platform decorations and
+materials remain outside the binding. See [themes and previews](guide/themes.md).
 
 ## Remaining catalog work
 
@@ -103,7 +111,7 @@ These are real gaps, not aliases to generic containers:
 | `message_scroller` | Native anchoring/follow behavior, streaming updates and history loading |
 | `chart`, `plot` | Radar/Sankey, multiple series and lower-level plot composition |
 | Existing families | Group variants, custom item renderers, images, input groups, date ranges, rich formatting, controlled popup lifecycle and complete builder options |
-| `highlighter`, `history`, `theme` | Provider hooks, explicit undo/redo commands and runtime theme control; editing/history/theme already run natively |
+| `highlighter`, `history` | Provider hooks and explicit undo/redo commands; editing/history already run natively |
 
 Next acceptance gates should prove menu keyboard routing, virtualized data
 updates and typed form submission with real windows before adding docking and

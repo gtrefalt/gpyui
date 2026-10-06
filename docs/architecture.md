@@ -18,6 +18,17 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
+## Native themes in 0.4.0
+
+Python exposes immutable Theme descriptions with macOS, Windows/Fluent and shadcn
+Zinc/Blue light/dark presets, custom colors, radii, typography and shadows. Rust
+translates a validated description to Kit ThemeConfig and applies it through
+Theme::update, synchronizing legacy component colors, background and Base tokens.
+Queued runtime theme changes refresh rendering without remounting controls or
+setting text values. Theme snapshots expose applied native state independently
+of the requested Python description. See the [source-grounded plan](plans/native-themes.md)
+and [theme guide](guide/themes.md) for verified APIs and limits.
+
 ## Commands and menus in 0.3.0
 
 The implementation retains the pinned upstream baseline below. Before adding
@@ -265,7 +276,7 @@ by the original owned worker loop and cancellation lifecycle.
 Layout styles use pixel dimensions and Kit semantic theme colors. Layout styles
 are applied to the layout node itself, so gaps/alignment affect its children.
 Leaf styles wrap the actual Kit component. Explicit sizes do not shrink, while
-flexible panes can shrink within the window. The theme is chosen at startup.
+flexible panes can shrink within the window. Themes can be chosen at startup or switched on the callback loop.
 
 The [workspace](https://github.com/gtrefalt/gpyui/blob/main/examples/workspace.py) and [gallery](https://github.com/gtrefalt/gpyui/blob/main/examples/gallery.py)
 are public Python API examples, not Rust-specific demos. The workspace simplifies
@@ -274,7 +285,6 @@ form and a paper-order table. A seeded asyncio stream batches simulated quotes
 and trades every 650 ms; its callback is cancelled on native close. A native button invokes an async Python handler that appends
 an order, updates status and shows a Kit notification. It makes no network trades.
 
-Current limits: single window, initial theme only and
-basic builder options. Menus/commands, virtualized list delegates, typed forms,
+Current limits: single window and basic builder options. Virtualized list delegates, typed forms,
 docking, multiwindow and additional plot families remain explicit implementation
 work. Acceptance gates for these next steps are recorded in the coverage guide.

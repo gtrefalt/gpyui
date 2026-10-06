@@ -2,6 +2,7 @@ mod bridge;
 mod commands;
 mod kit;
 mod protocol;
+mod theme;
 mod view;
 
 use pyo3::prelude::*;
