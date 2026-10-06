@@ -1,6 +1,6 @@
 # Native themes
 
-Use macOS-inspired or Windows/Fluent-inspired styling on any supported desktop.
+Use GPUI Kit’s macOS Classic themes or Windows/Fluent-inspired styling on any supported desktop.
 Both have light and dark palettes. Shadcn-inspired Zinc and Blue presets provide
 neutral alternatives, and every preset accepts custom colors and typography.
 These theme real GPUI Kit controls; window decorations remain platform-owned.
@@ -25,37 +25,39 @@ appearance. Existing `theme="light"` and `theme="dark"` select Kit's default the
 | Preset | Look | Base text | Control / overlay radius |
 | --- | --- | ---: | ---: |
 | `default` | GPUI Kit's original light/dark palette | 16 px | 6 / 8 px |
-| `macos` | Compact controls, gray chrome, white fields, green switches | 13 px | 5 / 10 px |
+| `macos` | Kit’s exact macOS Classic Light / Dark configuration | 16 px | 6 / 8 px |
 | `windows` | Roomier Fluent controls, underlined fields, blue/cyan switches | 14 px | 4 / 8 px |
 | `shadcn-zinc` | Neutral Zinc surfaces and contrasting primary actions | 16 px | 6 / 8 px |
 | `shadcn-blue` | Zinc surfaces with a blue primary action | 16 px | 6 / 8 px |
 
-The refined platform treatments are included in 0.5.0.
-macOS buttons and single-line fields use 24 px frames; Windows uses 32 px.
-Windows checkboxes and switches are larger, its slider thumb uses the accent,
-and its editor focus is an accent underline. macOS fields use a soft focus halo,
-white slider thumbs and the system green toggle. The same retained Kit controls
-and native editing entities render both treatments. Other component families
-continue to use the preset's shared colors and radii; theme selection does not
-change application-owned layout spacing.
+The unreleased `macos` correction loads the unchanged
+[upstream macOS Classic file](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/themes/macos-classic.json)
+from the pinned Kit revision. It preserves all 36 color entries in each mode and
+passes its highlight section through Kit’s own schema. Kit defaults supply
+16 px system text, 6 / 8 px corners and normal component sizing; both Classic
+themes explicitly disable shadows. No extra compact frames, green switch override
+or SF font substitution is added. Custom color/font/radius overrides remain optional.
 
-Fonts prefer the matching installed family: the system font on macOS, SF Pro
-Text/Helvetica Neue/Inter for the macOS preset elsewhere, and Segoe UI Variable
-Text/Segoe UI for Windows. Installed open fonts and Kit's system default are
-fallbacks. Explicit `font_family` always wins. No proprietary fonts are bundled.
-The macOS and Windows presets are inspired styles, not AppKit/WinUI controls or
-pixel-identical operating-system replicas. Native title bars, system menus,
-vibrancy and Mica are not replaced by theme colors.
+This matches Kit’s themes and control styling. Window decorations and available
+fonts are still supplied by the operating system; application layout and explicit
+per-control styles still affect the final interface. Pinned Kit ignores some
+source highlight keys, including dotted editor entries and `comment.doc`; gpyui
+uses that same upstream parser behavior.
 
-### macOS-inspired
+The Windows treatment retains 14 px text, 32 px button/field frames, larger
+checkboxes/switches, accent slider thumbs and underlined editor focus. Fonts prefer
+installed Segoe UI families, then installed open fonts or Kit’s default. Windows
+and shadcn remain inspired styles. No proprietary fonts are bundled.
+
+### macOS Classic
 
 === "Light"
 
-    ![A native macOS-inspired light theme with editable profile and appearance settings](../screenshots/themes/macos-light.png)
+    ![GPUI Kit macOS Classic Light rendered by real native controls](../screenshots/themes/macos-light.png)
 
 === "Dark"
 
-    ![The same native controls using the macOS-inspired dark palette](../screenshots/themes/macos-dark.png)
+    ![GPUI Kit macOS Classic Dark rendered by real native controls](../screenshots/themes/macos-dark.png)
 
 ### Windows/Fluent-inspired
 
@@ -87,8 +89,8 @@ vibrancy and Mica are not replaced by theme colors.
 
 These are real Linux/X11 captures of the same Python example. The documentation
 site's appearance toggle changes the website; it does not change captured PNGs.
-The macOS/Windows previews focus the display-name editor to show the halo versus
-underline treatment; the Python tree and editing controls are the same.
+The macOS/Windows previews focus the display-name editor; the Python tree and
+editing controls are the same.
 
 ## Customize a preset
 
@@ -124,7 +126,7 @@ work in the intended appearance or define separate light/dark overrides.
 | `font_family` | Installed font family, or `None` for preset font selection / Kit fallback |
 | `mono_font_size` | Finite number 8–48 pixels; default 13 |
 | `mono_font_family` | Installed monospace family, or `None` for Kit's platform default/fallback |
-| `shadow` | Boolean; default `True` |
+| `shadow` | Boolean override, or `None` for preset default: Classic `False`, others `True` |
 
 Accepted color tokens:
 
@@ -139,9 +141,9 @@ Accepted color tokens:
   `slider` (filled track), `slider_thumb`.
 
 For example, `Theme("macos", colors={"switch_checked": "#248a3d"})` overrides
-its green toggle independently from blue primary actions. Windows toggles and
-slider thumbs follow an overridden primary unless explicitly customized; the
-macOS toggle remains green and its slider thumb remains white.
+its checked switch independently from primary actions. Windows toggles and
+slider thumbs follow an overridden primary unless explicitly customized. Classic
+uses Kit’s own component color fallbacks.
 
 When overriding `primary`, Kit derives hover, active, ring and caret colors unless
 you explicitly override those tokens; selection uses the new color at 20% opacity.
@@ -180,7 +182,10 @@ Use `app.call_soon()` for theme requests from external Python threads.
 updates and returns the applied native configuration: `name`, `mode`, radius/font
 settings, `shadow`, resolved `colors` (including control surface, switch and slider tokens),
 and the synchronized `base` background,
-primary and radius. It is a state barrier, not a GPU presentation barrier.
+primary and radius. `config` exposes the applied Kit ThemeConfig (Classic’s name
+is `macOS Classic Light` or `macOS Classic Dark`); `highlight` contains the applied
+Kit highlighter style, and `resolved_colors` contains its full legacy palette as
+RGBA hex values. It is a state barrier, not a GPU presentation barrier.
 
 ## Run the appearance example
 

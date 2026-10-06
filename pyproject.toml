@@ -25,7 +25,7 @@ python-packages = ["gpyui"]
 python-source = "src"
 
 [tool.uv]
-cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.rs" }, { file = "src/gpyui/**/*.py" }, { file = "src/gpyui/**/*.pyi" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }, { file = "rust-toolchain.toml" }]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.rs" }, { file = "src/themes/*.json" }, { file = "src/gpyui/**/*.py" }, { file = "src/gpyui/**/*.pyi" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }, { file = "rust-toolchain.toml" }]
 
 [build-system]
 requires = ["maturin==1.12.6"]

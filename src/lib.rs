@@ -5,6 +5,7 @@ mod kit;
 mod protocol;
 mod theme;
 mod view;
+mod windows;
 
 use pyo3::prelude::*;
 

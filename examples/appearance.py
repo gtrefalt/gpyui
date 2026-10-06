@@ -23,7 +23,7 @@ from gpyui import (
 )
 
 PRESETS = {
-    "macOS": "macos",
+    "macOS Classic": "macos",
     "Windows": "windows",
     "Shadcn Zinc": "shadcn-zinc",
     "Shadcn Blue": "shadcn-blue",

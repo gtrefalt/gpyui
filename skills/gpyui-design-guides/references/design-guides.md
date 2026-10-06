@@ -54,14 +54,16 @@ Default to light appearance. Use `Application(theme="light")` or
 Each preset supports `mode="dark"`. Change `app.theme` on the callback loop to
 switch appearance while retaining editors. Check the app in both intended
 appearances; the documentation site's toggle does not change native previews.
-OS-inspired themes style real Kit controls; platform-owned decorations remain.
-The 0.5.0 native treatments distinguish compact macOS controls and green
-toggles from roomier Windows 11 controls, larger checkboxes and underlined fields.
-Choose spacing to match that density rather than using large web-form gaps for
-small desktop controls. Default text is 13 px for macOS and 14 px for Windows.
-Do not fake title-bar traffic lights, vibrancy or Mica inside application content.
-Select matching installed fonts through the preset; explicit font overrides must
-exist on the target desktop.
+The unreleased `macos` correction uses the exact pinned Kit macOS Classic Light
+and Dark theme configs: 16 px system text, 6/8 px corners, no shadows and standard
+Kit control geometry. Do not add compact frames, green toggle substitutions or
+SF font overrides when the user asks for Kit’s Classic appearance. Windows keeps
+14 px text, larger checkboxes/switches and underlined editor focus. Choose spacing
+to match the controls. Native decorations, fonts and platform behavior still vary;
+do not fake traffic lights, vibrancy or Mica inside application content.
+For utility windows use `Application(..., resizable=False)`; choose useful
+`min_width`/`min_height` for resizable layouts. Read the runtime reference before
+using initial position/state or live window actions.
 
 Use a consistent pixel scale, for example 8 for related controls, 12–16 between
 fields and 24 around a main form. Adjust based on density and window size. Apply

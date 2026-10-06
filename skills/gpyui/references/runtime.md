@@ -53,9 +53,9 @@ if __name__ == "__main__":
     app.run()
 ```
 
-`Application(*controls, title="gpyui", width=480, height=300, theme="light",
-on_start=None, on_error=None)` accepts unparented roots. Size must be finite
-and at least 240 × 160 pixels. Theme accepts `light`/`dark`, a preset name, or a
+`Application(*controls, ...)` accepts unparented roots. Default width/height are
+480 × 300. Size must be finite and meet `min_width`/`min_height` (240 × 160 by
+default); see window options below for smaller utility windows. Theme accepts `light`/`dark`, a preset name, or a
 Theme object; light is the default. Assign `app.theme` from running callbacks to
 switch without reconstructing controls. See [native themes](themes.md).
 
@@ -90,3 +90,39 @@ promise that unbounded updates will be accepted.
 
 Full reference: [application](https://gtrefalt.github.io/gpyui/reference/application/)
 and [release support](https://gtrefalt.github.io/gpyui/releases/).
+
+## Window options (unreleased)
+
+```python
+from gpyui import Application, Column, Label, TextInput, Theme
+
+app = Application(title="Utility", width=520, height=320, resizable=False, theme=Theme("macos"))
+with app, Column().style(gap=12):
+    Label("Display name")
+    TextInput("Sam Taylor")
+app.run()
+```
+
+Creation options: `resizable=True`, `minimizable=True`, `movable=True`,
+`min_width=240`, `min_height=160`, `position=None` (centered or `(x, y)`),
+`window_state="normal"` (`normal`, `maximized`, `fullscreen`). Minimums require
+finite pixels of at least 1; requested sizes must meet them. These options are read-only.
+`resizable=False` fixes windowed content size but permits `app.resize(width, height)`.
+A fixed window cannot start or toggle maximized. A native size guard restores
+external Linux resizes; a compositor can show an intermediate size. Fullscreen
+is exempt. Native movement/minimize restrictions are not enforced by pinned Linux
+decorations. Wayland owns placement; do not promise exact screen position there.
+
+Assign `app.title` or call `resize()` before startup or on the callback loop.
+`activate()`, `minimize()`, `toggle_maximized()` and `toggle_fullscreen()` require
+a running app and enqueue desktop requests. They flush pending controls and retain
+native editor identity, caret and undo. Queue failures leave requested title/size
+unchanged. Use `app.call_soon` from other threads. `app.width`/`height` are read-only
+requested dimensions, not observations of user resizing.
+
+`await app.window_snapshot()` reads native title, logical content width/height,
+screen x/y, configured capability flags/minimums and current maximized/fullscreen.
+It fences queued commands, not compositor changes or GPU presentation. One window
+remains the limit. Custom title bars, always-on-top, maximum size and live creation
+flag changes are not exposed. Full guide:
+[window controls](https://gtrefalt.github.io/gpyui/guide/windows/).

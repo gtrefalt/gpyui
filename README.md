@@ -40,7 +40,8 @@ documentation for the animated walkthrough.
 - **Forms and validation:** Kit Form/Field labels, help and inline errors,
   sync/async Python validators and shared submission with retry. Failed validation
   preserves native text, caret, selection and undo.
-- **Native themes:** macOS, Windows/Fluent and shadcn-inspired light/dark presets,
+- **Native themes:** macOS Classic (unreleased correction), Windows/Fluent and shadcn
+  light/dark presets,
   custom palettes and live switching that preserves editor state.
 - **Images (unreleased):** native files, URLs and encoded bytes, GIF/WebP animation,
   fit modes, loading/error callbacks and retry. See the
@@ -97,17 +98,23 @@ button runs your Python callback and updates the label. Explore
 
 ## Documentation and examples
 
+For a fixed-size window, use `Application(width=520, height=320, resizable=False)`.
+The unreleased window API also adds minimum dimensions, initial position/state,
+live `app.title` and `app.resize(...)`, plus minimize, focus and fullscreen actions.
+See [native window controls](https://gtrefalt.github.io/gpyui/guide/windows/) for
+platform behavior and examples.
+
 Choose a native preset with `Application(theme=Theme("macos"))` or
 `Theme("windows", mode="dark")`. Customize colors, corner radii and typography;
-switch a running app by assigning `app.theme`. macOS uses compact controls, soft
-gray surfaces and green switches; Windows uses roomier Fluent controls, larger
+switch a running app by assigning `app.theme`. The unreleased macOS correction
+uses Kit’s exact Classic Light/Dark configuration; Windows uses Fluent controls, larger
 checkboxes and underlined text fields. These style real Kit controls, with
 platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
 and the [appearance example](https://github.com/gtrefalt/gpyui/blob/main/examples/appearance.py).
 
-| macOS-inspired | Windows 11-inspired |
+| GPUI Kit macOS Classic Light | Windows 11-inspired |
 | --- | --- |
-| ![Compact macOS-style native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/macos-light.png) | ![Roomier Windows-style native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/windows-light.png) |
+| ![GPUI Kit macOS Classic Light native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/macos-light.png) | ![Roomier Windows-style native controls](https://raw.githubusercontent.com/gtrefalt/gpyui/main/docs/screenshots/themes/windows-light.png) |
 
 
 The [documentation](https://gtrefalt.github.io/gpyui/) includes a visual catalog
