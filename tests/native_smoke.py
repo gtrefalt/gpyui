@@ -33,6 +33,17 @@ observed = {}
 
 async def started():
     await asyncio.sleep(0.3)  # Allow the native window to present its first frames.
+    window = await app.window_snapshot()
+    assert window["title"] == "gpyui installed wheel smoke test" and window["resizable"] is True
+    app.title = "gpyui native window smoke"
+    app.resize(app.width + 16, app.height + 16)
+    for _ in range(50):
+        window = await app.window_snapshot()
+        if (window["width"], window["height"]) == (app.width, app.height):
+            break
+        await asyncio.sleep(0.02)
+    assert window["title"] == app.title
+    assert (window["width"], window["height"]) == (app.width, app.height)
     initial = await app.snapshot()
     assert initial[label.id]["text"] == "Starting"
     with app.batch():
@@ -206,13 +217,14 @@ async def started():
         for mode in ("light", "dark"):
             app.theme = Theme(preset, mode=mode)
             applied = await app.theme_snapshot()
-            assert applied["name"] == preset and applied["mode"] == mode
+            expected_name = f"macOS Classic {mode.title()}" if preset == "macos" else preset
+            assert applied["name"] == expected_name and applied["mode"] == mode
             assert applied["colors"]["button_primary"] == applied["colors"]["primary"]
             assert applied["base"]["primary"] == applied["colors"]["primary"]
             assert applied["base"]["radius"] == applied["radius"]
             if preset == "macos":
-                assert applied["colors"]["switch_checked"] != applied["colors"]["primary"]
-                assert applied["colors"]["slider_thumb"] == "#FFFFFF"
+                assert applied["shadow"] is False
+                assert applied["font_size"] == 16 and applied["radius"] == 6
             elif preset == "windows":
                 assert applied["colors"]["switch_checked"] == applied["colors"]["primary"]
                 assert applied["colors"]["slider_thumb"] == applied["colors"]["primary"]

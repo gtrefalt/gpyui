@@ -49,47 +49,9 @@ PRESETS = ("default", "macos", "windows", "shadcn-zinc", "shadcn-blue")
 
 def _palette(preset: str, mode: str) -> dict[str, str]:
     dark = mode == "dark"
-    if preset == "default":
+    if preset in ("default", "macos"):
         return {}
-    if preset == "macos":
-        colors = (
-            [
-                "#1c1c1e",
-                "#f5f5f7",
-                "#0a84ff",
-                "#001d3b",
-                "#409cff",
-                "#178aff",
-                "#3a3a3c",
-                "#2c2c2e",
-                "#a1a1a6",
-                "#48484a",
-                "#183859",
-                "#ff6961",
-                "#6cdd85",
-                "#ffd60a",
-                "#64d2ff",
-            ]
-            if dark
-            else [
-                "#ececec",
-                "#1d1d1f",
-                "#006fdb",
-                "#ffffff",
-                "#006be0",
-                "#005ec4",
-                "#e8e8ed",
-                "#ededf0",
-                "#636366",
-                "#c7c7cc",
-                "#e4efff",
-                "#d70015",
-                "#248a3d",
-                "#8a5700",
-                "#0069d9",
-            ]
-        )
-    elif preset == "windows":
+    if preset == "windows":
         colors = (
             [
                 "#202020",
@@ -204,21 +166,7 @@ def _palette(preset: str, mode: str) -> dict[str, str]:
         popover=palette["background"],
         sidebar=palette["muted"],
     )
-    if preset == "macos":
-        palette.update(
-            control_background="#343434" if dark else "#ffffff",
-            popover="#2c2c2e" if dark else "#ffffff",
-            sidebar="#252527" if dark else "#e3e3e5",
-            switch="#626264" if dark else "#b8b8bb",
-            switch_thumb="#ffffff",
-            switch_checked="#30d158" if dark else "#34c759",
-            slider=palette["primary"],
-            slider_thumb="#ffffff",
-            button="#454547" if dark else "#ffffff",
-            button_hover="#525254" if dark else "#f5f5f5",
-            button_active="#38383a" if dark else "#e4e4e4",
-        )
-    elif preset == "windows":
+    if preset == "windows":
         palette.update(
             control_background="#292929" if dark else "#ffffff",
             popover="#2c2c2c" if dark else "#ffffff",
@@ -249,7 +197,7 @@ class Theme:
     font_family: str | None = None
     mono_font_size: float = 13
     mono_font_family: str | None = None
-    shadow: bool = True
+    shadow: bool | None = None
 
     def __post_init__(self) -> None:
         if self.preset not in PRESETS:
@@ -281,8 +229,8 @@ class Theme:
             value = getattr(self, key)
             if value is not None and (not isinstance(value, str) or not value.strip() or len(value) > 256):
                 raise ValueError(f"{key} requires a nonempty installed font family of at most 256 characters")
-        if type(self.shadow) is not bool:
-            raise TypeError("shadow requires bool")
+        if self.shadow is not None and type(self.shadow) is not bool:
+            raise TypeError("shadow requires bool or None")
         object.__setattr__(self, "colors", MappingProxyType(overrides))
 
     def customize(self, **overrides: Any) -> Theme:
@@ -312,19 +260,15 @@ class Theme:
             "name": self.preset,
             "mode": self.mode,
             "colors": palette,
-            "radius": self.radius
-            if self.radius is not None
-            else (4 if self.preset == "windows" else 5 if self.preset == "macos" else 6),
-            "radius_lg": self.radius_lg
-            if self.radius_lg is not None
-            else (10 if self.preset == "macos" else 8),
+            "radius": self.radius if self.radius is not None else (4 if self.preset == "windows" else 6),
+            "radius_lg": self.radius_lg if self.radius_lg is not None else 8,
             "font_size": self.font_size
             if self.font_size is not None
-            else (13 if self.preset == "macos" else 14 if self.preset == "windows" else 16),
+            else (14 if self.preset == "windows" else 16),
             "font_family": self.font_family,
             "mono_font_size": self.mono_font_size,
             "mono_font_family": self.mono_font_family,
-            "shadow": self.shadow,
+            "shadow": self.shadow if self.shadow is not None else self.preset != "macos",
         }
 
 

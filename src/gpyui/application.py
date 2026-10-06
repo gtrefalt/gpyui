@@ -4,16 +4,17 @@ import asyncio
 import inspect
 import itertools
 import json
-import math
 import threading
 from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
+from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, cast
 
 from .commands import Command, DropdownMenu, Menu, menu_commands, menu_specs, validate_items
 from .controls import Column, Control, Event, Handler, _containers
 from .themes import Theme, _resolve_theme
 from .tree import walk
+from .windows import _WindowOptions
 
 if TYPE_CHECKING:
     from .controls import TextInput
@@ -38,6 +39,13 @@ class Application:
         title: str = "gpyui",
         width: float = 480,
         height: float = 300,
+        resizable: bool = True,
+        minimizable: bool = True,
+        movable: bool = True,
+        min_width: float = 240,
+        min_height: float = 160,
+        position: tuple[float, float] | None = None,
+        window_state: str = "normal",
         theme: str | Theme = "light",
         commands: Iterable[Command] = (),
         menus: Iterable[Menu] = (),
@@ -48,9 +56,11 @@ class Application:
             raise TypeError("title requires str")
         self._theme = _resolve_theme(theme)
         self._theme_dirty = False
-        if not math.isfinite(width) or not math.isfinite(height) or width < 240 or height < 160:
-            raise ValueError("window size must be finite and at least 240 x 160")
-        self.title, self.width, self.height = title, width, height
+        self._window_options = _WindowOptions(
+            resizable, minimizable, movable, min_width, min_height, position, window_state
+        )
+        self._window_options.validate_size(width, height)
+        self._title, self._width, self._height = title, width, height
         self._children: list[Control] = []
         self._controls: dict[int, Control] = {}
         self._phase = "new"
@@ -68,12 +78,108 @@ class Application:
         self._on_error = on_error
         self._tasks: set[asyncio.Task[None]] = set()
         self._snapshots: dict[int, asyncio.Future[dict[int, dict[str, Any]]]] = {}
+        self._window_snapshots: dict[int, asyncio.Future[dict[str, Any]]] = {}
         self._theme_snapshots: dict[int, asyncio.Future[dict[str, Any]]] = {}
         self._tokens = itertools.count(1)
         self._errors: list[Exception] = []
         self.add_command(*commands)
         self.menus = menus
         self.add(*controls)
+
+    @property
+    def title(self) -> str:
+        """Requested native window title. Assign on the callback loop at runtime."""
+        return self._title
+
+    @title.setter
+    def title(self, value: str) -> None:
+        if not isinstance(value, str):
+            raise TypeError("title requires str")
+        if self._phase != "new":
+            self._window_command("title", value)
+        self._title = value
+
+    @property
+    def width(self) -> float:
+        """Last requested width; use window_snapshot() for the current native size."""
+        return self._width
+
+    @property
+    def height(self) -> float:
+        return self._height
+
+    @property
+    def resizable(self) -> bool:
+        return self._window_options.resizable
+
+    @property
+    def minimizable(self) -> bool:
+        return self._window_options.minimizable
+
+    @property
+    def movable(self) -> bool:
+        return self._window_options.movable
+
+    @property
+    def min_width(self) -> float:
+        return self._window_options.min_width
+
+    @property
+    def min_height(self) -> float:
+        return self._window_options.min_height
+
+    @property
+    def position(self) -> tuple[float, float] | None:
+        return self._window_options.position
+
+    @property
+    def window_state(self) -> str:
+        """Creation state; read actual fullscreen/maximized flags with window_snapshot()."""
+        return self._window_options.state
+
+    def _window_command(self, action: str, value: Any = None) -> None:
+        self._check_mutation()
+        self.update()
+        self._bridge.window_command(action, json.dumps(value))
+
+    def resize(self, width: float, height: float) -> None:
+        """Request a content size, including for a window that users cannot resize."""
+        self._window_options.validate_size(width, height)
+        if self._phase != "new":
+            self._window_command("resize", [width, height])
+        self._width, self._height = width, height
+
+    def activate(self) -> None:
+        """Ask the desktop to focus and raise the window."""
+        self._window_command("activate")
+
+    def minimize(self) -> None:
+        self._check_mutation()
+        if not self.minimizable:
+            raise ValueError("window is not minimizable")
+        self._window_command("minimize")
+
+    def toggle_maximized(self) -> None:
+        self._check_mutation()
+        if not self.resizable:
+            raise ValueError("a fixed-size window cannot be maximized")
+        self._window_command("toggle_maximized")
+
+    def toggle_fullscreen(self) -> None:
+        self._window_command("toggle_fullscreen")
+
+    async def window_snapshot(self) -> dict[str, Any]:
+        """Read native content bounds and flags; desktop changes may arrive later."""
+        self._check_mutation()
+        self.update()
+        token = next(self._tokens)
+        future = asyncio.get_running_loop().create_future()
+        self._window_snapshots[token] = future
+        try:
+            self._bridge.window_snapshot(token)
+            return await future
+        finally:
+            self._window_snapshots.pop(token, None)
 
     @property
     def theme(self) -> Theme:
@@ -419,6 +525,10 @@ class Application:
                         theme_future = self._theme_snapshots.get(event["token"])
                         if theme_future is not None and not theme_future.done():
                             theme_future.set_result(event["theme"])
+                    elif name == "window_snapshot":
+                        window_future = self._window_snapshots.get(event["token"])
+                        if window_future is not None and not window_future.done():
+                            window_future.set_result(event["window"])
                     elif name == "command":
                         command = self._commands.get(event["id"])
                         if command is None or not command.enabled:
@@ -459,7 +569,9 @@ class Application:
                             await asyncio.sleep(0)
         finally:
             self._phase = "closed"
-            for future in itertools.chain(self._snapshots.values(), self._theme_snapshots.values()):
+            for future in itertools.chain(
+                self._snapshots.values(), self._theme_snapshots.values(), self._window_snapshots.values()
+            ):
                 if not future.done():
                     future.set_exception(ApplicationClosedError("native window closed"))
             tasks = tuple(self._tasks)
@@ -516,7 +628,12 @@ class Application:
             if not started.wait(5):
                 raise RuntimeError("Python callback loop failed to start")
             self._bridge.run(
-                self.title, self.width, self.height, self._theme.mode, json.dumps(self._theme._spec())
+                self.title,
+                self.width,
+                self.height,
+                self._theme.mode,
+                json.dumps(self._theme._spec()),
+                json.dumps(asdict(self._window_options)),
             )
         finally:
             self._bridge.finish()

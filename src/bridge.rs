@@ -57,6 +57,7 @@ pub(crate) struct Bridge {
     schema: Mutex<HashMap<u64, ControlType>>,
     retired: Mutex<HashSet<u64>>,
     config: Mutex<UiConfig>,
+    window_config: Mutex<crate::windows::WindowConfig>,
 }
 
 #[pymethods]
@@ -92,6 +93,7 @@ impl Bridge {
             schema: Mutex::new(schema),
             retired: Mutex::new(HashSet::new()),
             config: Mutex::new(config),
+            window_config: Mutex::new(Default::default()),
         })
     }
     /// Validate the entire batch before enqueueing any update.
@@ -173,6 +175,35 @@ impl Bridge {
     fn theme_snapshot(&self, token: u64) -> PyResult<()> {
         self.send(Command::ThemeSnapshot(token))
     }
+    fn window_command(&self, action: &str, value: &str) -> PyResult<()> {
+        use crate::windows::WindowCommand as W;
+        let command = match action {
+            "title" => W::Title(
+                serde_json::from_str(value).map_err(|e| PyValueError::new_err(e.to_string()))?,
+            ),
+            "resize" => {
+                let (width, height): (f32, f32) = serde_json::from_str(value)
+                    .map_err(|e| PyValueError::new_err(e.to_string()))?;
+                self.window_config
+                    .lock()
+                    .expect("window config lock poisoned")
+                    .validate_size(width, height)
+                    .map_err(PyValueError::new_err)?;
+                W::Resize(width, height)
+            }
+            "activate" => W::Activate,
+            "minimize" => W::Minimize,
+            "toggle_maximized" => W::ToggleMaximized,
+            "toggle_fullscreen" => W::ToggleFullscreen,
+            _ => return Err(PyValueError::new_err("unknown window command")),
+        };
+        self.send(Command::Window(command))
+    }
+    fn window_snapshot(&self, token: u64) -> PyResult<()> {
+        self.send(Command::Window(crate::windows::WindowCommand::Snapshot(
+            token,
+        )))
+    }
     #[pyo3(signature = (message, title="", variant="info"))]
     fn notify(&self, message: &str, title: &str, variant: &str) -> PyResult<()> {
         if !matches!(variant, "info" | "success" | "warning" | "danger") {
@@ -208,7 +239,8 @@ impl Bridge {
             serde_json::to_string(&events).map_err(|e| PyRuntimeError::new_err(e.to_string()))
         })
     }
-    #[pyo3(signature = (title, width, height, theme="light", theme_json=None))]
+    #[pyo3(signature = (title, width, height, theme="light", theme_json=None, window_json=None))]
+    #[allow(clippy::too_many_arguments)] // Keep the existing Python bridge signature compatible.
     fn run(
         &self,
         py: Python<'_>,
@@ -217,6 +249,7 @@ impl Bridge {
         height: f32,
         theme: &str,
         theme_json: Option<&str>,
+        window_json: Option<&str>,
     ) -> PyResult<()> {
         let theme_config = theme_json
             .map(crate::theme::parse)
@@ -236,17 +269,18 @@ impl Bridge {
                 "GPUI must run on Python's main thread",
             ));
         }
-        if !width.is_finite() || !height.is_finite() || width < 240. || height < 160. {
-            return Err(PyValueError::new_err(
-                "window size must be finite and at least 240 x 160",
-            ));
-        }
+        let window_config = crate::windows::WindowConfig::parse(window_json, width, height)
+            .map_err(PyValueError::new_err)?;
         #[cfg(target_os = "linux")]
         if std::env::var_os("DISPLAY").is_none() && std::env::var_os("WAYLAND_DISPLAY").is_none() {
             return Err(PyRuntimeError::new_err(
                 "GPUI requires an X11 or Wayland display",
             ));
         }
+        *self
+            .window_config
+            .lock()
+            .expect("window config lock poisoned") = window_config.clone();
         if RUN_STARTED.swap(true, Ordering::AcqRel) {
             return Err(PyRuntimeError::new_err(
                 "only one native Application.run() is supported per process",
@@ -283,14 +317,13 @@ impl Bridge {
                         if let Some(config) = theme_config {
                             crate::theme::apply(config, cx);
                         }
-                        let options = WindowOptions {
-                            window_bounds: Some(WindowBounds::centered(
-                                size(px(width), px(height)),
-                                cx,
-                            )),
-                            window_min_size: Some(size(px(240.), px(160.))),
-                            ..Default::default()
-                        };
+                        let options = window_config.options(width, height, cx);
+                        let window_state = crate::windows::WindowState::new(
+                            window_config,
+                            title.clone(),
+                            width,
+                            height,
+                        );
                         let view_transport = transport.clone();
                         match gpui_kit::open_window(options, cx, move |window, cx| {
                             window.set_window_title(&title);
@@ -300,6 +333,7 @@ impl Bridge {
                                     config,
                                     commands,
                                     view_transport,
+                                    window_state,
                                     window,
                                     cx,
                                 )

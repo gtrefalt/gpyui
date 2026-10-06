@@ -46,6 +46,23 @@ never replaces editor text, caret, selection or undo history. See
 [implementation evidence and acceptance](plans/forms-validation.md) and the
 [forms guide](guide/forms.md).
 
+## Window controls and exact macOS Classic (unreleased)
+
+Application now exposes native creation flags, minimum content dimensions,
+position and initial state. Queued title/size/focus/minimize/maximize/fullscreen
+requests stay on Rust’s UI thread. A separate native WindowState and bounds
+observer enforce fixed windowed dimensions while preserving all retained controls
+and editing state. Snapshots distinguish requested dimensions from actual native
+bounds. Platform limitations come from the pinned GPUI backends.
+
+The `macos` preset now loads Kit’s unchanged Classic Light/Dark JSON, including
+all source colors and Kit-parsed highlights. Kit default geometry/system typography
+and upstream shadow=False replace the earlier approximation. Windows renderer
+hints remain; Classic adds no presentation wrappers. Scalar defaults reset on
+switching, and default highlighting resets when leaving a highlighted config.
+See [source evidence and acceptance](plans/window-options.md),
+[window controls](guide/windows.md) and [themes](guide/themes.md).
+
 ## Native themes in 0.4.0 and refinements in 0.5.0
 
 Python exposes immutable Theme descriptions with macOS, Windows/Fluent and shadcn

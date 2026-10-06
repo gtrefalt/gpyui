@@ -29,7 +29,6 @@ struct ThemeSpec {
 enum PlatformStyle {
     #[default]
     Kit,
-    Mac,
     Windows,
 }
 
@@ -111,14 +110,41 @@ pub(crate) fn parse(value: &str) -> Result<NativeTheme, String> {
     }
     let mut appearance = Appearance {
         platform: match spec.name.as_str() {
-            "macos" => PlatformStyle::Mac,
             "windows" => PlatformStyle::Windows,
             _ => PlatformStyle::Kit,
         },
         ..Default::default()
     };
     let automatic_font = spec.font_family.is_none();
-    let mut colors = serde_json::Map::new();
+    // Exact Kit source, pinned at 3a142844d3661159964dce9e5512ca9a40286160.
+    // Keep every upstream token and syntax highlight; do not approximate a palette.
+    let mut config_value = if spec.name == "macos" {
+        let source: Value = serde_json::from_str(include_str!("themes/macos-classic.json"))
+            .map_err(|e| e.to_string())?;
+        source["themes"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|theme| theme["mode"] == json!(spec.mode))
+            .unwrap()
+            .clone()
+    } else {
+        json!({"name":spec.name, "mode":spec.mode, "colors":{}})
+    };
+    let mut colors = config_value["colors"].as_object().unwrap().clone();
+    if spec.colors.contains_key("primary") {
+        for key in [
+            "primary.hover.background",
+            "primary.active.background",
+            "ring",
+            "caret",
+        ] {
+            colors.remove(key);
+        }
+    }
+    if spec.colors.contains_key("border") {
+        colors.remove("input.border");
+    }
     for (key, value) in spec.colors {
         if !(value.len() == 7 || value.len() == 9)
             || !value.starts_with('#')
@@ -144,14 +170,19 @@ pub(crate) fn parse(value: &str) -> Result<NativeTheme, String> {
     // Specify every scalar, including default font families, so switching away
     // from a custom theme cannot retain that theme's typography/radius/shadows.
     let defaults = Theme::default();
-    let config = serde_json::from_value(json!({
-        "name":spec.name, "mode":spec.mode, "colors":colors,
+    let scalars = json!({
+        "colors":colors,
         "radius":spec.radius, "radius.lg":spec.radius_lg, "shadow":spec.shadow,
         "font.size":spec.font_size,
         "font.family":spec.font_family.unwrap_or_else(|| defaults.font_family.to_string()),
         "mono_font.size":spec.mono_font_size,
         "mono_font.family":spec.mono_font_family.unwrap_or_else(|| defaults.mono_font_family.to_string()),
-    })).map_err(|e| e.to_string())?;
+    });
+    config_value
+        .as_object_mut()
+        .unwrap()
+        .extend(scalars.as_object().unwrap().clone());
+    let config = serde_json::from_value(config_value).map_err(|e| e.to_string())?;
     Ok(NativeTheme {
         config,
         appearance,
@@ -162,14 +193,6 @@ pub(crate) fn parse(value: &str) -> Result<NativeTheme, String> {
 pub(crate) fn apply(mut native: NativeTheme, cx: &mut App) {
     if native.automatic_font {
         let candidates: &[&str] = match native.appearance.platform {
-            PlatformStyle::Mac if cfg!(target_os = "macos") => &[".SystemUIFont"],
-            PlatformStyle::Mac => &[
-                "SF Pro Text",
-                "Helvetica Neue",
-                "Inter",
-                "Liberation Sans",
-                "DejaVu Sans",
-            ],
             PlatformStyle::Windows => &[
                 "Segoe UI Variable Text",
                 "Segoe UI",
@@ -193,7 +216,16 @@ pub(crate) fn apply(mut native: NativeTheme, cx: &mut App) {
     let config = native.config;
     // update synchronizes legacy colors, component background tokens, semantic
     // tokens and the Base theme used by scrollbars, popovers and input helpers.
-    Theme::update(cx, |theme| theme.apply_config(&Rc::new(config)));
+    Theme::update(cx, |theme| {
+        if config.highlight.is_none() {
+            theme.highlight_theme = if config.mode.is_dark() {
+                gpui_kit::component::highlighter::HighlightTheme::default_dark()
+            } else {
+                gpui_kit::component::highlighter::HighlightTheme::default_light()
+            };
+        }
+        theme.apply_config(&Rc::new(config));
+    });
 }
 
 pub(crate) fn snapshot(cx: &App) -> Value {
@@ -228,6 +260,13 @@ pub(crate) fn snapshot(cx: &App) -> Value {
         "base": {"background":base.tokens.colors.background.to_hex(),
                  "primary":base.tokens.colors.primary.to_hex(), "radius":f32::from(base.tokens.radius.md)},
     });
+    snapshot["highlight"] = json!(theme.highlight_theme.style);
+    snapshot["config"] = json!(if theme.mode.is_dark() {
+        &theme.dark_theme
+    } else {
+        &theme.light_theme
+    });
+    snapshot["resolved_colors"] = json!(theme.colors);
     for (key, color) in [
         (
             "control_background",
@@ -252,7 +291,6 @@ pub(crate) fn snapshot(cx: &App) -> Value {
 // Kit's sizing hooks act on the real control, unlike a styled outer Python host.
 pub(crate) fn size(cx: &App) -> Size {
     match appearance(cx).platform {
-        PlatformStyle::Mac => Size::Small,
         PlatformStyle::Windows => Size::Medium,
         PlatformStyle::Kit => Size::Medium,
     }
@@ -273,24 +311,8 @@ pub(crate) fn button(button: Button, style: &Map<String, Value>, cx: &App) -> Bu
     }
     button
         .with_size(size(cx))
-        .h(px(number(
-            style,
-            "height",
-            if platform == PlatformStyle::Mac {
-                24.
-            } else {
-                32.
-            },
-        )))
-        .px(px(number(
-            style,
-            "padding",
-            if platform == PlatformStyle::Mac {
-                10.
-            } else {
-                12.
-            },
-        )))
+        .h(px(number(style, "height", 32.)))
+        .px(px(number(style, "padding", 12.)))
         .rounded(px(number(style, "radius", cx.theme().radius.into())))
         .text_size(px(number(style, "font_size", cx.theme().font_size.into())))
         .when(platform == PlatformStyle::Windows, |el| {
@@ -316,7 +338,6 @@ pub(crate) fn platform_controls(cx: &App) -> bool {
 
 pub(crate) fn checkbox_size(cx: &App) -> Size {
     match appearance(cx).platform {
-        PlatformStyle::Mac => Size::Medium,
         PlatformStyle::Windows => Size::Large,
         PlatformStyle::Kit => Size::Medium,
     }
@@ -413,15 +434,7 @@ pub(crate) fn field<T: IntoElement + Styled + Sizable>(
         .get("height")
         .and_then(Value::as_f64)
         .map(|v| px(v as f32))
-        .or_else(|| {
-            (!multiline).then(|| {
-                px(if appearance(cx).platform == PlatformStyle::Mac {
-                    24.
-                } else {
-                    32.
-                })
-            })
-        });
+        .or_else(|| (!multiline).then(|| px(32.)));
     let element = element.with_size(size(cx)).h_full().text_size(px(number(
         style,
         "font_size",
@@ -452,15 +465,7 @@ pub(crate) fn select<T: IntoElement>(
         focus,
         disabled,
         style: style.clone(),
-        height: Some(px(number(
-            style,
-            "height",
-            if appearance(cx).platform == PlatformStyle::Mac {
-                24.
-            } else {
-                32.
-            },
-        ))),
+        height: Some(px(number(style, "height", 32.))),
     }
     .into_any_element()
 }

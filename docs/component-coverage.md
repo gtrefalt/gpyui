@@ -132,3 +132,12 @@ bundled assets, with native GIF/WebP animation, fit modes, sizing, grayscale,
 loading/error text, queued callbacks and retry. Results are scoped to the current
 source and released on replacement/disposal. Image avatars, custom placeholders,
 shared caches and video streaming remain future work. See the [Images guide](guide/images.md).
+
+## Window controls (unreleased)
+
+Window creation now exposes fixed-size policy, configurable minimum content
+size, position/state and movement/minimize flags. Running apps can update title,
+request size/focus/minimize/maximize/fullscreen and read actual native bounds.
+These use GPUI WindowOptions through Kit’s window helper, not extra components.
+One window remains the limit. See [window controls](guide/windows.md) for the
+Linux fixed-size guard, desktop-dependent behavior and remaining window gaps.

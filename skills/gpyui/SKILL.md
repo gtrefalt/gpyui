@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe the repository API: **gpyui 0.5.0 plus the unreleased Image binding**. Read the installed version's API when
+These references describe the repository API: **gpyui 0.5.0 plus unreleased Image/window bindings and Kit Classic themes**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -31,7 +31,7 @@ it in the library before depending on it in application code.
    shortcuts, context menus or an application menu bar.
    Read [native themes](references/themes.md) for macOS/Windows/shadcn presets,
    custom colors and runtime switching without replacing editors. The theme
-   reference records the platform control refinements included in 0.5.0.
+   reference records the exact Kit Classic correction and Windows treatment.
    Read [forms and validation](references/forms.md) for Field labels/help/errors,
    Python validators, conditional editors and shared async submission/retry.
    Read [images](references/images.md) for files, URLs, encoded bytes, retry,

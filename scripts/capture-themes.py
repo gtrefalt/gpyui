@@ -50,7 +50,8 @@ def capture(preset, mode):
                     raise RuntimeError((directory / "native.log").read_text())
                 time.sleep(0.03)
             theme = json.loads((directory / "ready.json").read_text())
-            assert theme["name"] == preset and theme["mode"] == mode
+            expected_name = f"macOS Classic {mode.title()}" if preset == "macos" else preset
+            assert theme["name"] == expected_name and theme["mode"] == mode
             window = subprocess.check_output(
                 [
                     "xdotool",
@@ -65,7 +66,17 @@ def capture(preset, mode):
             if preset in ("macos", "windows"):
                 # Show the preset's real editor focus treatment on the common profile.
                 subprocess.run(
-                    ["xdotool", "mousemove", "--window", window, "340", "200", "click", "1"], check=True
+                    [
+                        "xdotool",
+                        "mousemove",
+                        "--window",
+                        window,
+                        "340",
+                        "230" if preset == "macos" else "200",
+                        "click",
+                        "1",
+                    ],
+                    check=True,
                 )
             subprocess.run(["xdotool", "mousemove", "0", "0"], check=True)
             time.sleep(0.2)

@@ -17,8 +17,13 @@ app.run()
 | --- | --- | --- |
 | `*controls` | None | Unparented root controls |
 | `title` | `"gpyui"` | Window title string |
-| `width` | `480` | Finite width, at least 240 pixels |
-| `height` | `300` | Finite height, at least 160 pixels |
+| `width` | `480` | Finite width, at least `min_width` pixels |
+| `height` | `300` | Finite height, at least `min_height` pixels |
+| `resizable` | `True` | False fixes windowed content dimensions |
+| `min_width`, `min_height` | `240`, `160` | Finite minimum dimensions, at least 1 pixel |
+| `minimizable`, `movable` | `True` | Native capability flags; platform support varies |
+| `position` | `None` | Centered or `(x, y)` screen coordinates |
+| `window_state` | `"normal"` | Initial normal, maximized or fullscreen state |
 | `theme` | `"light"` | Theme object, preset name, or `light`/`dark` |
 | `commands` | `()` | Explicit Command registration, including shortcut-only actions |
 | `menus` | `()` | Menu roots; macOS system bar or Kit in-window bar |
@@ -56,6 +61,19 @@ never replayed from a tree description.
 The native snapshot barrier does not wait for GPU presentation. While the app
 runs, mutate controls/State on the callback loop. External worker threads can
 use `app.call_soon(lambda: setattr(label, "text", result))`.
+
+## Window
+
+The unreleased window additions expose GPUI's real window options. Assign
+`app.title` or call `app.resize(width, height)` before startup or from the running
+callback loop. `width` and `height` report the last requested size; other creation
+options are read-only. Native operations `activate()`, `minimize()`,
+`toggle_maximized()` and `toggle_fullscreen()` require the running callback loop.
+They flush pending controls before enqueue. These operations retain all controls
+and editing state. `await window_snapshot()` reads actual native content size,
+position, configured capability flags/minimums and fullscreen/maximized flags.
+Desktop transitions may complete after the snapshot command. See
+[native window controls](../guide/windows.md) for complete platform contracts.
 
 ## Theme
 

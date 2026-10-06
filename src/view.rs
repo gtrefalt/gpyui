@@ -61,6 +61,8 @@ pub(crate) struct NativeView {
     popups: Popups,
     context_menus: HashMap<u64, ContextMenuSpec>,
     focus: FocusHandle,
+    window_state: crate::windows::WindowState,
+    _window_bounds: Subscription,
     _commands: Task<()>,
 }
 
@@ -70,6 +72,7 @@ impl NativeView {
         config: UiConfig,
         commands: Receiver<Command>,
         transport: Arc<Transport>,
+        window_state: crate::windows::WindowState,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Self {
@@ -82,6 +85,9 @@ impl NativeView {
                     break;
                 }
             }
+        });
+        let bounds_subscription = cx.observe_window_bounds(window, |view, window, _| {
+            view.window_state.enforce_size(window);
         });
         let mut view = Self {
             roots: nodes.iter().map(|n| n.id).collect(),
@@ -103,6 +109,8 @@ impl NativeView {
             popups: Rc::new(RefCell::new(HashMap::new())),
             context_menus: HashMap::new(),
             focus: cx.focus_handle(),
+            window_state,
+            _window_bounds: bounds_subscription,
             _commands: task,
         };
         window.focus(&view.focus, cx);
@@ -581,6 +589,24 @@ impl NativeView {
             Command::ThemeSnapshot(token) => {
                 if !self.transport.emit(json!({"event":"theme_snapshot", "token":token, "theme":crate::theme::snapshot(cx)})) {
                     cx.quit();
+                }
+            }
+            Command::Window(command) => {
+                use crate::windows::WindowCommand as W;
+                match command {
+                    W::Title(title) => { window.set_window_title(&title); self.window_state.title = title; },
+                    W::Resize(width, height) => {
+                        if self.window_state.config.validate_size(width, height).is_ok() {
+                            self.window_state.resize(width, height, window);
+                        }
+                    },
+                    W::Activate => window.activate_window(),
+                    W::Minimize if self.window_state.config.minimizable => window.minimize_window(),
+                    W::ToggleMaximized if self.window_state.config.resizable => window.zoom_window(),
+                    W::ToggleFullscreen => window.toggle_fullscreen(),
+                    W::Snapshot(token) if !self.transport.emit(json!({"event":"window_snapshot", "token":token,
+                        "window":self.window_state.snapshot(window)})) => { cx.quit(); },
+                    _ => {},
                 }
             }
             Command::Execute(id) => self.invoke(id, None, cx),

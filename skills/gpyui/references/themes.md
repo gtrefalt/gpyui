@@ -23,14 +23,16 @@ app.run()
 Presets: `default`, `macos`, `windows`, `shadcn-zinc`, `shadcn-blue`. Every preset
 accepts `mode="light" | "dark"`; default light. `Application(theme="macos")` selects
 the light preset; `theme="light" | "dark"` selects the Kit default.
-macOS and Windows styles are inspired, cross-platform Kit themes, not AppKit or
-WinUI controls. Native title bars/system menus remain platform-owned. The presets
-prefer matching installed SF/Segoe families, with installed-font/Kit fallbacks.
-No proprietary fonts are bundled and Mica is not exposed. In 0.5.0,
-macOS uses 13 px text, 24 px button/field frames, green switches
-and soft editor focus halos; Windows uses 14 px text, 32 px frames, larger
-checkboxes/switches and an accent editor underline. Other components inherit
-shared theme colors/radii. App spacing remains Python-owned.
+The unreleased `macos` preset uses Kit’s exact macOS Classic Light/Dark file
+at [the pinned revision](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/themes/macos-classic.json), including
+36 color entries per mode and the highlight section through Kit’s unchanged schema.
+It uses Kit’s default 16 px system font, 6/8 px radius and normal control sizing;
+shadows are False. No compact frames, green switch override or SF font substitution
+is added. Window decorations remain platform-owned. Pinned Kit ignores dotted
+editor highlight keys and `comment.doc`; gpyui matches that parser behavior.
+Windows keeps 14 px text, 32 px frames, larger checkbox/switch sizing, accent thumbs
+and underlined focus, with installed Segoe/Open-font/Kit fallbacks. No proprietary
+fonts are bundled. Windows and shadcn are inspired styles. App spacing is Python-owned.
 
 ```python
 from gpyui import Application, Button, Column, Label, Theme
@@ -54,7 +56,7 @@ Options: `colors` is a copied token-to-hex mapping (`#RRGGBB` or `#RRGGBBAA`);
 `radius`/`radius_lg` are integers 0–64 pixels; `font_size`/`mono_font_size` are
 finite numbers 8–48. Omitted radius/font size uses preset defaults; monospace
 size defaults to 13. `font_family`/`mono_font_family` use installed families,
-or `None` for preset family selection and Kit fallbacks. `shadow` is Boolean, default True.
+or `None` for preset family selection and Kit fallbacks. `shadow` is a Boolean override or None for preset defaults: Classic False, others True.
 
 Accepted theme color tokens:
 
@@ -67,9 +69,8 @@ Accepted theme color tokens:
 - `control_background` (TextInput/TextArea/Select), `switch` (off), `switch_thumb`,
   `switch_checked` (on), `slider` (fill), `slider_thumb`.
 
-Override `switch_checked` independently when changing macOS's green toggle.
-Windows on-track and slider thumb follow primary overrides; macOS keeps green
-and white respectively unless those tokens are explicitly overridden. Fields
+Override `switch_checked` independently from primary actions. Windows on-track
+and slider thumb follow primary overrides; Classic uses Kit color fallbacks. Fields
 retain the original Kit input state and focus handle across theme changes.
 
 Overriding primary derives hover/active/ring/caret unless explicitly overridden,
@@ -82,7 +83,8 @@ Runtime assignments must happen on the callback loop (or through `app.call_soon`
 from another thread). `app.batch()` coalesces assignments; it is not rollback.
 `app.theme` represents the requested theme. `await app.theme_snapshot()` flushes
 and reads applied native name/mode, radius, typography, shadow and colors, plus
-the Base projection. Like `snapshot()`, it does not wait for GPU presentation.
+the Base projection. It also includes Kit’s `config`, applied `highlight` and full
+`resolved_colors` (RGBA hex). Classic uses its upstream name in snapshots. Like `snapshot()`, it does not wait for GPU presentation.
 Closing the window fails pending snapshots and cancels tracked callbacks.
 
 Per-control `.style()` remains the limited semantic-token/pixel vocabulary in

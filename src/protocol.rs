@@ -95,6 +95,7 @@ pub(crate) enum Command {
     Snapshot(u64),
     Theme(Box<crate::theme::NativeTheme>),
     ThemeSnapshot(u64),
+    Window(crate::windows::WindowCommand),
     Close,
     Notify {
         message: String,

@@ -20,6 +20,7 @@ nav = [
     { "Images" = "guide/images.md" },
     { "Style and theme" = "guide/styling.md" },
     { "Native theme presets" = "guide/themes.md" },
+    { "Native window controls" = "guide/windows.md" },
     { "Agent skills" = "agent-skills.md" },
   ] },
 # BEGIN COMPONENT NAV

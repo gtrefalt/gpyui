@@ -27,12 +27,93 @@ def assert_color(actual, expected):
     assert all(abs(a - b) <= 1 for a, b in zip(rgb(actual), rgb(expected), strict=True)), (actual, expected)
 
 
+# ThemeConfigColors → ThemeColor field names in pinned Kit.
+CLASSIC_COLOR_FIELDS = {
+    "accent.background": "accent",
+    "accent.foreground": "accent_foreground",
+    "background": "background",
+    "border": "border",
+    "danger.background": "danger",
+    "danger.foreground": "danger_foreground",
+    "foreground": "foreground",
+    "link": "link",
+    "list.active.background": "list_active",
+    "list.active.border": "list_active_border",
+    "list.even.background": "list_even",
+    "list.hover.background": "list_hover",
+    "muted.background": "muted",
+    "muted.foreground": "muted_foreground",
+    "popover.background": "popover",
+    "popover.foreground": "popover_foreground",
+    "primary.background": "primary",
+    "primary.foreground": "primary_foreground",
+    "ring": "ring",
+    "scrollbar.background": "scrollbar",
+    "scrollbar.thumb.background": "scrollbar_thumb",
+    "secondary.background": "secondary",
+    "secondary.active.background": "secondary_active",
+    "secondary.foreground": "secondary_foreground",
+    "secondary.hover.background": "secondary_hover",
+    "selection.background": "selection",
+    "switch.background": "switch",
+    "switch.thumb.background": "switch_thumb",
+    "tab.background": "tab",
+    "tab.active.background": "tab_active",
+    "tab.active.foreground": "tab_active_foreground",
+    "tab_bar.background": "tab_bar",
+    "tab.foreground": "tab_foreground",
+    "title_bar.background": "title_bar",
+    "title_bar.border": "title_bar_border",
+    "status_bar.background": "status_bar",
+    "base.blue": "blue",
+    "base.cyan": "cyan",
+    "base.green": "green",
+    "base.magenta": "magenta",
+    "base.red": "red",
+    "base.yellow": "yellow",
+}
+
+
 def assert_theme(actual, theme):
     spec = theme._spec()
     for key in ("name", "mode", "radius", "radius_lg", "font_size", "mono_font_size", "shadow"):
-        assert actual[key] == spec[key], key
+        expected = (
+            f"macOS Classic {theme.mode.title()}" if key == "name" and theme.preset == "macos" else spec[key]
+        )
+        assert actual[key] == expected, key
     for key, color in spec["colors"].items():
         assert_color(actual["colors"][key], color)
+    if theme.preset == "macos" and not theme.colors:
+        source = json.loads(
+            (Path(__file__).resolve().parents[1] / "src/themes/macos-classic.json").read_text()
+        )
+        upstream = next(config for config in source["themes"] if config["mode"] == theme.mode)
+        # Native ThemeConfig contains every source color and highlight entry.
+        for key, value in upstream["colors"].items():
+            assert actual["config"]["colors"][key] == value
+            resolved = actual["resolved_colors"][CLASSIC_COLOR_FIELDS[key]]
+            assert_color(resolved, value)
+            expected_alpha = value[7:].lower() if len(value) == 9 else "ff"
+            # Kit caps selection opacity at 30% dark / 40% light.
+            if key == "selection.background":
+                maximum = 0x4D if theme.mode == "dark" else 0x66
+                expected_alpha = f"{min(int(expected_alpha, 16), maximum):02x}"
+            assert resolved[7:].lower() == expected_alpha
+        # Use the pinned Kit schema unchanged. It consumes recognized syntax
+        # entries but ignores dotted editor keys and comment.doc in its source.
+        for key, style in upstream["highlight"]["syntax"].items():
+            if key == "comment.doc":
+                assert actual["config"]["highlight"]["syntax"]["comment_doc"] is None
+                continue
+            applied = actual["highlight"]["syntax"][key]
+            assert_color(applied["color"], style["color"])
+            assert applied["font_style"] == style.get("font_style")
+            assert actual["config"]["highlight"]["syntax"][key] == applied
+        assert actual["config"]["highlight"]["editor_background"] is None
+        assert actual["shadow"] is False and actual["config"]["font.family"] == ".SystemUIFont"
+        assert actual["font_family"]  # Kit resolves its system font to an installed platform family.
+        assert_color(actual["colors"]["background"], upstream["colors"]["background"])
+        assert_color(actual["colors"]["primary"], upstream["colors"]["primary.background"])
     assert_color(actual["colors"]["button_primary"], actual["colors"]["primary"])
     assert_color(actual["colors"]["button_primary_hover"], actual["colors"]["primary_hover"])
     assert_color(actual["colors"]["button_primary_active"], actual["colors"]["primary_active"])

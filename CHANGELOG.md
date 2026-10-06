@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Expose fixed-size windows, configurable minimum dimensions, initial position/state,
+  movement/minimize flags, live title/size updates, native window actions and snapshots.
+  Keep editor identity/caret/undo intact and restore externally resized fixed Linux windows.
+- Replace the approximate macOS preset with Kit’s unchanged macOS Classic Light/Dark
+  configurations from the pinned revision; retain all source colors and Kit-parsed highlights,
+  use default Kit geometry/system typography and disable shadows as upstream specifies.
+- Refresh Classic native previews and add window examples, docs, source evidence and skills.
+
 - Add native Image with file/HTTP(S)/encoded-byte/bundled-asset sources, fit modes,
   aspect ratio, rounded corners, grayscale and loading/error placeholders.
 - Add queued sync/async load/error callbacks, retry, stale-result guards and
