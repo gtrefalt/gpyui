@@ -25,7 +25,12 @@ accepts `mode="light" | "dark"`; default light. `Application(theme="macos")` sel
 the light preset; `theme="light" | "dark"` selects the Kit default.
 macOS and Windows styles are inspired, cross-platform Kit themes, not AppKit or
 WinUI controls. Native title bars/system menus remain platform-owned. The presets
-use installed platform fonts; they do not bundle SF Pro/Segoe UI or expose Mica.
+prefer matching installed SF/Segoe families, with installed-font/Kit fallbacks.
+No proprietary fonts are bundled and Mica is not exposed. In the repository
+following 0.4.0, macOS uses 13 px text, 24 px button/field frames, green switches
+and soft editor focus halos; Windows uses 14 px text, 32 px frames, larger
+checkboxes/switches and an accent editor underline. Other components inherit
+shared theme colors/radii. App spacing remains Python-owned.
 
 ```python
 from gpyui import Application, Button, Column, Label, Theme
@@ -49,7 +54,7 @@ Options: `colors` is a copied token-to-hex mapping (`#RRGGBB` or `#RRGGBBAA`);
 `radius`/`radius_lg` are integers 0–64 pixels; `font_size`/`mono_font_size` are
 finite numbers 8–48. Omitted radius/font size uses preset defaults; monospace
 size defaults to 13. `font_family`/`mono_font_family` use installed families,
-or `None` for Kit platform defaults/fallbacks. `shadow` is Boolean, default True.
+or `None` for preset family selection and Kit fallbacks. `shadow` is Boolean, default True.
 
 Accepted theme color tokens:
 
@@ -59,6 +64,13 @@ Accepted theme color tokens:
 - `danger`, `danger_foreground`, `success`, `warning`, `info`.
 - `border`, `input` (input border), `ring`, `selection`, `caret`.
 - `button`, `button_hover`, `button_active`, `popover`, `sidebar`.
+- `control_background` (TextInput/TextArea/Select), `switch` (off), `switch_thumb`,
+  `switch_checked` (on), `slider` (fill), `slider_thumb`.
+
+Override `switch_checked` independently when changing macOS's green toggle.
+Windows on-track and slider thumb follow primary overrides; macOS keeps green
+and white respectively unless those tokens are explicitly overridden. Fields
+retain the original Kit input state and focus handle across theme changes.
 
 Overriding primary derives hover/active/ring/caret unless explicitly overridden,
 and selection uses its color at 20% opacity. Override readable foreground/surface

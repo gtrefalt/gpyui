@@ -1104,10 +1104,17 @@ impl NativeView {
                 .id(("label", id))
                 .child(Label::new(text.clone()))
                 .into_any_element(),
-            NativeControl::Input(input) => Input::new(input)
-                .id(("input", id))
-                .w_full()
-                .into_any_element(),
+            NativeControl::Input(input) => crate::theme::field(
+                Input::new(input)
+                    .id(("input", id))
+                    .w_full()
+                    .appearance(!crate::theme::field_frame(cx)),
+                input.focus_handle(cx),
+                false,
+                false,
+                &self.styles[&id],
+                cx,
+            ),
             NativeControl::DropdownMenu {
                 text,
                 items,
@@ -1118,7 +1125,7 @@ impl NativeView {
                 let actions = self.actions.clone();
                 let view = cx.weak_entity();
                 let popups = self.popups.clone();
-                Button::new(("dropdown-menu", id))
+                crate::theme::button(Button::new(("dropdown-menu", id)), &self.styles[&id], cx)
                     .label(text.clone())
                     .disabled(*disabled)
                     .dropdown_menu(move |popup, window, cx| {
@@ -1136,7 +1143,7 @@ impl NativeView {
             } => {
                 use gpui_kit::component::Disableable;
                 use gpui_kit::{component::button::ButtonVariants, prelude::FluentBuilder};
-                Button::new(("button", id))
+                crate::theme::button(Button::new(("button", id)), &self.styles[&id], cx)
                     .label(text.clone())
                     .disabled(
                         *disabled || command.is_some_and(|id| !self.actions.borrow()[&id].enabled),

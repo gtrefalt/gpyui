@@ -6,7 +6,7 @@ import sys
 import threading
 from pathlib import Path
 
-from gpyui import Application, Button, Column, Label, TextArea, TextInput, Theme
+from gpyui import Application, Button, Checkbox, Column, Label, Select, Switch, TextArea, TextInput, Theme
 
 directory = Path(sys.argv[1])
 preset, mode = sys.argv[2:4]
@@ -19,7 +19,18 @@ def write(name, value):
 
 
 async def start():
-    write("ready", {"field": field.id, "area": area.id, "theme": await app.theme_snapshot()})
+    write(
+        "ready",
+        {
+            "field": field.id,
+            "area": area.id,
+            "checkbox": checkbox.id,
+            "switch": toggle.id,
+            "select": select.id,
+            "clicks": clicks.id,
+            "theme": await app.theme_snapshot(),
+        },
+    )
     while True:
         path = directory / "command.json"
         if path.exists():
@@ -34,14 +45,22 @@ async def start():
 
 
 app = Application(
-    title="gpyui theme regression", width=600, height=420, theme=Theme(preset, mode=mode), on_start=start
+    title="gpyui theme regression", width=600, height=560, theme=Theme(preset, mode=mode), on_start=start
 )
 with app, Column().style(gap=12):
-    Label("Name")
-    field = TextInput("123").style(width=320)
-    Label("Notes")
+    Label("Name").style(height=20)
+    field = TextInput("123").style(width=320, height=32)
+
+    def clicked():
+        clicks.text = "Clicked from Python"
+
+    Button("Native primary", variant="primary", on_click=clicked).style(height=32)
+    checkbox = Checkbox("Checkbox").style(height=32)
+    toggle = Switch("Switch").style(height=32)
+    select = Select(items=["One", "Two"], value="One").style(width=160, height=32)
+    Label("Notes").style(height=20)
     area = TextArea("123").style(width=320, height=100)
-    Button("Native primary", variant="primary")
+    clicks = Label("Waiting")
 app.run()
 write(
     "closed",

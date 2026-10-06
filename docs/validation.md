@@ -3,6 +3,23 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
 
+## Platform appearance refinement (unreleased)
+
+The repository passes 222 Python/bridge tests, Ruff, ty, Rust formatting/strict
+Clippy and strict docs/skill validation. The 20-case native Linux/X11 suite
+includes macOS/Windows light/dark editing regression cases. The extended theme
+fixture also verifies Tab traversal and keyboard activation of the real Kit
+Button, Checkbox, Switch and Select after live switching; geometry overrides,
+control surface/switch/slider tokens and reset to default are checked.
+The all-preset native smoke script passes locally. Final native captures show
+13/14 px typography, 24/32 px button/field frames, green/blue switches, larger
+Windows indicators, accent/white slider thumbs and the differing editor focus
+treatments. Eight PNGs and both skills are refreshed.
+
+These changes are source-tested on Linux/X11, not yet a new PyPI release or a
+visual certification against AppKit/WinUI on those operating systems. Release
+wheel builds still run only for new version tags.
+
 ## Native themes (0.4.0)
 
 Local checks pass 217 Python/bridge tests, Ruff, ty, Rust formatting and strict

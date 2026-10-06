@@ -102,6 +102,8 @@ _TOKENS = (
     "warning",
     "info",
     "transparent",
+    "popover",
+    "sidebar",
 )
 
 

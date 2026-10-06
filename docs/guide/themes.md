@@ -25,12 +25,24 @@ appearance. Existing `theme="light"` and `theme="dark"` select Kit's default the
 | Preset | Look | Base text | Control / overlay radius |
 | --- | --- | ---: | ---: |
 | `default` | GPUI Kit's original light/dark palette | 16 px | 6 / 8 px |
-| `macos` | Soft gray surfaces, blue accent, rounded controls | 14 px | 6 / 10 px |
-| `windows` | Fluent-inspired neutrals, blue/cyan accent, compact corners | 14 px | 4 / 8 px |
+| `macos` | Compact controls, gray chrome, white fields, green switches | 13 px | 5 / 10 px |
+| `windows` | Roomier Fluent controls, underlined fields, blue/cyan switches | 14 px | 4 / 8 px |
 | `shadcn-zinc` | Neutral Zinc surfaces and contrasting primary actions | 16 px | 6 / 8 px |
 | `shadcn-blue` | Zinc surfaces with a blue primary action | 16 px | 6 / 8 px |
 
-Presets use Kit's platform font defaults. They do not bundle SF Pro or Segoe UI.
+The refined platform treatments are available in the repository after 0.4.0.
+macOS buttons and single-line fields use 24 px frames; Windows uses 32 px.
+Windows checkboxes and switches are larger, its slider thumb uses the accent,
+and its editor focus is an accent underline. macOS fields use a soft focus halo,
+white slider thumbs and the system green toggle. The same retained Kit controls
+and native editing entities render both treatments. Other component families
+continue to use the preset's shared colors and radii; theme selection does not
+change application-owned layout spacing.
+
+Fonts prefer the matching installed family: the system font on macOS, SF Pro
+Text/Helvetica Neue/Inter for the macOS preset elsewhere, and Segoe UI Variable
+Text/Segoe UI for Windows. Installed open fonts and Kit's system default are
+fallbacks. Explicit `font_family` always wins. No proprietary fonts are bundled.
 The macOS and Windows presets are inspired styles, not AppKit/WinUI controls or
 pixel-identical operating-system replicas. Native title bars, system menus,
 vibrancy and Mica are not replaced by theme colors.
@@ -75,6 +87,8 @@ vibrancy and Mica are not replaced by theme colors.
 
 These are real Linux/X11 captures of the same Python example. The documentation
 site's appearance toggle changes the website; it does not change captured PNGs.
+The macOS/Windows previews focus the display-name editor to show the halo versus
+underline treatment; the Python tree and editing controls are the same.
 
 ## Customize a preset
 
@@ -107,7 +121,7 @@ work in the intended appearance or define separate light/dark overrides.
 | `colors` | Mapping of accepted tokens to `#RRGGBB` or `#RRGGBBAA` |
 | `radius`, `radius_lg` | Integer 0–64 pixels; omitted values use preset defaults |
 | `font_size` | Finite number 8–48 pixels; omitted value uses preset default |
-| `font_family` | Installed font family, or `None` for Kit's system default |
+| `font_family` | Installed font family, or `None` for preset font selection / Kit fallback |
 | `mono_font_size` | Finite number 8–48 pixels; default 13 |
 | `mono_font_family` | Installed monospace family, or `None` for Kit's platform default/fallback |
 | `shadow` | Boolean; default `True` |
@@ -120,13 +134,22 @@ Accepted color tokens:
 - Status: `danger`, `danger_foreground`, `success`, `warning`, `info`.
 - Editing: `border`, `input` (input border), `ring`, `selection`, `caret`.
 - Components: `button`, `button_hover`, `button_active`, `popover`, `sidebar`.
+- Control treatment: `control_background` (TextInput, TextArea and Select surface),
+  `switch` (off track), `switch_thumb`, `switch_checked` (on track),
+  `slider` (filled track), `slider_thumb`.
+
+For example, `Theme("macos", colors={"switch_checked": "#248a3d"})` overrides
+its green toggle independently from blue primary actions. Windows toggles and
+slider thumbs follow an overridden primary unless explicitly customized; the
+macOS toggle remains green and its slider thumb remains white.
 
 When overriding `primary`, Kit derives hover, active, ring and caret colors unless
 you explicitly override those tokens; selection uses the new color at 20% opacity.
 An overridden border also becomes the default input border. Colors omitted by the
 preset fall back through Kit's native component theme configuration.
 Use `.style(color="primary", background="muted")` on controls as before;
-raw hex colors belong in `Theme`, not `.style(...)`.
+raw hex colors belong in `Theme`, not `.style(...)`. Use `background="popover"`
+for a raised content surface and `background="sidebar"` for a navigation pane.
 
 ## Switch a running window
 
@@ -155,7 +178,8 @@ Use `app.call_soon()` for theme requests from external Python threads.
 
 `app.theme` is the requested theme. `await app.theme_snapshot()` flushes pending
 updates and returns the applied native configuration: `name`, `mode`, radius/font
-settings, `shadow`, resolved `colors`, and the synchronized `base` background,
+settings, `shadow`, resolved `colors` (including control surface, switch and slider tokens),
+and the synchronized `base` background,
 primary and radius. It is a state barrier, not a GPU presentation barrier.
 
 ## Run the appearance example

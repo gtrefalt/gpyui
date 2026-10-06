@@ -155,7 +155,7 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L414) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L416) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Clipboard
 
@@ -192,7 +192,7 @@ The native copy affordance owns clipboard behavior.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L555) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L557) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Icon
 
@@ -229,7 +229,7 @@ Use lowercase kebab-case Lucide names. Names must refer to bundled assets.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L399) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L401) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Kbd
 
@@ -266,7 +266,7 @@ This displays a shortcut; it does not register a Python command handler.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L462) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L464) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Separator
 
@@ -300,4 +300,4 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L409) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L411) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)

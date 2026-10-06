@@ -140,6 +140,12 @@ async def started():
             assert applied["colors"]["button_primary"] == applied["colors"]["primary"]
             assert applied["base"]["primary"] == applied["colors"]["primary"]
             assert applied["base"]["radius"] == applied["radius"]
+            if preset == "macos":
+                assert applied["colors"]["switch_checked"] != applied["colors"]["primary"]
+                assert applied["colors"]["slider_thumb"] == "#FFFFFF"
+            elif preset == "windows":
+                assert applied["colors"]["switch_checked"] == applied["colors"]["primary"]
+                assert applied["colors"]["slider_thumb"] == applied["colors"]["primary"]
             assert (await app.snapshot())[field.id]["value"] == "Wheel test"
             await asyncio.sleep(0.04)  # Present themed components on each target.
     app.theme = Theme(

@@ -46,4 +46,4 @@ minimum < maximum, step > 0, and value must remain in range. Range and step are 
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L341) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L343) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

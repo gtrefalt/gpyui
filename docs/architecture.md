@@ -29,6 +29,15 @@ setting text values. Theme snapshots expose applied native state independently
 of the requested Python description. See the [source-grounded plan](plans/native-themes.md)
 and [theme guide](guide/themes.md) for verified APIs and limits.
 
+Platform refinements after 0.4.0 add Rust-owned appearance hints alongside Kit's
+ThemeConfig: editor surface and checked-switch color. The original Kit Input,
+Textarea and Select entities render inside presentation-only frames, using their
+original focus handles. Kit sizing/style hooks give macOS and Windows distinct
+control geometry. Colors supported by Kit flow through ThemeConfig as before;
+renderer-specific colors are validated before enqueue and installed before Kit
+refreshes windows. Switching away resets every hint. Native snapshots report the
+applied surface/switch/slider colors. Layout composition stays Python-owned.
+
 ## Commands and menus in 0.3.0
 
 The implementation retains the pinned upstream baseline below. Before adding
@@ -100,7 +109,7 @@ Open overlays read current children from the retained view, and carousel bounds
 follow visible children. Property-only updates retain the existing compact
 batch path. Structural commands serialize the retained forest; large-tree update
 performance and a smaller structural diff protocol remain future measurement
-work. There is still one window and a startup-only theme.
+work. There is still one window; themes can change at runtime.
 
 The comparison and first-milestone plan below record the original investigation;
 this section describes the current runtime contract.

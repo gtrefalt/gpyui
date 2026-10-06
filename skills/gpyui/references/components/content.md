@@ -34,7 +34,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L384) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L386) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Badge
 
@@ -68,7 +68,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L389) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L391) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Avatar
 
@@ -105,7 +105,7 @@ Initials are exposed in this wrapper; image avatars remain future work.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L394) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L396) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Markdown
 
@@ -144,7 +144,7 @@ Text rendering and selection stay native.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L677) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L679) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Html
 
@@ -181,7 +181,7 @@ This is Kit's native TextView HTML support, not an embedded browser or arbitrary
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L682) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L684) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Bubble
 
@@ -216,7 +216,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L535) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L537) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Message
 
@@ -250,7 +250,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L540) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L542) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Marker
 
@@ -284,7 +284,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L545) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L547) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Attachment
 
@@ -322,4 +322,4 @@ Presentation is exposed; file download/open behavior is an application concern.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L550) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L552) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)

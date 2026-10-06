@@ -38,7 +38,7 @@ value is a percentage from 0 through 100. loading enables indeterminate feedback
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L371) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L373) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## ProgressCircle
 
@@ -72,7 +72,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L376) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L378) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Spinner
 
@@ -107,7 +107,7 @@ The preview captures one frame of a native animation.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L380) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L382) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Skeleton
 
@@ -142,7 +142,7 @@ The preview captures one frame of a native animation.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L453) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L455) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Shimmer
 
@@ -179,7 +179,7 @@ The preview captures one frame of a native animation.
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L457) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L459) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Alert
 
@@ -214,7 +214,7 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L444) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L446) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
 
 ## Empty
 
@@ -248,4 +248,4 @@ This wrapper exposes no Python activation/change handler. Update its mutable pro
 
 All controls accept [pixel layout and semantic theme styling](../styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L439) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L441) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](https://gtrefalt.github.io/gpyui/component-coverage/)

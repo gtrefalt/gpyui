@@ -98,7 +98,14 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
                     radius=9,
                     font_size=16,
                     shadow=False,
-                    colors={"primary": "#7c3aed", "primary_foreground": "#ffffff"},
+                    colors={
+                        "primary": "#7c3aed",
+                        "primary_foreground": "#ffffff",
+                        "control_background": "#21152e",
+                        "switch_checked": "#b94bee",
+                        "switch_thumb": "#f4f4f5",
+                        "slider_thumb": "#e4e4e7",
+                    },
                 )
             )
             xdo("type", "--clearmodifiers", "5")
@@ -106,7 +113,7 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
             xdo("key", "ctrl+z")
             assert command()["nodes"][str(ready["field"])]["value"] == "123"
             # The multiline editor also retains native selection and undo.
-            xdo("mousemove", "--window", window, 90, 165, "click", 1)
+            xdo("mousemove", "--window", window, 90, 340, "click", 1)
             xdo("key", "ctrl+End", "Left", "shift+Left")
             switch(Theme("shadcn-zinc"))
             xdo("type", "--clearmodifiers", "6")
@@ -117,6 +124,21 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
             assert default["theme"]["radius"] == 6 and default["theme"]["shadow"] is True
             assert default["theme"]["font_size"] == 16  # No leaked custom scalars.
             assert default["theme"]["colors"]["primary"] != "#7C3AED"
+            assert_color(
+                default["theme"]["colors"]["control_background"], default["theme"]["colors"]["background"]
+            )
+            assert_color(default["theme"]["colors"]["switch_checked"], default["theme"]["colors"]["primary"])
+            # The presentation frame must keep Kit's keyboard traversal/activation.
+            switch(Theme(preset, mode=mode))
+            xdo("mousemove", "--window", window, 90, 68, "click", 1)
+            xdo("key", "Tab", "space")  # single-line editor -> primary button
+            assert command()["nodes"][str(ready["clicks"])]["text"] == "Clicked from Python"
+            xdo("key", "Tab", "space")
+            assert command()["nodes"][str(ready["checkbox"])]["value"] is True
+            xdo("key", "Tab", "space")
+            assert command()["nodes"][str(ready["switch"])]["value"] is True
+            xdo("key", "Tab", "Return", "Down", "Return")
+            assert command()["nodes"][str(ready["select"])]["value"] == "Two"
             subprocess.run(
                 ["import", "-window", window, str(ARTIFACTS / f"themes-{preset}-{mode}.png")], check=True
             )

@@ -56,6 +56,29 @@ def test_preset_text_contrast_in_primary_states_and_muted_surfaces(preset, mode)
         assert (high + 0.05) / (low + 0.05) >= 4.5, (preset, mode, background, foreground)
 
 
+@pytest.mark.parametrize("mode", ("light", "dark"))
+def test_platform_presets_have_distinct_surfaces_density_and_toggle_colors(mode):
+    mac = Theme("macos", mode=mode)._spec()
+    windows = Theme("windows", mode=mode)._spec()
+    assert mac["font_size"] == 13 and windows["font_size"] == 14
+    assert mac["radius"] == 5 and windows["radius"] == 4
+    for spec in (mac, windows):
+        assert spec["colors"]["control_background"] != spec["colors"]["background"]
+        assert spec["colors"]["switch_thumb"] == "#ffffff"
+    assert mac["colors"]["switch_checked"] != mac["colors"]["primary"]
+    assert windows["colors"]["switch_checked"] == windows["colors"]["primary"]
+    assert mac["colors"]["slider_thumb"] != windows["colors"]["slider_thumb"]
+
+
+def test_custom_brand_keeps_macos_green_toggle_and_white_thumb():
+    mac = Theme("macos", colors={"primary": "#7c3aed"})._spec()["colors"]
+    windows = Theme("windows", colors={"primary": "#7c3aed"})._spec()["colors"]
+    assert mac["switch_checked"] == "#34c759" and mac["slider_thumb"] == "#ffffff"
+    assert "switch_checked" not in windows and "slider_thumb" not in windows
+    explicit = Theme("windows", colors={"primary": "#7c3aed", "switch_checked": "#248a3d"})
+    assert explicit._spec()["colors"]["switch_checked"] == "#248a3d"
+
+
 def test_theme_owns_an_immutable_copy_and_customization_keeps_original():
     colors = {"primary": "#7c3aed", "primary_foreground": "#ffffff"}
     theme = Theme("windows", colors=colors)

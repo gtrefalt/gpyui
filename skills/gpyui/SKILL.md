@@ -30,7 +30,8 @@ it in the library before depending on it in application code.
 5. Read [commands and menus](references/commands-and-menus.md) for reusable actions,
    shortcuts, context menus or an application menu bar.
    Read [native themes](references/themes.md) for macOS/Windows/shadcn presets,
-   custom colors and runtime switching without replacing editors.
+   custom colors and runtime switching without replacing editors. The theme
+   reference also records repository refinements after the published 0.4.0.
 6. Start from the [application recipes](references/recipes.md) rather than
    assembling unfamiliar API calls. Adapt them to the user's task.
 7. Validate the tree and business logic without a native window, then run the

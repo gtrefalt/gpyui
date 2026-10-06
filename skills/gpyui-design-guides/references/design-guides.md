@@ -53,6 +53,13 @@ Each preset supports `mode="dark"`. Change `app.theme` on the callback loop to
 switch appearance while retaining editors. Check the app in both intended
 appearances; the documentation site's toggle does not change native previews.
 OS-inspired themes style real Kit controls; platform-owned decorations remain.
+The post-0.4.0 repository treatments distinguish compact macOS controls and green
+toggles from roomier Windows 11 controls, larger checkboxes and underlined fields.
+Choose spacing to match that density rather than using large web-form gaps for
+small desktop controls. Default text is 13 px for macOS and 14 px for Windows.
+Do not fake title-bar traffic lights, vibrancy or Mica inside application content.
+Select matching installed fonts through the preset; explicit font overrides must
+exist on the target desktop.
 
 Use a consistent pixel scale, for example 8 for related controls, 12–16 between
 fields and 24 around a main form. Adjust based on density and window size. Apply
@@ -71,7 +78,7 @@ The exact styling surface is:
 - Semantic token strings for `background` and `color`: `background`,
   `foreground`, `muted`, `muted_foreground`, `primary`, `primary_foreground`,
   `secondary`, `secondary_foreground`, `border`, `accent`, `accent_foreground`,
-  `danger`, `success`, `warning`, `info`, `transparent`.
+  `danger`, `success`, `warning`, `info`, `transparent`, `popover`, `sidebar`.
 
 Do not import CSS or Rust styling assumptions. There are no bound per-edge
 padding, margin, raw hex per-control colors, animation or positioning APIs.
