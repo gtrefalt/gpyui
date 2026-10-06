@@ -52,8 +52,10 @@ supported, but automatic validation/submission belongs to its Form.
 `validators=[...]` accepts sync or async callables taking one value. Validators
 run sequentially in field order on the application's Python asyncio loop. Return
 `None` or `""` for success, or a nonempty string to show an inline error. A
-`ValueError` becomes its message. Other exceptions and invalid return types are
-programming errors handled through the normal application error path.
+`ValueError` becomes its message. `OSError` and `ValidationError` use the expected
+operation-failure handling described below, whether raised during validation or
+saving. Other exceptions and invalid return types are programming errors handled
+through the normal application error path.
 
 Required validation runs first. `None`, `False`, whitespace-only strings and
 empty lists fail; numeric zero is valid. A required checkbox therefore means it
@@ -100,7 +102,8 @@ enabled state is restored in `finally`, including cancellation.
 
 `on_submit` accepts a sync/async callback taking zero arguments or one copied
 dict. It runs only after valid input. Return values are ignored. Raise `OSError`
-for an expected I/O failure: the message is shown in `form.error` and the user can
+for an expected I/O failure during validation or saving: the message is shown
+in `form.error` and the user can
 retry the same command. Raise `ValidationError({"field_name": "message"}, message)`
 for expected submission/server validation. Names must identify active captured
 fields. If input changed while saving, named errors are discarded and a summary

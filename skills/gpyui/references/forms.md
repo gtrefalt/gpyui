@@ -54,7 +54,8 @@ exact constructor properties. Standalone Fields render without owning submit.
 
 Validators take one copied raw value, run sequentially on the Python callback
 loop, and may be async. None/empty string succeeds; a nonempty string or ValueError
-becomes inline error. Required checking runs first: None, False, blank strings
+becomes inline error. OSError and ValidationError use the expected operation-failure
+handling below, whether raised by a validator or save callback. Required checking runs first: None, False, blank strings
 and empty lists fail; numeric zero succeeds. NumberInput remains an editing
 string; parse/normalize a copied payload in the save callback. Unexpected
 exceptions and non-string validator results are programming errors.
