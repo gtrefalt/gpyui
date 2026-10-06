@@ -235,9 +235,19 @@ class KitControl(Column):
         if props[name] != value:
             props[name] = value
             if self._app:
-                self._app._queue(self.id, name, value)
+                self._app._queue(self.id, name, self._encode_property(name, value))
         if name == "value" and self._state is not None:
             self._state.value = value
+
+    def _encode_property(self, name: str, value: Any) -> Any:
+        return value
+
+    def _spec(self) -> dict[str, Any]:
+        spec = super()._spec()
+        spec["props"] = {
+            name: self._encode_property(name, value) for name, value in self._properties["props"].items()
+        }
+        return spec
 
     def bind_value(self, state: State[Any]) -> Self:
         if "value" not in self.fields or "change" not in self.events:

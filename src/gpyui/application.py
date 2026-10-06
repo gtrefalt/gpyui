@@ -433,10 +433,17 @@ class Application:
                                 cast("TextInput | KitControl", mirrored)._receive_native(value)
                         self._dispatch(command._handler, Event(command, "command"))
                         await asyncio.sleep(0)
-                    elif name in {"click", "change", "release", "resize"}:
+                    elif name in {"click", "change", "release", "resize", "load", "error"}:
                         control = self._controls.get(event["id"])
                         if control is None:
                             continue
+                        if name in {"load", "error"}:
+                            from .images import Image
+
+                            if not isinstance(control, Image) or not control._accept_image_event(
+                                event["revision"]
+                            ):
+                                continue
                         # Rust includes values only for native input/Kit controls.
                         for control_id, value in event.get("values", {}).items():
                             if mirrored := self._controls.get(int(control_id)):

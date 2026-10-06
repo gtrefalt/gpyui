@@ -19,6 +19,6 @@ See [composition](composition.md), [state/events](state-and-events.md) and [styl
 | [Charts](components/charts.md) | LineChart, AreaChart, BarChart, PieChart, CandlestickChart |
 | [Date, time and color](components/date-time-and-color.md) | Calendar, DatePicker, TimeField, ColorPicker |
 | [Feedback](components/feedback.md) | Progress, ProgressCircle, Spinner, Skeleton, Shimmer, Alert, Empty |
-| [Content](components/content.md) | Tag, Badge, Avatar, Markdown, Html, Bubble, Message, Marker, Attachment |
+| [Content](components/content.md) | Tag, Badge, Avatar, Image, Markdown, Html, Bubble, Message, Marker, Attachment |
 | [Disclosure](components/disclosure.md) | Collapsible, Accordion, Carousel |
 | [Overlays](components/overlays.md) | Tooltip, Popover, HoverCard, Dialog, Sheet |

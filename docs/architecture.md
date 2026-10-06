@@ -18,6 +18,17 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
+## Images (unreleased)
+
+Image binds the actual GPUI `img()` exported by Kit. Each retained native image
+entity runs GPUI's decoder on the background executor and owns one current
+decoded result. Encoded Python bytes use a temporary composite asset source;
+files and URLs use native Resource types. A matching Reqwest client enables
+native HTTP(S). Load/error notifications use the shared asyncio callback queue,
+with cancellation and revision checks preventing stale delivery. Fit and style
+updates retain the result. See [source evidence](plans/images.md) and the
+[Python image guide](guide/images.md), including the separate requirements for video.
+
 ## Forms and validation in 0.5.0
 
 Python Form and Field construct Kit's real typed builders. Rust owns grid/label

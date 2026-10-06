@@ -11,7 +11,7 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.5.0's Python capabilities, including native themes,
+GPUI Kit. It describes gpyui 0.5.0 plus the unreleased Image binding's Python capabilities, including native themes,
 Form/Field validation, runtime switching and the current one-window limit.
 
 ## Reading map
@@ -39,6 +39,11 @@ Form/Field validation, runtime switching and the current one-window limit.
 - Use runtime visibility and child updates to change screens while retaining
   editing controls. OS-global hotkeys, custom focus APIs and docking
   remain outside the Python surface.
+
+For image previews, reserve the loading box, choose contain/cover deliberately,
+and show actionable failure/retry feedback. Use Image for full-color images and
+Icon for theme-following glyphs. Image replacements are not a video pipeline;
+read the technical image reference before implementing streams.
 
 ## Inspiration
 

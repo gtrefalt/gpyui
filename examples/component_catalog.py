@@ -33,7 +33,18 @@ GROUPS = {
     "Charts": ("LineChart", "AreaChart", "BarChart", "PieChart", "CandlestickChart"),
     "Date, time and color": ("Calendar", "DatePicker", "TimeField", "ColorPicker"),
     "Feedback": ("Progress", "ProgressCircle", "Spinner", "Skeleton", "Shimmer", "Alert", "Empty"),
-    "Content": ("Tag", "Badge", "Avatar", "Markdown", "Html", "Bubble", "Message", "Marker", "Attachment"),
+    "Content": (
+        "Tag",
+        "Badge",
+        "Avatar",
+        "Image",
+        "Markdown",
+        "Html",
+        "Bubble",
+        "Message",
+        "Marker",
+        "Attachment",
+    ),
     "Disclosure": ("Collapsible", "Accordion", "Carousel"),
     "Overlays": ("Tooltip", "Popover", "HoverCard", "Dialog", "Sheet"),
 }
@@ -302,6 +313,14 @@ SAMPLES = {
         "Native initials generated from a name.",
         'control = ui.Avatar("Ada Lovelace")',
         "Initials are exposed in this wrapper; image avatars remain future work.",
+    ),
+    "Image": Sample(
+        "Full-color images decoded, cached and rendered natively.",
+        'control = ui.Image(b\'<svg xmlns="http://www.w3.org/2000/svg" width="360" height="160" viewBox="0 0 360 160"><rect width="360" height="160" fill="#e0f2fe"/><circle cx="290" cy="36" r="18" fill="#fbbf24"/><path d="M0 160L110 45L230 160Z" fill="#0f766e"/><path d="M130 160L245 70L360 160Z" fill="#115e59"/></svg>\', fit="cover").style(width=480, height=180, radius=12)',
+        "Accepts paths, HTTP(S) URLs, encoded bytes and ImageSource.asset(key). Assign source to replace, "
+        "None to clear, or call reload() to retry. on_load receives width/height/frame count; "
+        "on_error receives an error message. Animated GIF/WebP are images, not a video streaming API. "
+        "See the Images guide for ownership, loading and source rules.",
     ),
     "Markdown": Sample(
         "Native rich text from Markdown.",

@@ -262,9 +262,14 @@ impl Bridge {
         let cleanup = transport.clone();
         let result = py.detach(move || {
             std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let image_assets = crate::images::ImageAssets::default();
+                let http_client = reqwest_client::ReqwestClient::user_agent("gpyui")
+                    .expect("native image HTTP client");
                 gpui_kit::application()
-                    .with_assets(gpui_kit::assets::AllAssets)
+                    .with_assets(image_assets.clone())
+                    .with_http_client(Arc::new(http_client))
                     .run(move |cx| {
+                        cx.set_global(image_assets);
                         gpui_kit::init(cx);
                         gpui_kit::component::Theme::change(
                             if dark {

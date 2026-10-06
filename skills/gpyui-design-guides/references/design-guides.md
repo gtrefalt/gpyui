@@ -154,6 +154,16 @@ Label simulated data explicitly, as in the bundled dashboard recipe. Show stream
 status and provide an applicable stop/close action. Avoid fake precision or
 animated values unrelated to the user's task.
 
+## Design image previews
+
+Use the Image control for photos, screenshots and full-color SVG. Reserve width
+and height (or width/aspect ratio) before loading, with contain for diagrams and
+cover for intentional crops. Keep loading and unavailable states visible; offer
+retry for a recoverable source. Use Icon for monochrome Lucide glyphs. Preserve
+image controls across hide/show, and dispose discarded previews. GIF/WebP
+animation and occasional encoded-image replacement are supported; video/camera
+streaming needs a separate native pipeline and is not exposed.
+
 ## Preserve native interaction
 
 Use visible labels for inputs and legible command text. Do not require hover to

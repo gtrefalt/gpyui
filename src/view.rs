@@ -492,6 +492,16 @@ impl NativeView {
                         "resizable" => NativeState::Resizable(
                             cx.new(|_| gpui_kit::component::ResizableState::default()),
                         ),
+                        "image" => {
+                            let state = cx.new(|_| crate::images::NativeImage::new(&props));
+                            subscriptions.push(cx.subscribe(&state, move |view, _, event: &crate::images::ImageEvent, cx| {
+                                if view.displayed.contains(&id) && !view.transport.emit(json!({
+                                    "event":event.name, "id":id, "revision":event.revision, "value":event.value
+                                })) { cx.quit(); }
+                                cx.notify();
+                            }));
+                            NativeState::Image(state)
+                        }
                         _ => NativeState::None,
                     };
                     NativeControl::Kit(NativeKit {
@@ -542,6 +552,9 @@ impl NativeView {
                         props.insert("children".into(), json!(kit.children));
                         if let Some(value) = kit.value(cx) {
                             props.insert("value".into(), value);
+                        }
+                        if let NativeState::Image(state) = &kit.state {
+                            props.insert("image".into(), state.read(cx).status());
                         }
                         Value::Object(props)
                     }
@@ -611,6 +624,13 @@ impl NativeView {
                 self.configure(config, cx);
                 self.mount(nodes, window, cx);
                 self.roots = roots;
+                for (id, control) in &self.controls {
+                    if !retained.contains(id)
+                        && let NativeControl::Kit(kit) = control
+                        && let NativeState::Image(state) = &kit.state {
+                        state.update(cx, |image, cx| image.release(window, cx));
+                    }
+                }
                 self.controls.retain(|id, _| retained.contains(id));
                 self.styles.retain(|id, _| retained.contains(id));
                 self.visible.retain(|id, _| retained.contains(id));
@@ -1224,7 +1244,7 @@ impl NativeView {
             ),
         };
         let element = if matches!(&self.controls[&id], NativeControl::Column(_))
-            || matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll" | "form" | "field"))
+            || matches!(&self.controls[&id], NativeControl::Kit(k) if matches!(k.kind.as_str(), "row" | "container" | "scroll" | "form" | "field" | "image"))
         {
             element
         } else {

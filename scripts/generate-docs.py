@@ -49,6 +49,8 @@ def slug(name):
 def type_name(validator):
     names = {
         "text": "str",
+        "image_source": "str / PathLike / bytes / ImageSource / None; reads back as ImageSource / None",
+        "aspect_ratio": "nonnegative number; 0 uses the intrinsic ratio",
         "columns": "integer 1–12",
         "field_name": "str; nonempty unique name within a Form",
         "label_width": "nonnegative pixel number",
@@ -107,6 +109,7 @@ def component_page(name):
         fields = {
             key: (default, type_name(validate), "Constructor only" if key in cls.readonly else "Assignment")
             for key, (default, validate) in cls.fields.items()
+            if not key.startswith("_")
         }
     lines = [
         f"# {name}",
@@ -169,6 +172,13 @@ def component_page(name):
             "`await validate()` and `await submit()` return bool; `busy`, `errors` and `values()` expose Python state. "
             "See [forms and validation](../guide/forms.md) for hidden fields, stale async validation and retry.",
         ]
+    elif name == "Image":
+        lines += [
+            "`on_load` receives `{width, height, frames}` in Event.value; `on_error` receives an error string. "
+            "Callbacks may be sync or async and run on the owned callback loop. `reload()` retries an unchanged source. "
+            "The source getter returns an immutable ImageSource or None. Source replacement discards stale callbacks. "
+            "See [Images](../guide/images.md) for source rules, ownership, placeholders and video limits.",
+        ]
     elif name == "Field":
         lines += [
             "`control=` accepts a prebuilt value control; alternatively compose children with a `with` block. "
@@ -189,6 +199,8 @@ def component_page(name):
                 "click": "Native pointer or keyboard activation, with current input-value snapshots.",
                 "release": "Reports the slider value when the native drag is released.",
                 "resize": "Reports native panel sizes after a resize.",
+                "load": "Receives Event.value = {width, height, frames} after native decoding.",
+                "error": "Receives Event.value = an image loading/decoding error string; call reload() to retry.",
             }[event]
             lines.append(f"- `on_{event}(event)`: {text}")
         lines += [
@@ -234,6 +246,7 @@ def generated_files():
         "DropdownMenu",
         "Form",
         "Field",
+        "Image",
         *(cls.__name__ for cls in ui.widgets.COMPONENTS),
     }
     assert len(names) == len(set(names)) and set(names) == set(SAMPLES) == actual
@@ -339,6 +352,7 @@ def skill_references():
                         "guide/state": "../state-and-events.md",
                         "guide/commands": "../commands-and-menus.md",
                         "guide/forms": "../forms.md",
+                        "guide/images": "../images.md",
                     }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
                     + (
                         "#dynamic-composition"

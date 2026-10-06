@@ -32,6 +32,15 @@ pub(crate) fn fields(kind: &str) -> Option<&'static [&'static str]> {
         "tag" => &["text", "variant"],
         "badge" => &["count", "text"],
         "avatar" | "icon" => &["name"],
+        "image" => &[
+            "source",
+            "fit",
+            "grayscale",
+            "aspect_ratio",
+            "loading_text",
+            "error_text",
+            "_revision",
+        ],
         "separator" => &["text", "vertical"],
         "link" => &["text", "href", "disabled"],
         "pagination" => &["value", "pages"],
@@ -67,7 +76,13 @@ fn integer(value: &Value) -> bool {
 fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
     match property {
         "text" | "title" | "description" | "author" | "placeholder" | "href" | "label" | "help"
-        | "error" => value.is_string(),
+        | "error" | "loading_text" | "error_text" => value.is_string(),
+        "source" => crate::images::valid_source(value),
+        "fit" => value
+            .as_str()
+            .is_some_and(|v| matches!(v, "contain" | "cover" | "fill" | "scale_down" | "none")),
+        "aspect_ratio" => finite(value) && value.as_f64().unwrap() >= 0.,
+        "_revision" => integer(value),
         "name" if kind == "field" => value.as_str().is_some_and(|name| {
             name.is_empty() || (!name.trim().is_empty() && name.chars().count() <= 128)
         }),
@@ -90,7 +105,7 @@ fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
                     && s.bytes()
                         .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-'))
         }),
-        "disabled" | "loading" | "vertical" | "required" => value.is_boolean(),
+        "disabled" | "loading" | "vertical" | "required" | "grayscale" => value.is_boolean(),
         "minimum" | "maximum" | "step" => finite(value),
         "column_width" => finite(value) && value.as_f64().unwrap() >= 24.,
         "count" | "pages" | "length" => integer(value),
@@ -344,6 +359,7 @@ impl Props<'_> {
 
 pub(crate) enum NativeState {
     None,
+    Image(Entity<crate::images::NativeImage>),
     Slider(Entity<c::slider::SliderState>),
     Select(Entity<c::select::SelectState<Vec<SharedString>>>),
     Table(Entity<c::table::TableState<TableData>>),
@@ -452,6 +468,9 @@ impl NativeKit {
         self.props.insert(property.to_owned(), value);
         let p = Props(&self.props);
         match &self.state {
+            NativeState::Image(state) if matches!(property, "source" | "_revision") => {
+                state.update(cx, |state, cx| state.reset(&self.props, window, cx));
+            }
             NativeState::Editor(state) => state.update(cx, |state, cx| {
                 if property == "value" {
                     state.set_value(p.s("value"), window, cx);
@@ -545,6 +564,24 @@ impl NativeKit {
                   _: &mut Window,
                   cx: &mut Context<NativeView>| view.change(id, value.clone(), cx);
         match self.kind.as_str() {
+            "image" => {
+                let NativeState::Image(state) = &self.state else {
+                    unreachable!()
+                };
+                crate::images::ImageElement {
+                    state: state.clone(),
+                    id,
+                    // Never copy encoded source payloads on every paint.
+                    props: self
+                        .props
+                        .iter()
+                        .filter(|(key, _)| key.as_str() != "source")
+                        .map(|(key, value)| (key.clone(), value.clone()))
+                        .collect(),
+                    style: style.clone(),
+                }
+                .into_any_element()
+            }
             "row" | "container" | "scroll" => apply_style(
                 div()
                     .id(eid)
