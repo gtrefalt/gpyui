@@ -72,6 +72,17 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
             assert_theme(result["theme"], theme)
             return result
 
+        def expect_node(control, property, value):
+            # XTest input, bridge snapshots and Python callbacks have separate
+            # queues. A snapshot does not fence an earlier external key event.
+            deadline = time.monotonic() + 5
+            while time.monotonic() < deadline:
+                actual = command()["nodes"][str(ready[control])][property]
+                if actual == value:
+                    return
+                time.sleep(0.03)
+            assert actual == value
+
         try:
             ready = wait_file(tmp_path / "ready.json", process)
             assert_theme(ready["theme"], Theme(preset, mode=mode))
@@ -86,9 +97,9 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
                 )
             )
             xdo("type", "--clearmodifiers", "4")
-            assert command()["nodes"][str(ready["field"])]["value"] == "1243"
+            expect_node("field", "value", "1243")
             xdo("key", "ctrl+z")
-            assert command()["nodes"][str(ready["field"])]["value"] == "123"
+            expect_node("field", "value", "123")
             # Select a native character, then change palette/radius/typography.
             xdo("key", "ctrl+End", "Left", "shift+Left")
             switch(
@@ -109,17 +120,17 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
                 )
             )
             xdo("type", "--clearmodifiers", "5")
-            assert command()["nodes"][str(ready["field"])]["value"] == "153"
+            expect_node("field", "value", "153")
             xdo("key", "ctrl+z")
-            assert command()["nodes"][str(ready["field"])]["value"] == "123"
+            expect_node("field", "value", "123")
             # The multiline editor also retains native selection and undo.
             xdo("mousemove", "--window", window, 90, 340, "click", 1)
             xdo("key", "ctrl+End", "Left", "shift+Left")
             switch(Theme("shadcn-zinc"))
             xdo("type", "--clearmodifiers", "6")
-            assert command()["nodes"][str(ready["area"])]["value"] == "163"
+            expect_node("area", "value", "163")
             xdo("key", "ctrl+z")
-            assert command()["nodes"][str(ready["area"])]["value"] == "123"
+            expect_node("area", "value", "123")
             default = switch(Theme())
             assert default["theme"]["radius"] == 6 and default["theme"]["shadow"] is True
             assert default["theme"]["font_size"] == 16  # No leaked custom scalars.
@@ -132,13 +143,13 @@ def test_native_presets_live_switching_selection_and_undo(tmp_path, preset, mode
             switch(Theme(preset, mode=mode))
             xdo("mousemove", "--window", window, 90, 68, "click", 1)
             xdo("key", "Tab", "space")  # single-line editor -> primary button
-            assert command()["nodes"][str(ready["clicks"])]["text"] == "Clicked from Python"
+            expect_node("clicks", "text", "Clicked from Python")
             xdo("key", "Tab", "space")
-            assert command()["nodes"][str(ready["checkbox"])]["value"] is True
+            expect_node("checkbox", "value", True)
             xdo("key", "Tab", "space")
-            assert command()["nodes"][str(ready["switch"])]["value"] is True
+            expect_node("switch", "value", True)
             xdo("key", "Tab", "Return", "Down", "Return")
-            assert command()["nodes"][str(ready["select"])]["value"] == "Two"
+            expect_node("select", "value", "Two")
             subprocess.run(
                 ["import", "-window", window, str(ARTIFACTS / f"themes-{preset}-{mode}.png")], check=True
             )
