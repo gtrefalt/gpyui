@@ -54,7 +54,7 @@ Default to light appearance. Use `Application(theme="light")` or
 Each preset supports `mode="dark"`. Change `app.theme` on the callback loop to
 switch appearance while retaining editors. Check the app in both intended
 appearances; the documentation site's toggle does not change native previews.
-The 0.6.0 `macos` correction uses the exact pinned Kit macOS Classic Light
+The 0.6.1 `macos` correction uses the exact pinned Kit macOS Classic Light
 and Dark theme configs: 16 px system text, 6/8 px corners, no shadows and standard
 Kit control geometry. Do not add compact frames, green toggle substitutions or
 SF font overrides when the user asks for Kit’s Classic appearance. Windows keeps

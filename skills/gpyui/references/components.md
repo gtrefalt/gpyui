@@ -1,6 +1,6 @@
 # Python component index
 
-Generated from the repository's Python contracts (manifest version 0.6.0) and tested catalog specimens.
+Generated from the repository's Python contracts (manifest version 0.6.1) and tested catalog specimens.
 Run `uv run --only-group docs python scripts/generate-docs.py` in the library checkout to regenerate.
 
 Read only the families relevant to the task. Each includes complete runnable examples,

@@ -1,6 +1,6 @@
 # Tables and input controls
 
-These additions are available from 0.6.0. Version 0.5.0 has the earlier
+These additions are available from 0.6.1. Version 0.5.0 has the earlier
 string table and input contracts.
 
 ## Keyed tables

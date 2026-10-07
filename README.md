@@ -99,14 +99,14 @@ button runs your Python callback and updates the label. Explore
 ## Documentation and examples
 
 For a fixed-size window, use `Application(width=520, height=320, resizable=False)`.
-The 0.6.0 window API also adds minimum dimensions, initial position/state,
+The 0.6.1 window API also adds minimum dimensions, initial position/state,
 live `app.title` and `app.resize(...)`, plus minimize, focus and fullscreen actions.
 See [native window controls](https://gtrefalt.github.io/gpyui/guide/windows/) for
 platform behavior and examples.
 
 Choose a native preset with `Application(theme=Theme("macos"))` or
 `Theme("windows", mode="dark")`. Customize colors, corner radii and typography;
-switch a running app by assigning `app.theme`. The 0.6.0 macOS correction
+switch a running app by assigning `app.theme`. The 0.6.1 macOS correction
 uses Kit’s exact Classic Light/Dark configuration; Windows uses Fluent controls, larger
 checkboxes and underlined text fields. These style real Kit controls, with
 platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
@@ -152,7 +152,7 @@ installs agent instructions.
 
 gpyui is in early development, with 77 Python controls on `main`. This is basic
 catalog coverage; many upstream builder options and specialized APIs remain
-unbound. Version 0.6.0 includes Image, expanded window controls, exact macOS Classic
+unbound. Version 0.6.1 includes Image, expanded window controls, exact macOS Classic
 themes, richer tables/inputs, MultiSelect and CommandPalette. Its backend pins
 GPUI Kit 0.7.1 and GPUI 0.3.8; 0.5.0 used Kit 0.7.0 / GPUI 0.3.7.
 Diff/Speech have no Python bindings; optional Speech and GPUI Fast are not enabled.

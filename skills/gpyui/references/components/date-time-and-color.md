@@ -1,6 +1,6 @@
 # Date, time and color
 
-Generated Python API reference from the repository (manifest version 0.6.0).
+Generated Python API reference from the repository (manifest version 0.6.1).
 Follows the repository manifest; check [release status and coverage](../coverage.md) against your installed version.
 
 ## Calendar
