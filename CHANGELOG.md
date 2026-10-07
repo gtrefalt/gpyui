@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.6.0 — 2026-10-07
+
+- Add native Image sources, fit modes, GIF/WebP animation, load/error callbacks,
+  source-scoped retry and bundled-asset support.
+
 - Add keyed TableRow/TableColumn models, native text/numeric sorting and filtering,
   preserved domain selection across row replacement, and source-index callbacks.
 - Add TextInput disabled/read-only/password/clear/adornment options and native

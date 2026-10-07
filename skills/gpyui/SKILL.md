@@ -10,17 +10,17 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe the repository API: **gpyui 0.5.0 plus unreleased Image/window bindings, Kit Classic themes and the Kit 0.7.1 / GPUI 0.3.8 backend update**. Read the installed version's API when
-it differs; never invent an API by translating a Rust, web, Tkinter or Flet
-example. If the request needs a missing binding, identify that gap and implement
-it in the library before depending on it in application code.
+These references describe **gpyui 0.6.0**, including Image, expanded window controls,
+exact macOS Classic themes, keyed tables, richer inputs, MultiSelect,
+CommandPalette and the Kit 0.7.1 / GPUI 0.3.8 backend. Verify the installed
+version's API before using these additions.
 
 ## Workflow
 
 1. Read [setup and runtime](references/runtime.md) before creating an app.
    Read [coverage and remaining APIs](references/coverage.md) when assessing
    parity or choosing features; it records released/unreleased APIs, the pinned
-   upstream baseline and the roadmap. The unreleased dependency update uses
+   upstream baseline and the roadmap. Version 0.6.0 uses
    Kit 0.7.1 / GPUI 0.3.8. Diff/Speech have no Python bindings; the optional Speech
    feature and GPUI Fast backend are not enabled.
 2. Read [composition and component conventions](references/composition.md),

@@ -16,14 +16,14 @@ Python: [workspace](https://github.com/gtrefalt/gpyui/blob/main/examples/workspa
 
 ## Release and upstream baseline
 
-The catalog describes the repository's `main` API, including unreleased work.
-The release version is **0.5.0**; `Image`, expanded window controls and the exact
-macOS Classic theme correction, keyed tables, richer inputs, MultiSelect and CommandPalette are implemented on `main` but unreleased.
+The catalog describes **gpyui 0.6.0**, including Image, expanded window controls,
+exact macOS Classic themes, keyed tables, richer inputs, MultiSelect and
+CommandPalette. These additions require version 0.6.0 or later.
 Verify the installed version before using those APIs. The 77-control count
 includes Image, MultiSelect and CommandPalette and is not a percentage of upstream parity: Rust and Python
 divide component families differently.
 
-The unreleased backend update pins **GPUI Kit 0.7.1 / GPUI 0.3.8** at
+Version 0.6.0 pins **GPUI Kit 0.7.1 / GPUI 0.3.8** at
 [`c1bda59e67f46266991a230ae94f749af496af2a`](https://github.com/longbridge/gpui-kit/commit/c1bda59e67f46266991a230ae94f749af496af2a).
 The matching HTTP client also uses snapshot 0.3.8. The released 0.5.0 backend
 used Kit 0.7.0 / GPUI 0.3.7; verify the installed package when comparing runtime
@@ -170,7 +170,7 @@ and upstream source/docs; it does not certify exhaustive builder or platform
 parity. See [native validation](https://gtrefalt.github.io/gpyui/validation/) for dependency-upgrade checks and
 existing acceptance evidence.
 
-## Images (unreleased)
+## Images (0.6.0)
 
 `Image` exposes Kit’s native `img()` for paths, HTTP(S) URLs, encoded bytes and
 bundled assets, with native GIF/WebP animation, fit modes, sizing, grayscale,
@@ -178,11 +178,11 @@ loading/error text, queued callbacks and retry. Results are scoped to the curren
 source and released on replacement/disposal. Image avatars, custom placeholders,
 shared caches and video streaming remain future work. See the [Images guide](images.md).
 
-## Window controls (unreleased)
+## Window controls (0.6.0)
 
 Window creation now exposes fixed-size policy, configurable minimum content
 size, position/state and movement/minimize flags. Running apps can update title,
 request size/focus/minimize/maximize/fullscreen and read actual native bounds.
 These use GPUI WindowOptions through Kit’s window helper, not extra components.
-One window remains the limit. See [window controls](runtime.md#window-options-unreleased) for the
+One window remains the limit. See [window controls](runtime.md#window-options) for the
 Linux fixed-size guard, desktop-dependent behavior and remaining window gaps.

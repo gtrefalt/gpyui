@@ -310,7 +310,7 @@ def generated_files():
         "Use the site search to find a control by name. "
         "[Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.",
         "",
-        "The catalog follows `main`, including unreleased contracts. Check the coverage page's "
+        "The catalog follows the repository manifest. Check the coverage page's "
         "release status against your installed version before using an example.",
         "",
     ]
@@ -375,7 +375,7 @@ def skill_references():
         "",
         "Read only the families relevant to the task. Each includes complete runnable examples,",
         "properties, events, constructor-only fields and limits. Rust Kit methods do not imply Python methods.",
-        "These contracts include unreleased work; check [release status and coverage](coverage.md) against your installed version.",
+        "These contracts follow the repository manifest; check [release status and coverage](coverage.md) against your installed version.",
         "See [composition](composition.md), [state/events](state-and-events.md) and [styling](styling.md) for shared contracts.",
         "",
         "| Family | Python controls |",
@@ -389,7 +389,7 @@ def skill_references():
             f"# {group}",
             "",
             f"Generated Python API reference from the repository (manifest version {version}).",
-            "Includes unreleased contracts; check [release status and coverage](../coverage.md) against your installed version.",
+            "Follows the repository manifest; check [release status and coverage](../coverage.md) against your installed version.",
             "",
         ]
         for name in names:
@@ -431,7 +431,7 @@ def skill_references():
         "guide/commands.md": "commands-and-menus.md",
         "guide/themes.md": "themes.md",
         "guide/images.md": "images.md",
-        "guide/windows.md": "runtime.md#window-options-unreleased",
+        "guide/windows.md": "runtime.md#window-options",
     }
     coverage = re.sub(
         r"\]\((?![a-zA-Z][a-zA-Z0-9+.-]*:|#)([^)]+)\)",

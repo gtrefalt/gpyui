@@ -67,7 +67,7 @@ Changing a button's local disabled flag does not disable the shared command.
 
 `CommandPalette(commands, *, query="", placeholder="Search commands…",
 searchable=True, filterable=True, loading=False, on_query=None, on_cancel=None)`
-is an unreleased control backed by Kit's retained `CommandState` and native
+is available from 0.6.0, backed by Kit's retained `CommandState` and native
 virtual command list. Use the same `Command` instances as buttons and menus:
 enabled/checked state, callback execution and shortcut hints remain shared.
 

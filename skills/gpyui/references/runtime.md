@@ -2,11 +2,10 @@
 
 ## Version and coverage
 
-These references describe gpyui 0.5.0 plus the repository's unreleased Image,
-window controls, exact macOS Classic correction and dependency update. Installing the 0.5.0 release
-does not include those additions. Check the installed API before using them.
-The unreleased backend update pins GPUI Kit 0.7.1 / GPUI 0.3.8; the 0.5.0
-release used Kit 0.7.0 / GPUI 0.3.7. Rust APIs do not imply Python bindings.
+These references describe gpyui 0.6.0, including Image, expanded window controls,
+exact macOS Classic themes, keyed tables, richer inputs, MultiSelect and
+CommandPalette. Version 0.6.0 pins GPUI Kit 0.7.1 / GPUI 0.3.8; 0.5.0 used
+Kit 0.7.0 / GPUI 0.3.7. Rust APIs do not imply Python bindings.
 Diff/Speech remain unbound; optional Speech and GPUI Fast are not enabled.
 See [coverage and remaining APIs](coverage.md) for the shared roadmap.
 
@@ -26,7 +25,7 @@ Download the correct architecture (`linux_x86_64` or `linux_aarch64`) and use,
 from your uv project:
 
 ```bash
-uv add /path/to/gpyui-0.5.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.6.0-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install gpyui` or `pip install /path/to/wheel.whl` in a
@@ -101,7 +100,7 @@ promise that unbounded updates will be accepted.
 Full reference: [application](https://gtrefalt.github.io/gpyui/reference/application/)
 and [release support](https://gtrefalt.github.io/gpyui/releases/).
 
-## Window options (unreleased)
+## Window options
 
 ```python
 from gpyui import Application, Column, Label, TextInput, Theme

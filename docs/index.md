@@ -49,9 +49,10 @@ Python example. The documentation search indexes all component names.
 !!! note "Current scope"
 
     gpyui is in early development with 77 controls on `main` and native notifications.
-    The release is 0.5.0; Image, expanded window controls and the exact macOS Classic
-    correction are unreleased. Basic catalog coverage does not imply full Kit parity.
-    The unreleased backend update uses Kit 0.7.1 / GPUI 0.3.8.
+    Version 0.6.0 includes Image, expanded window controls, exact macOS Classic
+    themes, keyed tables, richer inputs, MultiSelect and CommandPalette.
+    Basic catalog coverage does not imply full Kit parity. The backend uses
+    Kit 0.7.1 / GPUI 0.3.8.
     Table uses native virtualization; List currently renders all items. Linux/X11 is
     tested, and macOS/Windows wheels have native smoke tests. One window and
     dynamic children and visibility are supported, preserving native editing state. The package is

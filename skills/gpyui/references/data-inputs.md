@@ -2,8 +2,8 @@
 
 # Tables and input controls
 
-These additions are unreleased. The catalog follows `main`; released 0.5.0 has
-the earlier string table and input contracts.
+These additions are available from 0.6.0. Version 0.5.0 has the earlier
+string table and input contracts.
 
 ## Keyed tables
 

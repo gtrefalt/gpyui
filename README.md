@@ -40,10 +40,10 @@ documentation for the animated walkthrough.
 - **Forms and validation:** Kit Form/Field labels, help and inline errors,
   sync/async Python validators and shared submission with retry. Failed validation
   preserves native text, caret, selection and undo.
-- **Native themes:** macOS Classic (unreleased correction), Windows/Fluent and shadcn
+- **Native themes:** macOS Classic, Windows/Fluent and shadcn
   light/dark presets,
   custom palettes and live switching that preserves editor state.
-- **Images (unreleased):** native files, URLs and encoded bytes, GIF/WebP animation,
+- **Images:** native files, URLs and encoded bytes, GIF/WebP animation,
   fit modes, loading/error callbacks and retry. See the
   [image guide](https://gtrefalt.github.io/gpyui/guide/images/); video streaming
   requires a separate native pipeline.
@@ -99,14 +99,14 @@ button runs your Python callback and updates the label. Explore
 ## Documentation and examples
 
 For a fixed-size window, use `Application(width=520, height=320, resizable=False)`.
-The unreleased window API also adds minimum dimensions, initial position/state,
+The 0.6.0 window API also adds minimum dimensions, initial position/state,
 live `app.title` and `app.resize(...)`, plus minimize, focus and fullscreen actions.
 See [native window controls](https://gtrefalt.github.io/gpyui/guide/windows/) for
 platform behavior and examples.
 
 Choose a native preset with `Application(theme=Theme("macos"))` or
 `Theme("windows", mode="dark")`. Customize colors, corner radii and typography;
-switch a running app by assigning `app.theme`. The unreleased macOS correction
+switch a running app by assigning `app.theme`. The 0.6.0 macOS correction
 uses Kit’s exact Classic Light/Dark configuration; Windows uses Fluent controls, larger
 checkboxes and underlined text fields. These style real Kit controls, with
 platform-owned window decorations. See [themes and native previews](https://gtrefalt.github.io/gpyui/guide/themes/)
@@ -152,9 +152,9 @@ installs agent instructions.
 
 gpyui is in early development, with 77 Python controls on `main`. This is basic
 catalog coverage; many upstream builder options and specialized APIs remain
-unbound. The release is 0.5.0; Image, expanded window controls and the exact macOS
-Classic correction, richer tables/inputs, MultiSelect and CommandPalette on `main` are unreleased. The unreleased backend update pins
-GPUI Kit 0.7.1 and GPUI 0.3.8; released 0.5.0 used Kit 0.7.0 / GPUI 0.3.7.
+unbound. Version 0.6.0 includes Image, expanded window controls, exact macOS Classic
+themes, richer tables/inputs, MultiSelect and CommandPalette. Its backend pins
+GPUI Kit 0.7.1 and GPUI 0.3.8; 0.5.0 used Kit 0.7.0 / GPUI 0.3.7.
 Diff/Speech have no Python bindings; optional Speech and GPUI Fast are not enabled.
 
 Applications currently use one window with dynamic children and visibility.

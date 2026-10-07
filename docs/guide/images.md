@@ -2,7 +2,7 @@
 
 `Image` displays full-color raster images and SVG, with native asynchronous
 loading and decoding. Animated GIF/WebP also play in an active window.
-This binding is on the development branch and is not yet in the 0.5.0 PyPI release.
+This binding is available from gpyui 0.6.0.
 
 ![Native light image viewer](../screenshots/images-light.png)
 
