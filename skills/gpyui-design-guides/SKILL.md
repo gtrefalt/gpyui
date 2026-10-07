@@ -11,7 +11,9 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.5.0 plus the unreleased Image binding's Python capabilities, including native themes,
+GPUI Kit. It describes gpyui 0.5.0 plus unreleased Image/window bindings and the
+exact Kit Classic correction. Verify the installed API before designing around
+those additions and the unreleased Kit 0.7.1 / GPUI 0.3.8 backend update. It includes native themes,
 Form/Field validation, runtime switching and the current one-window limit.
 
 ## Reading map
@@ -39,16 +41,15 @@ Form/Field validation, runtime switching and the current one-window limit.
 - Use runtime visibility and child updates to change screens while retaining
   editing controls. OS-global hotkeys, custom focus APIs and docking
   remain outside the Python surface.
-
-For image previews, reserve the loading box, choose contain/cover deliberately,
-and show actionable failure/retry feedback. Use Image for full-color images and
-Icon for theme-following glyphs. Image replacements are not a video pipeline;
-read the technical image reference before implementing streams.
+- Table uses native virtualization and keyed TableRow models preserve domain selection;
+  its value remains a source index when sorted/filtered. List renders all items.
+  Tree selects stable IDs, Select/Combobox one string, and MultiSelect a string list.
+  CommandPalette shares existing Commands. Check unreleased API status before use.
 
 ## Inspiration
 
 These original Python-focused guides are inspired by
-[GPUI Kit's design skill](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills/gpui-kit-design-guides)
-and [upstream design guidance](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/website/docs/design-guides.md).
+[GPUI Kit's design skill](https://github.com/longbridge/gpui-kit/tree/c1bda59e67f46266991a230ae94f749af496af2a/skills/gpui-kit-design-guides)
+and [upstream design guidance](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/website/docs/design-guides.md).
 Upstream principles inform the design; the Python contract remains the authority
 for implementable features.

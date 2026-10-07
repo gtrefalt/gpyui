@@ -25,12 +25,21 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | --- | --- | --- | --- |
 | `value` | `""` | str | Assignment |
 | `placeholder` | `""` | str | Assignment |
+| `disabled` | `false` | bool | Assignment |
+| `read_only` | `false` | bool | Assignment |
+| `password` | `false` | bool | Assignment |
+| `clearable` | `false` | bool | Assignment |
+| `prefix` | `""` | str | Assignment |
+| `suffix` | `""` | str | Assignment |
 
 All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](../reference/core.md).
 
 ## Events and state
 
 - `on_change(event)`: Runs after native value and Python mirror/bound State change.
+- `on_submit(event)`: Receives the current text on Enter, with native input mirrors updated.
+- `on_focus(event)`: Receives the current text when native focus is gained.
+- `on_blur(event)`: Receives the current text when native focus is lost.
 
 Handlers can take zero arguments or one `Event`, and can be synchronous or async. They run on the owned Python asyncio loop. See [events and asyncio](../guide/events.md).
 
@@ -38,7 +47,7 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 ## Contract and limits
 
-Programmatic value replacement clears native undo history; native edits are never echoed back through the setter.
+Programmatic value replacement clears native undo history; native edits are never echoed back through the setter. disabled, read_only, password, clearable and string prefix/suffix options are mutable. on_submit, on_focus and on_blur report native events; password only masks display, not values or snapshots.
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 

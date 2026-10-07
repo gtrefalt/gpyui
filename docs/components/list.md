@@ -39,8 +39,8 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 ## Contract and limits
 
-This wrapper composes ListItems. It does not expose virtual ListState/delegate or async search.
+This wrapper renders every ListItem. It does not expose virtual ListState/delegate, scroll-to-item or async search. value is a positional index, not a stable item ID.
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L592) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L753) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

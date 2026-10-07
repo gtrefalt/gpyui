@@ -270,13 +270,62 @@ class TextInput(Control):
     """
 
     def __init__(
-        self, value: str = "", *, placeholder: str = "", on_change: Callable[..., Any] | None = None
+        self,
+        value: str = "",
+        *,
+        placeholder: str = "",
+        disabled: bool = False,
+        read_only: bool = False,
+        password: bool = False,
+        clearable: bool = False,
+        prefix: str = "",
+        suffix: str = "",
+        on_change: Callable[..., Any] | None = None,
+        on_submit: Callable[..., Any] | None = None,
+        on_focus: Callable[..., Any] | None = None,
+        on_blur: Callable[..., Any] | None = None,
     ):
-        handler = Handler(on_change) if on_change is not None else None
-        super().__init__("input", value=_text(value), placeholder=_text(placeholder))
+        from .widgets import boolean
+
+        handlers = {
+            name: Handler(callback)
+            for name, callback in (
+                ("change", on_change),
+                ("submit", on_submit),
+                ("focus", on_focus),
+                ("blur", on_blur),
+            )
+            if callback is not None
+        }
+        super().__init__(
+            "input",
+            value=_text(value),
+            placeholder=_text(placeholder),
+            disabled=boolean(disabled),
+            read_only=boolean(read_only),
+            password=boolean(password),
+            clearable=boolean(clearable),
+            prefix=_text(prefix),
+            suffix=_text(suffix),
+        )
         self._state: State[str] | None = None
-        if handler is not None:
-            self._handlers["change"] = handler
+        self._handlers.update(handlers)
+
+    def __getattr__(self, name: str) -> Any:
+        if name in {"disabled", "read_only", "password", "clearable", "prefix", "suffix"}:
+            return self._properties[name]
+        raise AttributeError(name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if (
+            name in {"disabled", "read_only", "password", "clearable", "prefix", "suffix"}
+            and "_properties" in self.__dict__
+        ):
+            from .widgets import boolean
+
+            self._set(name, _text(value) if name in {"prefix", "suffix"} else boolean(value))
+        else:
+            super().__setattr__(name, value)
 
     @property
     def value(self) -> str:

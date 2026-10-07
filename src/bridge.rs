@@ -100,9 +100,11 @@ impl Bridge {
     fn submit(&self, batch_json: &str) -> PyResult<()> {
         let patches: Vec<Patch> =
             serde_json::from_str(batch_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
-        let schema = self.schema.lock().expect("schema lock poisoned");
+        let mut schema = self.schema.lock().expect("schema lock poisoned");
         protocol::validate_batch(&patches, &schema).map_err(PyValueError::new_err)?;
-        self.send(Command::Batch(patches))
+        self.send(Command::Batch(patches.clone()))?;
+        protocol::apply_schema_patches(&patches, &mut schema);
+        Ok(())
     }
     /// Atomically validate/enqueue topology and properties before changing schema.
     #[pyo3(signature = (tree_json, roots_json, batch_json, config_json=None))]
@@ -143,6 +145,7 @@ impl Bridge {
             }
         }
         protocol::validate_batch(&patches, &next).map_err(PyValueError::new_err)?;
+        protocol::apply_schema_patches(&patches, &mut next);
         let retained = next.keys().copied().collect();
         self.send(Command::Reconcile {
             nodes,

@@ -45,7 +45,7 @@ Full-color images decoded, cached and rendered natively.
 
 <div class="component-card" markdown>
 
-[![Native Markdown component](../../screenshots/components/markdown.png?v=6504c1637d8e)](../markdown.md)
+[![Native Markdown component](../../screenshots/components/markdown.png?v=0f21955f2b96)](../markdown.md)
 
 **[Markdown](../markdown.md)**
 
@@ -55,7 +55,7 @@ Native rich text from Markdown.
 
 <div class="component-card" markdown>
 
-[![Native Html component](../../screenshots/components/html.png?v=849cf4789ff8)](../html.md)
+[![Native Html component](../../screenshots/components/html.png?v=da727c71e423)](../html.md)
 
 **[Html](../html.md)**
 

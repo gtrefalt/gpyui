@@ -10,14 +10,24 @@ from gpyui import Application, Button, Column, Command, DropdownMenu, Label, Men
 name = TextInput("Ada")
 status = Label("Ready")
 
+
 def save(event):
     status.text = f"Saved {name.value} through {event.sender.label}"
 
+
 save_command = Command("Save", save, shortcut="mod+s")
 app = Application(
-    Column([name, Button(command=save_command, variant="primary"),
-            DropdownMenu("More", [save_command, MenuSeparator(), Menu("Document", [save_command])]), status]),
-    title="Shared commands", width=560, height=360,
+    Column(
+        [
+            name,
+            Button(command=save_command, variant="primary"),
+            DropdownMenu("More", [save_command, MenuSeparator(), Menu("Document", [save_command])]),
+            status,
+        ]
+    ),
+    title="Shared commands",
+    width=560,
+    height=360,
     menus=[Menu("File", [save_command])],
 )
 name.context_menu([save_command])
@@ -52,6 +62,40 @@ unregister/dispose API yet; a window can retain at most 1,024 commands.
 combines its own `disabled` flag with the command's enabled state. An explicit
 button text overrides that label. `command` and `on_click` are mutually exclusive.
 Changing a button's local disabled flag does not disable the shared command.
+
+## Command palette
+
+`CommandPalette(commands, *, query="", placeholder="Search commands…",
+searchable=True, filterable=True, loading=False, on_query=None, on_cancel=None)`
+is an unreleased control backed by Kit's retained `CommandState` and native
+virtual command list. Use the same `Command` instances as buttons and menus:
+enabled/checked state, callback execution and shortcut hints remain shared.
+
+```python
+from gpyui import Application, Button, Command, CommandPalette, Dialog, Label
+
+status = Label("Ready")
+save = Command("Save document", lambda: setattr(status, "text", "Saved"), shortcut="mod+s")
+palette = CommandPalette([save])
+dialog = Dialog("Commands", children=[palette])
+app = Application(Button("Commands", on_click=dialog.open), status, dialog)
+app.run()
+```
+
+Assign `commands` to replace results or `query` to replace search text. Commands
+are unique, capped at 1,024 and automatically registered with the owning window.
+Removing results leaves their commands registered, as with menus. Search is
+local by default, and keyboard navigation skips disabled commands. Confirming an
+item dispatches its shared command with current input values; it does not close
+the dialog automatically. The command callback may close it when appropriate.
+
+`on_query` receives `Event.value` after the query mirror changes. For external
+search, use `filterable=False`, set `loading` while awaiting results, and assign
+`commands` when ready. The application must cancel or discard stale async
+results; no provider generation policy is built into this initial wrapper.
+`on_cancel` reports Escape with an empty query. Escape first clears a nonempty
+query; a hosting Dialog owns dismissal on the subsequent Escape. Its cancel
+callback should record state rather than dismiss that dialog again.
 
 ## Shortcuts
 
@@ -103,5 +147,5 @@ The [notes example](../examples/notes.md) demonstrates async disk persistence,
 Save from a button/menu/shortcut and a checked sidebar command. Hiding the sidebar
 changes layout around the same retained editor.
 
-Command palettes, OS-global hotkeys, user-editable keymaps and multiple windows
+OS-global hotkeys, user-editable keymaps and multiple windows
 remain future work. See [coverage](../component-coverage.md).

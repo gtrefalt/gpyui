@@ -116,7 +116,7 @@ pub(crate) fn parse(value: &str) -> Result<NativeTheme, String> {
         ..Default::default()
     };
     let automatic_font = spec.font_family.is_none();
-    // Exact Kit source, pinned at 3a142844d3661159964dce9e5512ca9a40286160.
+    // Exact Kit source, pinned at c1bda59e67f46266991a230ae94f749af496af2a.
     // Keep every upstream token and syntax highlight; do not approximate a palette.
     let mut config_value = if spec.name == "macos" {
         let source: Value = serde_json::from_str(include_str!("themes/macos-classic.json"))

@@ -5,12 +5,13 @@ through **gpyui's Python API**, with actual GPUI Kit controls:
 
 | Skill | Use it for |
 | --- | --- |
-| [gpyui](gpyui/SKILL.md) | Installation, all 75 component contracts/examples, composition, State, events, asyncio, lifecycle, styling and runnable applications |
+| [gpyui](gpyui/SKILL.md) | Installation, all 77 component contracts/examples, composition, State, events, asyncio, lifecycle, styling and runnable applications |
 | [gpyui-design-guides](gpyui-design-guides/SKILL.md) | Desktop task hierarchy, panes, forms, spacing, semantic colors, data views, interaction states, copy and design review |
 
-They are inspired by [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills),
+They are inspired by [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/c1bda59e67f46266991a230ae94f749af496af2a/skills),
 with original guidance adapted to the Python binding. They target gpyui 0.5.0,
-plus unreleased Image/window bindings and exact Kit Classic themes, and clearly
+plus unreleased Image/window bindings, exact Kit Classic themes and the Kit 0.7.1 /
+GPUI 0.3.8 backend update, and clearly
 distinguish Python support from unbound upstream capabilities.
 
 ## Install with the skills CLI
@@ -63,6 +64,12 @@ just docs-generate
 just skills-check
 just docs-check
 ```
+
+The technical skill's `references/coverage.md` is generated from
+`docs/component-coverage.md`. Maintain that source page for the release/main
+distinction, upstream baseline and roadmap; regeneration bundles the same
+coverage guidance with the installed skill. Update the README and documentation
+entry pages when those product-level claims change.
 
 Update the hand-written guidance and skill version markers when changing the
 API. Keep examples executable, bundle any local references, and verify callback

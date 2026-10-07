@@ -1,6 +1,6 @@
 ---
 name: gpyui
-description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 75 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
+description: Build native desktop applications in Python with gpyui and Longbridge GPUI Kit components. Use when creating or changing a gpyui app, choosing controls, composing layouts, binding State, handling events or asyncio, updating tables and charts, opening dialogs, styling, or managing application lifecycle. Includes verified Python contracts for all 77 controls and runnable recipes. Use the gpyui-design-guides skill for visible interface design. Rust GPUI Kit APIs are not automatically available in Python.
 ---
 
 # Build apps with gpyui
@@ -10,7 +10,7 @@ focus, text editing and retained Kit component state. Python owns composition,
 application data and callbacks. Applications import `gpyui`; they do not manage
 GPUI entities, contexts, initialization or native threads themselves.
 
-These references describe the repository API: **gpyui 0.5.0 plus unreleased Image/window bindings and Kit Classic themes**. Read the installed version's API when
+These references describe the repository API: **gpyui 0.5.0 plus unreleased Image/window bindings, Kit Classic themes and the Kit 0.7.1 / GPUI 0.3.8 backend update**. Read the installed version's API when
 it differs; never invent an API by translating a Rust, web, Tkinter or Flet
 example. If the request needs a missing binding, identify that gap and implement
 it in the library before depending on it in application code.
@@ -18,6 +18,11 @@ it in the library before depending on it in application code.
 ## Workflow
 
 1. Read [setup and runtime](references/runtime.md) before creating an app.
+   Read [coverage and remaining APIs](references/coverage.md) when assessing
+   parity or choosing features; it records released/unreleased APIs, the pinned
+   upstream baseline and the roadmap. The unreleased dependency update uses
+   Kit 0.7.1 / GPUI 0.3.8. Diff/Speech have no Python bindings; the optional Speech
+   feature and GPUI Fast backend are not enabled.
 2. Read [composition and component conventions](references/composition.md),
    then the relevant family in the [component index](references/components.md).
    The family references include every constructor field, event, fixed property,
@@ -72,12 +77,21 @@ it in the library before depending on it in application code.
   but does not own pages; implement page changes with visibility or child updates. Initial wrappers do not expose full Kit
   docking, custom table delegates, multi-series chart configuration or editor
   language-server hooks.
+- Use TableRow keys for domain selection across replacement; Table.value remains
+  a source index when sorted/filtered. TableColumn supports per-column widths and
+  text/numeric sorting. Table is native and virtualized; List renders all items.
+- TextInput supports disabled/read_only/password/clearable/string adornments and
+  submit/focus/blur callbacks. TextArea/Editor support read_only; NumberInput bounds
+  and step are mutable. Select/Combobox items are mutable strings; MultiSelect uses
+  lists of selected strings. CommandPalette reuses shared Command instances.
+  Read [tables and inputs](references/data-inputs.md) and the family reference
+  before designing richer providers or custom cells.
 
 ## Sources and inspiration
 
 The split into technical and design skills, task-directed references, ownership
 rules and complete recipes is inspired by
-[GPUI Kit's skills at the pinned revision](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills).
+[GPUI Kit's skills at the pinned revision](https://github.com/longbridge/gpui-kit/tree/c1bda59e67f46266991a230ae94f749af496af2a/skills).
 The instructions here are written for gpyui's Python API, rather than copies of
 upstream Rust guidance.
 

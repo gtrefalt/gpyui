@@ -1,11 +1,11 @@
 {
   "zed": {
     "repository": "https://github.com/zed-industries/zed",
-    "revision": "1a28cff4b409169bac058bca40dfbfeb7621d19b"
+    "revision": "279fe070bb389b79652e52065b2f001edcc0b11b"
   },
   "gpui-kit": {
     "repository": "https://github.com/longbridge/gpui-kit",
-    "revision": "3a142844d3661159964dce9e5512ca9a40286160"
+    "revision": "c1bda59e67f46266991a230ae94f749af496af2a"
   },
   "nicegui": {
     "repository": "https://github.com/zauberzeug/nicegui",
@@ -17,8 +17,8 @@
   },
   "gpui-snapshot": {
     "package": "gpui-pre",
-    "version": "0.3.7",
-    "zed_revision": "1a28cff4b409169bac058bca40dfbfeb7621d19b",
-    "provenance": "[package.metadata.gpui-pre] in downloaded gpui-pre-0.3.7/Cargo.toml.orig"
+    "version": "0.3.8",
+    "zed_revision": "279fe070bb389b79652e52065b2f001edcc0b11b",
+    "provenance": "[package.metadata.gpui-pre] in downloaded gpui-pre-0.3.8/Cargo.toml.orig"
   }
 }

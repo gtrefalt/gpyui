@@ -26,6 +26,7 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `value` | `""` | str | Assignment |
 | `placeholder` | `""` | str | Assignment |
 | `disabled` | `false` | bool | Assignment |
+| `read_only` | `false` | bool | Assignment |
 
 All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](../reference/core.md).
 
@@ -43,4 +44,4 @@ Basic editing is exposed; Python language-server and provider hooks remain futur
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L698) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L899) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Add keyed TableRow/TableColumn models, native text/numeric sorting and filtering,
+  preserved domain selection across row replacement, and source-index callbacks.
+- Add TextInput disabled/read-only/password/clear/adornment options and native
+  submit/focus/blur events; read-only TextArea/Editor and bounded numeric stepping.
+- Support mutable Select/Combobox choices and searchable MultiSelect, with dependent
+  option/value updates validated atomically against the latest native bridge schema.
+- Add native CommandPalette search/keyboard navigation over shared Commands, with
+  live enabled/checked state, shortcut hints and mutable query/results/loading.
+- Synchronize coverage, examples, native previews, guides and both app-building skills.
+
+- Update the pinned native backend to GPUI Kit 0.7.1 and the matching GPUI 0.3.8
+  snapshot family, including the HTTP client. Refresh dependency identity,
+  source evidence and bundled license notices. Keep the standard GPUI backend;
+  Diff/Speech remain unbound and optional Speech/GPUI Fast are not enabled.
 - Expose fixed-size windows, configurable minimum dimensions, initial position/state,
   movement/minimize flags, live title/size updates, native window actions and snapshots.
   Keep editor identity/caret/undo intact and restore externally resized fixed Linux windows.

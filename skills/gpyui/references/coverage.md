@@ -1,0 +1,188 @@
+<!-- Generated from docs/component-coverage.md; run just docs-generate. -->
+
+# Component coverage and Python API
+
+The goal remains full GPUI Kit access from Python. The library exposes
+**77 controls**, reusable command/menu models and native notifications through
+`Application.notify`. Layout helpers use GPUI directly; the themed component
+wrappers construct actual Kit components. There are no placeholder classes for
+unimplemented Kit families.
+
+This is basic catalog coverage, not parity with every upstream builder method.
+The inventory below is grounded in the pinned
+[component crate](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/lib.rs).
+Component links resolve to that same immutable revision. Examples are entirely
+Python: [workspace](https://github.com/gtrefalt/gpyui/blob/main/examples/workspace.py) and [gallery](https://github.com/gtrefalt/gpyui/blob/main/examples/gallery.py).
+
+## Release and upstream baseline
+
+The catalog describes the repository's `main` API, including unreleased work.
+The release version is **0.5.0**; `Image`, expanded window controls and the exact
+macOS Classic theme correction, keyed tables, richer inputs, MultiSelect and CommandPalette are implemented on `main` but unreleased.
+Verify the installed version before using those APIs. The 77-control count
+includes Image, MultiSelect and CommandPalette and is not a percentage of upstream parity: Rust and Python
+divide component families differently.
+
+The unreleased backend update pins **GPUI Kit 0.7.1 / GPUI 0.3.8** at
+[`c1bda59e67f46266991a230ae94f749af496af2a`](https://github.com/longbridge/gpui-kit/commit/c1bda59e67f46266991a230ae94f749af496af2a).
+The matching HTTP client also uses snapshot 0.3.8. The released 0.5.0 backend
+used Kit 0.7.0 / GPUI 0.3.7; verify the installed package when comparing runtime
+behavior. Updating the dependency does not expose additional Python controls.
+
+## Available controls
+
+Controls accept a positional value for their first property and keyword
+arguments for the others. Container controls accept `children=[...]` and `with`
+blocks. `Row`, `Container` and `Scroll` also accept a positional children list.
+`Column` retains its original children-list constructor.
+
+| Family | Python controls | Initial contract |
+| --- | --- | --- |
+| GPUI layout | `Column`, `Row`, `Container`, `Scroll` | Children, pixel layout, native vertical scrolling |
+| [GroupBox](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/group_box.rs) | `GroupBox` | Title and children |
+| [Toolbar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/toolbar.rs), [StatusBar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/status_bar.rs) | `Toolbar`, `StatusBar` | Python-composed native content |
+| [Label](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/label.rs), [Button](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/button/button.rs) | `Label`, `Button` | Text; button disabled/click, constructor variant/icon |
+| [Command](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/command/mod.rs) | `CommandPalette` | Retained query/search/keyboard navigation; shared Commands, live enabled/checked and shortcut hints |
+| [Input](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/input/mod.rs) | `TextInput`, `TextArea`, `NumberInput`, `OtpInput`, `Editor` | Native editing, value/change, explicit two-way binding; disabled/read-only editing; TextInput masking, clear/adornments and submit/focus/blur; numeric bounds/step |
+| [Form/Field](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/form/mod.rs) | `Form`, `Field` | Real Kit grid/labels/help/required markers; Python sync/async validation, inline errors and shared async submission; retained conditional editors |
+| [Checkbox](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/checkbox.rs), [Switch](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/switch.rs), [Radio](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/radio.rs), [Toggle](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/button/toggle.rs) | `Checkbox`, `Switch`, `Radio`, `Toggle`, `RadioGroup` | Boolean or index value, disabled, change/binding; standalone radios need Python grouping policy |
+| [Slider](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/slider.rs), [Rating](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/rating.rs) | `Slider`, `Rating` | Scalar slider range/step, 0–5 rating, change/binding; slider release event |
+| [Select](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/select.rs), [Combobox](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/combobox.rs) | `Select`, `Combobox`, `MultiSelect` | Mutable string items, single or multiple selected values, disabled; native searchable combobox |
+| [Tabs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/tab/tab_bar.rs), [Sidebar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/sidebar/mod.rs), [Breadcrumb](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/breadcrumb.rs), [Stepper](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/stepper/stepper.rs) | `Tabs`, `Sidebar`, `Breadcrumb`, `Stepper` | Labels, zero-based selection, disabled, change |
+| [Pagination](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/pagination.rs), [Link](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/link.rs) | `Pagination`, `Link` | Zero-based page value translated to Kit's one-based page API; URL/click |
+| [List](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/list/list_item.rs), [Table](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/table/data_table.rs), [Tree](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/tree.rs) | `List`, `Table`, `Tree` | ListItem composition; retained TableState/delegate and rows; retained TreeState with stable item IDs |
+| [Charts](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/chart/mod.rs) | `LineChart`, `AreaChart`, `BarChart`, `PieChart`, `CandlestickChart` | Native plots and tooltips, assignable data; line domain follows data |
+| [Calendar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/time/calendar.rs), [DatePicker](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/time/date_picker.rs), [TimeField](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/time/time_field.rs), [ColorPicker](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/color_picker.rs) | `Calendar`, `DatePicker`, `TimeField`, `ColorPicker` | Native state and change/binding; single ISO dates, local time to seconds, hex RGB/RGBA colors |
+| [Progress](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/progress/mod.rs), [Spinner](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/spinner.rs), [Skeleton](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/skeleton.rs), [Shimmer](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/shimmer.rs) | `Progress`, `ProgressCircle`, `Spinner`, `Skeleton`, `Shimmer` | Percentage/indeterminate progress and native animated feedback |
+| [Tag](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/tag.rs), [Badge](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/badge.rs), [Avatar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/avatar/avatar.rs), icons | `Tag`, `Badge`, `Avatar`, `Icon`, `Kbd`, `Separator` | Semantic tag variants, count badges, initials, bundled Lucide icons, keystrokes, separators |
+| [Alert](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/alert.rs), [Empty](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/empty.rs), [DescriptionList](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/description_list.rs) | `Alert`, `Empty`, `DescriptionList` | Text/variants and label/value pairs |
+| [Accordion](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/accordion.rs), [Collapsible](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/collapsible.rs), [Carousel](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/carousel/mod.rs), [Resizable](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/resizable.rs) | `Accordion`, `Collapsible`, `Carousel`, `Resizable` | Disclosure, native slide selection, native resize state and resize events |
+| [Dialog](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/dialog/dialog.rs), [Sheet](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/sheet.rs), [Notification](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/notification.rs) | `Dialog`, `Sheet`, `app.notify(...)` | Python contents, queued native open/close, native dismissal mirrored to value; one dialog and one sheet per window |
+| [Tooltip](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/tooltip.rs), [Popover](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/popover.rs), [HoverCard](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/hover_card.rs), [Clipboard](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/clipboard.rs) | `Tooltip`, `Popover`, `HoverCard`, `Clipboard` | Native hover/popup/copy behavior and Python-composed popup contents |
+| [Message](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/message.rs), [Bubble](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/bubble.rs), [Marker](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/marker.rs), [Attachment](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/attachment.rs), [Text](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/text/compat.rs) | `Message`, `Bubble`, `Marker`, `Attachment`, `Markdown`, `Html` | Native content presentation and rich text selection |
+
+## Commands and menu coverage (0.3.0)
+
+`Command`, `Menu` and `MenuSeparator` are application-owned models in addition to
+77 layout controls. `DropdownMenu`, `Control.context_menu(...)` and application
+menus use Kit's real menu builders. Commands provide shared enabled/checked
+state, async callbacks and platform-aware shortcuts. macOS uses system application
+menus, Windows/Linux use Kit AppMenuBar; OS-native context menus fall back to
+Kit on Linux. See [commands and menus](commands-and-menus.md).
+
+## Values, updates and constraints
+
+`on_change(event)` receives `Event.value` after native state has changed and the
+Python mirror/bound State has been updated. Zero-argument and async callbacks
+retain the original contract. Kit controlled controls write their state in Rust
+and notify immediately; their interaction does not wait for Python to redraw.
+Entity-backed inputs retain focus, caret, editing buffers and undo history in Rust.
+
+All input values are strings, including NumberInput's partially edited buffer.
+NumberInput has mutable optional bounds and positive step, clamped natively on stepping/blur. Boolean controls use bool; navigation, rating,
+pagination and table selections use zero-based indices; Tree uses stable string
+item IDs. Select/Combobox use selected strings, with `""` for no selection; MultiSelect uses lists of selected strings. Date
+controls use `YYYY-MM-DD` or `""`; time uses `HH:MM:SS`; colors use `#rrggbb` or
+`#rrggbbaa`. Tables select source row zero initially; keyed row replacement retains selected_key. Empty tables retain value zero and selected_key None. Filtering can hide the selected row without clearing domain selection. List currently composes Kit ListItems;
+the full virtual ListState/delegate API is not exposed.
+
+Table rows are lists of strings or TableRow(key, cells) models matching its columns. TableColumn supports individual width and text/numeric sorting; native sorting/filtering leaves source order intact. See [tables and inputs](https://gtrefalt.github.io/gpyui/guide/data-inputs/). Charts accept
+`[[label, value], ...]`; candles accept `[label, open, high, low, close]` and
+validate the OHLC bounds. Tree items have `id`, `text`, and optional `children`;
+IDs must be unique, with a maximum of 10,000 items and 32 levels.
+
+Properties are mutable through assignment unless explicitly fixed: Slider
+range/step; Tree items; Table columns/column_width/per-column configuration; OTP length;
+Resizable axis; Dialog/Sheet title. Collections are copied when assigned/read.
+Dynamic roots and container children, visibility and explicit subtree disposal
+are supported. Reordering, moving, hiding and detaching preserve native control
+identity and editing state. Accordion initially exposes one
+open index and string item contents. Avatar initially exposes initials; Editor
+exposes editing without Python LSP/provider hooks. Chart animation/hover and
+resize geometry remain native. Native presets and custom themes can be applied at startup or switched at runtime.
+
+`.style(...)` supports width, height, min_width, min_height, padding, gap, radius,
+font_size, flex, full_width, full_height, border, bold, align and justify. Spacing
+and dimensions are pixels. Background/color use semantic theme tokens:
+background, foreground, muted, muted_foreground, primary, primary_foreground,
+secondary, secondary_foreground, border, accent, accent_foreground, danger,
+success, warning, info and transparent.
+
+## Theme coverage (0.4.0)
+
+Theme is an immutable application model, separate from the 77 controls. Native
+macOS/Windows and shadcn Zinc/Blue presets support light/dark modes, semantic color
+overrides, radii, fonts and shadows. Runtime switching preserves native editors;
+awaited theme snapshots verify Kit and Base values. Custom title bars and window
+materials remain outside the binding. Refinements in 0.5.0 add
+platform sizing/treatment for Button, DropdownMenu, TextInput, TextArea, Select,
+Checkbox and Switch, plus slider thumb/track tokens. Other controls share the
+palette/radius; there is no claim of full AppKit/WinUI parity.
+See [themes and previews](themes.md).
+
+## Remaining catalog work
+
+These are real gaps, not aliases to generic containers:
+
+| Upstream area | Next implementation |
+| --- | --- |
+| `command` | Groups/keywords/custom rows, user-editable keymaps and sequential chords; native CommandPalette, reusable commands, menus and window shortcuts are implemented |
+| `dock` | Stable panel identities, persistence, drag/detach behavior and multiwindow lifecycle |
+| `setting`, `questionnaire` | Schema-driven settings/questionnaires; Form/Field, validation, conditional fields and submission lifecycle are implemented |
+| `list`, `searchable_list`, virtual list | Native ListState/delegate, stable item keys, sections/custom rows, queued async search, load-more and scroll-to-item; current List renders every item |
+| `table` | Custom cells/editors, richer selection, async delegates and load-more; stable keys, per-column widths/text-numeric sorting, local filtering and native virtualization are implemented |
+| `tree` | Dynamic/lazy children, metadata/custom rows and programmatic expansion/scrolling; stable IDs and native TreeState are implemented, but items are fixed |
+| `select`, `combobox` | Typed item metadata, groups, disabled items, custom triggers/rows and managed async providers; mutable string choices and MultiSelect are implemented |
+| `input` | InputGroup, element adornments, paste/token hooks, caret/selection methods and richer event metadata; TextInput disabled/read-only/password/clear/string adornments/submit/focus/blur and numeric bounds/step are implemented |
+| `message_scroller` | Native anchoring/follow behavior, streaming updates and history loading |
+| `chart`, `plot` | Radar/Sankey, multiple series and lower-level plot composition |
+| Existing families | Button/Avatar groups, image avatars, richer navigation/accordion items, date ranges/disabled-date rules, range sliders, controlled Popover/HoverCard lifecycle and complete builder options; Dialog/Sheet already expose open/close |
+| `input::editor`, `highlighter`, `history` | Language/LSP/completion providers, diagnostics, search/decorations and explicit undo/redo commands; editing/history already run natively |
+| Scroll, layout and styles | Horizontal/bidirectional scrolling, scroll handles, full grid/wrap/per-edge/max-size styling and broader native layout options |
+| Focus, accessibility and locale | General control focus/tab-order APIs, accessibility label/role overrides and Kit locale selection; native component defaults already provide interaction behavior |
+| Notifications | Custom content/actions and fuller lifecycle/configuration; message/title/variant notifications are implemented |
+| `diff`, `speech` | Python state/models/events and native component wrappers; the upstream modules are now in the pin, but neither has a Python API |
+
+Next: native List virtualization and stable item keys, richer selection metadata,
+custom table cells and async data providers. Docking and multiwindow follow.
+Keyed tables, everyday input/selection options and shared command search now have
+native acceptance coverage. Full Kit parity still requires the remaining
+behaviors and wider platform testing.
+
+## Kit 0.7.1 additions and binding limits
+
+The upgraded dependency includes
+[Diff](https://github.com/longbridge/gpui-kit/blob/c1bda59e/website/component/diff.md),
+a native virtualized patch/source/conflict viewer, and
+[Speech](https://github.com/longbridge/gpui-kit/blob/c1bda59e/website/component/speech.md),
+experimental dictation state, button and waveform components. Default microphone
+and system recognition support requires upstream's optional `speech` feature
+and depends on the platform. Neither family is bound in Python, and gpyui does
+not enable the `speech` feature. The optional GPUI Fast backend is available
+upstream but is not enabled by gpyui; the standard GPUI backend remains selected.
+
+Upstream input/IME/completion/streamed-text fixes are included by the upgrade.
+Tooltip timing defaults, clipboard accessibility labels and input-token hover
+events also exist upstream; Python options/event hooks remain unbound.
+
+The source review checks Python contracts, representative native implementations
+and upstream source/docs; it does not certify exhaustive builder or platform
+parity. See [native validation](https://gtrefalt.github.io/gpyui/validation/) for dependency-upgrade checks and
+existing acceptance evidence.
+
+## Images (unreleased)
+
+`Image` exposes Kit’s native `img()` for paths, HTTP(S) URLs, encoded bytes and
+bundled assets, with native GIF/WebP animation, fit modes, sizing, grayscale,
+loading/error text, queued callbacks and retry. Results are scoped to the current
+source and released on replacement/disposal. Image avatars, custom placeholders,
+shared caches and video streaming remain future work. See the [Images guide](images.md).
+
+## Window controls (unreleased)
+
+Window creation now exposes fixed-size policy, configurable minimum content
+size, position/state and movement/minimize flags. Running apps can update title,
+request size/focus/minimize/maximize/fullscreen and read actual native bounds.
+These use GPUI WindowOptions through Kit’s window helper, not extra components.
+One window remains the limit. See [window controls](runtime.md#window-options-unreleased) for the
+Linux fixed-size guard, desktop-dependent behavior and remaining window gaps.

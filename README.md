@@ -27,7 +27,7 @@ documentation for the animated walkthrough.
 
 ## Why gpyui?
 
-- **Native components:** 75 Python controls spanning inputs, images, tables, charts,
+- **Native components:** 77 Python controls spanning inputs, images, tables, charts,
   navigation, dialogs and feedback, backed by GPUI Kit.
 - **Python composition:** build layouts with `Column`, `Row`, containers and
   context managers, or pass an explicit tree of controls.
@@ -36,7 +36,7 @@ documentation for the animated walkthrough.
 - **Async events:** use regular functions or `async def` callbacks; property
   changes are queued and batched for native updates.
 - **Shared commands:** use the same Python action from buttons, nested menus and
-  platform-aware keyboard shortcuts.
+  platform-aware keyboard shortcuts and searchable CommandPalette.
 - **Forms and validation:** Kit Form/Field labels, help and inline errors,
   sync/async Python validators and shared submission with retry. Failed validation
   preserves native text, caret, selection and undo.
@@ -150,10 +150,23 @@ installs agent instructions.
 
 ## Project status
 
-gpyui is in early development. The component catalog has initial Python wrappers;
-specialized Kit APIs are still being exposed. Applications currently use one
-window with dynamic children and visibility. Existing controls retain their native
-identity and editing state when moved or hidden. See the
+gpyui is in early development, with 77 Python controls on `main`. This is basic
+catalog coverage; many upstream builder options and specialized APIs remain
+unbound. The release is 0.5.0; Image, expanded window controls and the exact macOS
+Classic correction, richer tables/inputs, MultiSelect and CommandPalette on `main` are unreleased. The unreleased backend update pins
+GPUI Kit 0.7.1 and GPUI 0.3.8; released 0.5.0 used Kit 0.7.0 / GPUI 0.3.7.
+Diff/Speech have no Python bindings; optional Speech and GPUI Fast are not enabled.
+
+Applications currently use one window with dynamic children and visibility.
+Existing controls retain their native identity and editing state when moved or
+hidden. Table uses Kit's native virtualized table; List currently composes all
+items. Tables now support stable row keys, per-column widths/text-numeric sorting
+and native filtering. Inputs add read-only/masked editing, numeric bounds and
+mutable choices; MultiSelect and CommandPalette expose native selection/search.
+The next priorities are native List virtualization, custom cells and async providers.
+Docking and multiwindow follow. Settings/questionnaires,
+MessageScroller, advanced editor providers and remaining chart APIs are also
+unbound. See the
 [coverage and roadmap](https://gtrefalt.github.io/gpyui/component-coverage/) for
 supported features and planned work.
 

@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tomllib
 from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "examples"))
@@ -23,7 +24,7 @@ import gpyui as ui
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = "https://github.com/gtrefalt/gpyui/blob/main/"
-FIELDS = {
+FIELDS: dict[str, dict[str, tuple[Any, str, str]]] = {
     "Column": {"children": ((), "Iterable[Control]", "Composition")},
     "Label": {"text": ("", "str", "Assignment")},
     "TextInput": {"value": ("", "str", "Assignment"), "placeholder": ("", "str", "Assignment")},
@@ -41,6 +42,41 @@ FIELDS = {
     },
 }
 
+FIELDS["TextInput"].update(
+    {
+        name: (default, kind, "Assignment")
+        for name, default, kind in (
+            ("disabled", False, "bool"),
+            ("read_only", False, "bool"),
+            ("password", False, "bool"),
+            ("clearable", False, "bool"),
+            ("prefix", "", "str"),
+            ("suffix", "", "str"),
+        )
+    }
+)
+FIELDS["CommandPalette"] = {
+    "commands": ([], "Iterable[Command]", "Assignment"),
+    "query": ("", "str", "Assignment"),
+    "placeholder": ("Search commands…", "str", "Assignment"),
+    "searchable": (True, "bool", "Assignment"),
+    "filterable": (True, "bool", "Assignment"),
+    "loading": (False, "bool", "Assignment"),
+}
+
+FIELDS["Table"] = {
+    "columns": ([], "list[str | TableColumn]", "Constructor only"),
+    "rows": ([], "list[list[str]] or list[TableRow]", "Assignment; preserves keyed selection"),
+    "value": (0, "source row index; zero for an empty table", "Assignment"),
+    "selected_key": (None, "str or None when empty", "Assign an existing row key"),
+    "row_keys": ([], "list[str]; derived from rows", "Read only; replaced with rows"),
+    "column_width": (125, "fallback width for string columns, minimum 24 pixels", "Constructor only"),
+    "sortable": (False, "bool; enables header sort buttons", "Constructor only"),
+    "sort_column": (-1, "source column index; -1 clears sorting", "Assignment or sort()"),
+    "sort_descending": (False, "bool", "Assignment or sort()"),
+    "filter": ("", "case-insensitive substring in any cell", "Assignment"),
+}
+
 
 def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", re.sub(r"(?<!^)(?=[A-Z][a-z])", "-", name).lower()).strip("-")
@@ -56,6 +92,10 @@ def type_name(validator):
         "label_width": "nonnegative pixel number",
         "boolean": "bool",
         "number": "finite number",
+        "numbers": "list[finite number]",
+        "optional_number": "finite number or None",
+        "sort_index": "column index; -1 clears sorting",
+        "_command_ids": "list[registered command ID]",
         "integer": "nonnegative int",
         "strings": "list[str]",
         "rows": "list[list[str]]",
@@ -102,7 +142,9 @@ def component_page(name):
     if name == "Button":
         events = ("click",)
     elif name == "TextInput":
-        events = ("change",)
+        events = ("change", "submit", "focus", "blur")
+    if name == "CommandPalette":
+        events = ("query", "cancel")
     if name in FIELDS:
         fields = FIELDS[name]
     else:
@@ -196,6 +238,12 @@ def component_page(name):
         for event in events:
             text = {
                 "change": "Runs after native value and Python mirror/bound State change.",
+                "query": "Receives the current search query after its Python mirror changes.",
+                "cancel": "Reports Escape after the query is empty; a hosting Dialog owns dismissal.",
+                "submit": "Receives the current text on Enter, with native input mirrors updated.",
+                "focus": "Receives the current text when native focus is gained.",
+                "blur": "Receives the current text when native focus is lost.",
+                "sort": "Receives {column, descending} after native header sorting and Python mirrors update.",
                 "click": "Native pointer or keyboard activation, with current input-value snapshots.",
                 "release": "Reports the slider value when the native drag is released.",
                 "resize": "Reports native panel sizes after a resize.",
@@ -208,7 +256,7 @@ def component_page(name):
             "Handlers can take zero arguments or one `Event`, and can be synchronous or async. "
             "They run on the owned Python asyncio loop. See [events and asyncio](../guide/events.md).",
         ]
-        if "change" in events:
+        if "change" in events or "query" in events:
             lines += [
                 "",
                 "`bind_value(State(...))` binds both ways without echoing native edits back through setters. "
@@ -244,6 +292,7 @@ def generated_files():
         "TextInput",
         "Button",
         "DropdownMenu",
+        "CommandPalette",
         "Form",
         "Field",
         "Image",
@@ -260,6 +309,9 @@ def generated_files():
         "",
         "Use the site search to find a control by name. "
         "[Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.",
+        "",
+        "The catalog follows `main`, including unreleased contracts. Check the coverage page's "
+        "release status against your installed version before using an example.",
         "",
     ]
     nav = ['{ "Components" = [', '  { "Overview" = "components/index.md" },']
@@ -318,11 +370,12 @@ def skill_references():
     index = [
         "# Python component index",
         "",
-        f"Generated from gpyui {version}'s Python contracts and tested catalog specimens.",
+        f"Generated from the repository's Python contracts (manifest version {version}) and tested catalog specimens.",
         "Run `uv run --only-group docs python scripts/generate-docs.py` in the library checkout to regenerate.",
         "",
         "Read only the families relevant to the task. Each includes complete runnable examples,",
         "properties, events, constructor-only fields and limits. Rust Kit methods do not imply Python methods.",
+        "These contracts include unreleased work; check [release status and coverage](coverage.md) against your installed version.",
         "See [composition](composition.md), [state/events](state-and-events.md) and [styling](styling.md) for shared contracts.",
         "",
         "| Family | Python controls |",
@@ -332,7 +385,13 @@ def skill_references():
     for group, names in GROUPS.items():
         relative = f"components/{slug(group)}.md"
         index.append(f"| [{group}]({relative}) | {', '.join(names)} |")
-        lines = [f"# {group}", "", f"Generated Python API reference for gpyui {version}.", ""]
+        lines = [
+            f"# {group}",
+            "",
+            f"Generated Python API reference from the repository (manifest version {version}).",
+            "Includes unreleased contracts; check [release status and coverage](../coverage.md) against your installed version.",
+            "",
+        ]
         for name in names:
             page = component_page(name)
             page = re.sub(r"^!\[Native .*?\n\n", "", page, flags=re.MULTILINE)
@@ -353,6 +412,7 @@ def skill_references():
                         "guide/commands": "../commands-and-menus.md",
                         "guide/forms": "../forms.md",
                         "guide/images": "../images.md",
+                        "component-coverage": "../coverage.md",
                     }.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('/index')}/")
                     + (
                         "#dynamic-composition"
@@ -366,6 +426,38 @@ def skill_references():
             lines.append(page)
         files[prefix + relative] = "\n".join(lines)
     files[prefix + "components.md"] = "\n".join(index) + "\n"
+    coverage = (ROOT / "docs/component-coverage.md").read_text()
+    targets = {
+        "guide/commands.md": "commands-and-menus.md",
+        "guide/themes.md": "themes.md",
+        "guide/images.md": "images.md",
+        "guide/windows.md": "runtime.md#window-options-unreleased",
+    }
+    coverage = re.sub(
+        r"\]\((?![a-zA-Z][a-zA-Z0-9+.-]*:|#)([^)]+)\)",
+        lambda match: (
+            "]("
+            + targets.get(match[1], f"https://gtrefalt.github.io/gpyui/{match[1].removesuffix('.md')}/")
+            + ")"
+        ),
+        coverage,
+    )
+    files[prefix + "coverage.md"] = (
+        "<!-- Generated from docs/component-coverage.md; run just docs-generate. -->\n\n" + coverage
+    )
+    for source, target in (("commands", "commands-and-menus"), ("data-inputs", "data-inputs")):
+        content = (ROOT / f"docs/guide/{source}.md").read_text()
+        content = content.replace("](../component-coverage.md)", "](coverage.md)").replace(
+            "](commands.md#", "](commands-and-menus.md#"
+        )
+        content = re.sub(
+            r"\]\(\.\./examples/([^)]*)\.md\)",
+            lambda match: f"](https://gtrefalt.github.io/gpyui/examples/{match[1]}/)",
+            content,
+        )
+        files[prefix + target + ".md"] = (
+            f"<!-- Generated from docs/guide/{source}.md; run just docs-generate. -->\n\n" + content
+        )
     return files
 
 

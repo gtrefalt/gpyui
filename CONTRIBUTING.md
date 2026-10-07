@@ -59,6 +59,8 @@ to the gitignored `artifacts/` directory. See the
 ## Documentation
 
 ```bash
+just docs-generate
+just skills-check
 just docs-check
 just docs-serve
 ```
@@ -67,6 +69,12 @@ Documentation tools run in `.venv-docs` and do not require compiling Rust.
 See [documentation development](https://gtrefalt.github.io/gpyui/contributing-docs/)
 for generated component references, native screenshot capture and GitHub Pages.
 Keep animations in the documentation; the package README uses a static PNG.
+Keep README status, documentation and bundled skills aligned with public API
+changes. `docs/component-coverage.md` is the shared coverage and roadmap source;
+`just docs-generate` copies it into the installable technical skill alongside the
+generated component contracts. Mark unreleased APIs and distinguish newer
+upstream features from gaps in the pinned version. Documentation/skill updates
+alone do not require a version bump or native wheel build.
 
 ## Pull requests
 
@@ -83,3 +91,7 @@ automatic publishing and recovery without rebuilding.
 
 gpyui's code is licensed under [MIT](LICENSE). Preserve third-party license
 notices; dependencies retain their own licenses.
+
+The command and table/input guides also generate their matching bundled skill
+references. Edit `docs/guide/commands.md` or `docs/guide/data-inputs.md`, format
+its Python snippets, and run `just docs-generate` before the sync checks.

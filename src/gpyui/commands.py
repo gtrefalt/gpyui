@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, Self
 
 from .controls import Control, Handler, _ids
 from .state import State
+from .widgets import BOOL, TEXT, KitControl, integer, text
 
 if TYPE_CHECKING:
     from .application import Application
@@ -240,3 +241,66 @@ class DropdownMenu(Control):
         if not isinstance(value, bool):
             raise TypeError("disabled requires bool")
         self._set("disabled", value)
+
+
+def _command_ids(value: Any) -> list[int]:
+    if not isinstance(value, list | tuple) or len(value) > 1024:
+        raise ValueError("palette supports up to 1,024 commands")
+    return [integer(item) for item in value]
+
+
+class CommandPalette(KitControl):
+    """A retained, searchable native command list; compose it inside a Dialog."""
+
+    native = "command_palette"
+    fields = {
+        "value": TEXT,
+        "items": ([], _command_ids),
+        "placeholder": ("Search commands…", text),
+        "searchable": (True, BOOL[1]),
+        "filterable": (True, BOOL[1]),
+        "loading": BOOL,
+    }
+    events = ("query", "cancel")
+    readonly = ("items",)
+
+    def __init__(
+        self, commands: Iterable[Command] = (), *, query: str = "", on_query=None, **properties: Any
+    ):
+        if "items" in properties or "value" in properties or "on_change" in properties:
+            raise TypeError("use commands, query and on_query for a command palette")
+        self._palette_commands = self._validate_commands(commands)
+        super().__init__(
+            value=query, items=[c.id for c in self._palette_commands], on_query=on_query, **properties
+        )
+
+    @staticmethod
+    def _validate_commands(commands: Iterable[Command]) -> tuple[Command, ...]:
+        result = tuple(commands)
+        if any(not isinstance(command, Command) for command in result):
+            raise TypeError("palette commands require Command")
+        if len(result) > 1024 or len({c.id for c in result}) != len(result):
+            raise ValueError("palette commands must be unique, with at most 1,024 entries")
+        return result
+
+    @property
+    def commands(self) -> tuple[Command, ...]:
+        return self._palette_commands
+
+    @commands.setter
+    def commands(self, value: Iterable[Command]) -> None:
+        commands = self._validate_commands(value)
+        self._ensure_alive()
+        if self._app:
+            self._app._check_mutation()
+            self._app._register_commands(commands)
+        self._replace_properties(items=[c.id for c in commands])
+        self._palette_commands = commands
+
+    @property
+    def query(self) -> str:
+        return self.value
+
+    @query.setter
+    def query(self, value: str) -> None:
+        self.value = value

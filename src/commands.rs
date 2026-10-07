@@ -154,7 +154,8 @@ pub(crate) fn add_schema(
         }
         Ok(())
     }
-    visit(nodes, schema)
+    visit(nodes, schema)?;
+    crate::protocol::validate_palettes(schema)
 }
 
 pub(crate) fn has_command(entries: &[MenuEntry], id: u64) -> bool {

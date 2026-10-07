@@ -59,7 +59,7 @@ styles; `radius` rounds the drawn image itself.
 
 `fit` accepts `contain` (whole image, default), `cover` (fill and crop), `fill`
 (stretch), `scale_down` (contain without enlargement), or `none` (intrinsic size,
-anchored at the top left in pinned GPUI 0.3.7). `grayscale=True` changes native drawing. These properties can change
+anchored at the top left in pinned GPUI 0.3.8). `grayscale=True` changes native drawing. These properties can change
 without restarting a download or remounting the control.
 
 `loading_text` appears after GPUI's 200 ms placeholder delay; `error_text` replaces

@@ -23,7 +23,7 @@ Run this in a fresh Python process on a desktop with the native build installed.
 
 | Property | Default | Type / accepted values | Update |
 | --- | --- | --- | --- |
-| `items` | `[]` | list[str] | Constructor only |
+| `items` | `[]` | list[str] | Assignment |
 | `value` | `""` | str | Assignment |
 | `placeholder` | `"Choose…"` | str | Assignment |
 | `disabled` | `false` | bool | Assignment |
@@ -40,8 +40,8 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 ## Contract and limits
 
-value is a selected string or "". Items are fixed after construction.
+value is one selected string or "". Reassign unique nonempty items to refresh choices; unavailable selection is cleared. Use MultiSelect for multiple values.
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L596) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L757) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

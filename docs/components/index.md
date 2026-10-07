@@ -1,8 +1,10 @@
 # Components
 
-Browse all **75 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
+Browse all **77 Python controls**. Each page includes a native preview, an executable Python example, accepted properties and events. These are real GPUI/Kit controls, not browser replicas.
 
 Use the site search to find a control by name. [Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.
+
+The catalog follows `main`, including unreleased contracts. Check the coverage page's release status against your installed version before using an example.
 
 ## Layout
 
@@ -119,6 +121,16 @@ Native activation invokes Python callbacks.
 **[DropdownMenu](dropdown-menu.md)**
 
 A Kit button with nested commands, checks and shortcut hints.
+
+</div>
+
+<div class="component-card" markdown>
+
+[![Native CommandPalette component](../screenshots/components/command-palette.png?v=5d916acdbec2)](command-palette.md)
+
+**[CommandPalette](command-palette.md)**
+
+Search and execute shared native commands.
 
 </div>
 
@@ -329,6 +341,16 @@ Search within native string choices.
 
 <div class="component-card" markdown>
 
+[![Native MultiSelect component](../screenshots/components/multi-select.png?v=0ea8925c14d9)](multi-select.md)
+
+**[MultiSelect](multi-select.md)**
+
+Search and select several native choices.
+
+</div>
+
+<div class="component-card" markdown>
+
 [![Native Slider component](../screenshots/components/slider.png?v=909cf05cf762)](slider.md)
 
 **[Slider](slider.md)**
@@ -419,11 +441,11 @@ Compose selectable native ListItems.
 
 <div class="component-card" markdown>
 
-[![Native Table component](../screenshots/components/table.png?v=9c4618ea2d84)](table.md)
+[![Native Table component](../screenshots/components/table.png?v=e0bd71e875c8)](table.md)
 
 **[Table](table.md)**
 
-Native retained table state with string rows.
+Native virtualized table with stable row keys, sorting and filtering.
 
 </div>
 
@@ -669,7 +691,7 @@ Full-color images decoded, cached and rendered natively.
 
 <div class="component-card" markdown>
 
-[![Native Markdown component](../screenshots/components/markdown.png?v=6504c1637d8e)](markdown.md)
+[![Native Markdown component](../screenshots/components/markdown.png?v=0f21955f2b96)](markdown.md)
 
 **[Markdown](markdown.md)**
 
@@ -679,7 +701,7 @@ Native rich text from Markdown.
 
 <div class="component-card" markdown>
 
-[![Native Html component](../screenshots/components/html.png?v=849cf4789ff8)](html.md)
+[![Native Html component](../screenshots/components/html.png?v=da727c71e423)](html.md)
 
 **[Html](html.md)**
 

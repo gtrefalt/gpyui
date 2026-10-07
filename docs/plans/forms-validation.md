@@ -1,18 +1,19 @@
 # Forms and validation implementation
 
-Implemented against GPUI 0.3.7 and Kit revision
-`3a142844d3661159964dce9e5512ca9a40286160`. Cargo pins remain unchanged.
+Originally implemented against Kit 0.7.0 / GPUI 0.3.7. The current source
+references follow Kit 0.7.1 at `c1bda59e67f46266991a230ae94f749af496af2a`
+and GPUI 0.3.8; see [validation](../validation.md) for upgrade acceptance checks.
 This milestone follows dynamic children, commands and themes; it is included in 0.5.0.
 
 ## Upstream evidence
 
 | Source at the pinned Kit revision | Binding decision |
 | --- | --- |
-| [Form](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/form/form.rs) accepts typed `Vec<Field>`, supplies layout/size props, label width, columns and footer | Build actual Kit Fields inside actual Kit Form in Rust; validate direct named Field children before mounting or reconciliation. Apply grid/span styles to those builders. |
-| [Field](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/form/field.rs) supplies label, required marker, description/description_fn, children and column span | Expose these as Python metadata. Render help plus error using description_fn and semantic muted/danger text. Form summary uses its footer. |
+| [Form](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/form/form.rs) accepts typed `Vec<Field>`, supplies layout/size props, label width, columns and footer | Build actual Kit Fields inside actual Kit Form in Rust; validate direct named Field children before mounting or reconciliation. Apply grid/span styles to those builders. |
+| [Field](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/form/field.rs) supplies label, required marker, description/description_fn, children and column span | Expose these as Python metadata. Render help plus error using description_fn and semantic muted/danger text. Form summary uses its footer. |
 | Form/Field have no validation engine, submit callback, schema coercion or error setter | Keep Python validation policy explicit. Do not claim those mechanisms are upstream Kit features. |
-| [Input](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/state.rs) retains native editing state through the Base input engine | Reuse existing native input entities and focus handles. Failure changes Field/Form metadata, never editor values. |
-| [Base input keyboard bindings](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/base/src/input/base/state.rs) own caret, selection, grouped history and OS-specific undo/redo | Verify editing via real keyboard events; use Ctrl+Y for native Linux redo rather than imposing a Python undo policy. |
+| [Input](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/input/state.rs) retains native editing state through the Base input engine | Reuse existing native input entities and focus handles. Failure changes Field/Form metadata, never editor values. |
+| [Base input keyboard bindings](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/base/src/input/base/state.rs) own caret, selection, grouped history and OS-specific undo/redo | Verify editing via real keyboard events; use Ctrl+Y for native Linux redo rather than imposing a Python undo policy. |
 
 The existing [NiceGUI/Flet source comparison](../architecture.md#implementation-evidence-and-adopted-patterns)
 continues to guide Python composition and callback ownership. Form submission

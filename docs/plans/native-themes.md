@@ -1,22 +1,22 @@
 # Native theme implementation plan
 
-Verified against GPUI Kit revision
-`3a142844d3661159964dce9e5512ca9a40286160` and GPUI `0.3.7`; no dependency update
-is required for this milestone.
+Originally implemented against Kit 0.7.0 / GPUI 0.3.7. The current source
+references follow Kit 0.7.1 at `c1bda59e67f46266991a230ae94f749af496af2a`
+and GPUI 0.3.8; see [validation](../validation.md) for upgrade acceptance checks.
 
 ## Source evidence
 
-- [ThemeConfig and Theme::apply_config](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/schema.rs):
+- [ThemeConfig and Theme::apply_config](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/theme/schema.rs):
   mode, font families/sizes, integer radius, shadow, semantic colors and component
   color fallbacks. Primary colors flow into actual button hover/active colors;
   input borders, popovers, menus and other controls use the same configuration.
-- [Theme::update](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/mod.rs):
+- [Theme::update](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/theme/mod.rs):
   reconcile legacy colors and background tokens, synchronize the Base theme and
   refresh windows. Direct `global_mut` edits bypass that synchronization. Applying
   semantic tokens alone leaves some legacy component palettes unchanged.
-- [Root::render](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/root.rs):
+- [Root::render](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/root.rs):
   inherit current font family/size and update window rem size on render.
-- [Monospace fallback](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/mono_font.rs):
+- [Monospace fallback](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/theme/mono_font.rs):
   resolve the platform default to an installed family; explicit families are
   application choices and must be installed.
 
@@ -61,21 +61,21 @@ The first captures exposed a gap: colors/radii alone left the actual controls
 nearly identical. No upstream revision change is needed. Verified hooks at the
 same pinned source are:
 
-- [button/button.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/button/button.rs): `Sizable` and `Styled` instance refinement reach the real
+- [button/button.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/button/button.rs): `Sizable` and `Styled` instance refinement reach the real
   button after variant styling. Apply 24/32 px heights, padding, font and radius;
   keep enabled/hover/active/keyboard handling in Kit.
-- [input/input.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/input.rs) and [input/textarea.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/input/textarea.rs): appearance-free rendering keeps the
+- [input/input.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/input/input.rs) and [input/textarea.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/input/textarea.rs): appearance-free rendering keeps the
   original text state, context menu, accessibility and keyboard actions. Wrap
   that renderer in a Rust presentation frame with the original focus handle,
   full-height multiline containment and a halo / underline focus treatment.
-- [select.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/select.rs): `appearance(false)` removes the trigger frame while retaining
+- [select.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/select.rs): `appearance(false)` removes the trigger frame while retaining
   selection/search/menu state; `Sizable` controls trigger and popup density.
-- [sizing.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/sizing.rs): custom Size does **not** provide arbitrary input height: it uses
+- [sizing.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/sizing.rs): custom Size does **not** provide arbitrary input height: it uses
   the six-rem-unit branch and scales text by 0.875 of the supplied pixel value.
   Use Small/Medium and explicit frame heights rather than treating Size as height.
-- [checkbox.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/checkbox.rs), [switch.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/switch.rs): size enums change actual indicator/track geometry;
+- [checkbox.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/checkbox.rs), [switch.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/switch.rs): size enums change actual indicator/track geometry;
   Switch.color overrides checked color independently from primary. Track/thumb
-  and slider colors have ThemeConfig keys in [theme/schema.rs](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/schema.rs).
+  and slider colors have ThemeConfig keys in [theme/schema.rs](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/theme/schema.rs).
 - GPUI's text system exposes installed family names, enabling preset preferences
   without bundling proprietary fonts or repeatedly trying missing families.
 

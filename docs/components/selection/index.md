@@ -75,6 +75,16 @@ Search within native string choices.
 
 <div class="component-card" markdown>
 
+[![Native MultiSelect component](../../screenshots/components/multi-select.png?v=0ea8925c14d9)](../multi-select.md)
+
+**[MultiSelect](../multi-select.md)**
+
+Search and select several native choices.
+
+</div>
+
+<div class="component-card" markdown>
+
 [![Native Slider component](../../screenshots/components/slider.png?v=909cf05cf762)](../slider.md)
 
 **[Slider](../slider.md)**

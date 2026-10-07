@@ -2,7 +2,7 @@
 
 Native rich text from Markdown.
 
-![Native Markdown preview](../screenshots/components/markdown.png?v=6504c1637d8e)
+![Native Markdown preview](../screenshots/components/markdown.png?v=0f21955f2b96)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
@@ -39,4 +39,4 @@ Text rendering and selection stay native.
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L689) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L890) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

@@ -25,8 +25,24 @@ pub(crate) fn fields(kind: &str) -> Option<&'static [&'static str]> {
         }
         "rating" => &["value", "disabled"],
         "slider" => &["value", "minimum", "maximum", "step", "disabled"],
-        "select" | "combobox" => &["items", "value", "placeholder", "disabled"],
-        "textarea" | "number_input" | "editor" => &["value", "placeholder", "disabled"],
+        "select" | "combobox" | "multi_select" => &["items", "value", "placeholder", "disabled"],
+        "textarea" | "editor" => &["value", "placeholder", "disabled", "read_only"],
+        "number_input" => &[
+            "value",
+            "placeholder",
+            "disabled",
+            "minimum",
+            "maximum",
+            "step",
+        ],
+        "command_palette" => &[
+            "value",
+            "items",
+            "placeholder",
+            "searchable",
+            "filterable",
+            "loading",
+        ],
         "otp_input" => &["value", "length", "disabled"],
         "progress" | "progress_circle" => &["value", "loading"],
         "tag" => &["text", "variant"],
@@ -50,7 +66,19 @@ pub(crate) fn fields(kind: &str) -> Option<&'static [&'static str]> {
         "shimmer" | "clipboard" | "tooltip" | "popover" | "hover_card" => &["text"],
         "kbd" => &["key"],
         "collapsible" => &["text", "value"],
-        "table" => &["columns", "rows", "value", "column_width"],
+        "table" => &[
+            "columns",
+            "rows",
+            "value",
+            "column_width",
+            "row_keys",
+            "column_widths",
+            "sort_types",
+            "sortable",
+            "sort_column",
+            "sort_descending",
+            "filter",
+        ],
         "line_chart" | "area_chart" | "bar_chart" | "pie_chart" | "candlestick_chart" => &["data"],
         "message" => &["text", "author"],
         "marker" => &["text", "loading"],
@@ -76,7 +104,7 @@ fn integer(value: &Value) -> bool {
 fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
     match property {
         "text" | "title" | "description" | "author" | "placeholder" | "href" | "label" | "help"
-        | "error" | "loading_text" | "error_text" => value.is_string(),
+        | "error" | "loading_text" | "error_text" | "filter" => value.is_string(),
         "source" => crate::images::valid_source(value),
         "fit" => value
             .as_str()
@@ -105,8 +133,17 @@ fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
                     && s.bytes()
                         .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-'))
         }),
-        "disabled" | "loading" | "vertical" | "required" | "grayscale" => value.is_boolean(),
+        "disabled" | "loading" | "vertical" | "required" | "grayscale" | "read_only"
+        | "searchable" | "filterable" | "sortable" | "sort_descending" => value.is_boolean(),
+        "minimum" | "maximum" if kind == "number_input" => value.is_null() || finite(value),
         "minimum" | "maximum" | "step" => finite(value),
+        "sort_column" => value
+            .as_i64()
+            .is_some_and(|v| (-1..=1_000_000).contains(&v)),
+        "column_widths" => value.as_array().is_some_and(|a| {
+            a.len() <= 10_000 && a.iter().all(|v| finite(v) && v.as_f64().unwrap() >= 24.)
+        }),
+        "row_keys" | "sort_types" => strings(value),
         "column_width" => finite(value) && value.as_f64().unwrap() >= 24.,
         "count" | "pages" | "length" => integer(value),
         "variant" => value.as_str().is_some_and(|s| {
@@ -123,6 +160,9 @@ fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
                         .all(|r| strings(r) && r.as_array().unwrap().len() == 2)
             })
         }
+        "items" if kind == "command_palette" => value.as_array().is_some_and(|a| {
+            a.len() <= 1024 && a.iter().all(|v| v.as_u64().is_some_and(|id| id > 0))
+        }),
         "items" if kind == "tree" => valid_tree(value),
         "items" => strings(value),
         "rows" => value
@@ -158,8 +198,9 @@ fn valid_field(kind: &str, property: &str, value: &Value) -> bool {
                     && s.starts_with('#')
                     && s[1..].bytes().all(|b| b.is_ascii_hexdigit())
             }),
-            "select" | "combobox" | "textarea" | "number_input" | "otp_input" | "editor"
-            | "tree" => value.is_string(),
+            "multi_select" => strings(value),
+            "command_palette" | "select" | "combobox" | "textarea" | "number_input"
+            | "otp_input" | "editor" | "tree" => value.is_string(),
             "slider" => finite(value),
             "progress" | "progress_circle" => {
                 finite(value) && (0. ..=100.).contains(&value.as_f64().unwrap())
@@ -178,9 +219,12 @@ pub(crate) fn validate_property(
     value: &Value,
 ) -> bool {
     if (kind == "slider" && matches!(property, "minimum" | "maximum" | "step"))
-        || (kind == "table" && matches!(property, "columns" | "column_width"))
+        || (kind == "table"
+            && matches!(
+                property,
+                "columns" | "column_width" | "column_widths" | "sort_types" | "sortable"
+            ))
         || (matches!(kind, "dialog" | "sheet") && property == "title")
-        || (matches!(kind, "select" | "combobox") && property == "items")
         || (kind == "otp_input" && property == "length")
         || (kind == "tree" && property == "items")
         || (kind == "resizable" && property == "vertical")
@@ -193,26 +237,8 @@ pub(crate) fn validate_property(
     {
         return false;
     }
-    let p = Props(initial);
-    match (kind, property) {
-        ("tree", "value") => value == "" || tree_has(&initial["items"], value.as_str().unwrap()),
-        ("slider", "value") => {
-            (p.n("minimum") as f64..=p.n("maximum") as f64).contains(&value.as_f64().unwrap())
-        }
-        ("select" | "combobox", "value") => {
-            value == "" || initial["items"].as_array().unwrap().contains(value)
-        }
-        ("otp_input", "value") => {
-            value.as_str().unwrap().len() <= p.ix("length")
-                && value.as_str().unwrap().bytes().all(|b| b.is_ascii_digit())
-        }
-        ("table", "rows") => value
-            .as_array()
-            .unwrap()
-            .iter()
-            .all(|r| r.as_array().unwrap().len() == p.strings("columns").len()),
-        _ => true,
-    }
+    let _ = initial;
+    true
 }
 
 pub(crate) fn validate(kind: &str, props: &Map<String, Value>) -> Result<(), String> {
@@ -235,11 +261,38 @@ pub(crate) fn validate(kind: &str, props: &Map<String, Value>) -> Result<(), Str
     {
         return Err("invalid slider range/value".into());
     }
-    if matches!(kind, "select" | "combobox")
-        && !p.s("value").is_empty()
-        && !p.strings("items").contains(&p.s("value"))
+    if matches!(kind, "select" | "combobox" | "multi_select") {
+        let items = props["items"].as_array().unwrap();
+        let mut seen = std::collections::HashSet::new();
+        if items
+            .iter()
+            .any(|v| v == "" || !seen.insert(v.as_str().unwrap()))
+        {
+            return Err("select items must be unique and nonempty".into());
+        }
+        let values = if kind == "multi_select" {
+            props["value"].as_array().unwrap().clone()
+        } else if props["value"] == "" {
+            vec![]
+        } else {
+            vec![props["value"].clone()]
+        };
+        let mut selected = std::collections::HashSet::new();
+        if values
+            .iter()
+            .any(|v| !items.contains(v) || !selected.insert(v.as_str().unwrap()))
+        {
+            return Err("selected values must be unique items".into());
+        }
+    }
+    if kind == "number_input"
+        && (p.n("step") <= 0.
+            || (props["minimum"]
+                .as_f64()
+                .zip(props["maximum"].as_f64())
+                .is_some_and(|(min, max)| min > max)))
     {
-        return Err("select value must be an item".into());
+        return Err("invalid numeric bounds/step".into());
     }
     if kind == "otp_input"
         && (!(1..=32).contains(&p.ix("length"))
@@ -248,12 +301,25 @@ pub(crate) fn validate(kind: &str, props: &Map<String, Value>) -> Result<(), Str
     {
         return Err("invalid OTP length/value".into());
     }
-    if kind == "table"
-        && p.rows("rows")
-            .iter()
-            .any(|r| r.len() != p.strings("columns").len())
-    {
-        return Err("table rows must match columns".into());
+    if kind == "table" {
+        let columns = p.strings("columns").len();
+        let rows = p.rows("rows");
+        let keys = p.strings("row_keys");
+        let unique: std::collections::HashSet<_> = keys.iter().collect();
+        if rows.iter().any(|r| r.len() != columns)
+            || keys.len() != rows.len()
+            || unique.len() != keys.len()
+            || keys.iter().any(|key| key.is_empty())
+            || props["column_widths"].as_array().unwrap().len() != columns
+            || p.strings("sort_types").len() != columns
+            || p.strings("sort_types")
+                .iter()
+                .any(|s| !matches!(s.as_str(), "text" | "number"))
+            || props["sort_column"].as_i64().unwrap() >= columns as i64
+            || (!rows.is_empty() && p.ix("value") >= rows.len())
+        {
+            return Err("invalid table columns, rows, keys or selection".into());
+        }
     }
     if kind == "pagination" && (p.ix("pages") == 0 || p.ix("value") >= p.ix("pages")) {
         return Err("invalid page index".into());
@@ -359,6 +425,7 @@ impl Props<'_> {
 
 pub(crate) enum NativeState {
     None,
+    Palette(Entity<c::command::CommandState>),
     Image(Entity<crate::images::NativeImage>),
     Slider(Entity<c::slider::SliderState>),
     Select(Entity<c::select::SelectState<Vec<SharedString>>>),
@@ -387,7 +454,82 @@ pub(crate) struct NativeKit {
 pub(crate) struct TableData {
     pub(crate) columns: Vec<SharedString>,
     pub(crate) rows: Vec<Vec<SharedString>>,
-    pub(crate) width: f32,
+    pub(crate) order: Vec<usize>,
+    widths: Vec<f32>,
+    sort_types: Vec<SharedString>,
+    sort_column: i64,
+    descending: bool,
+    sortable: bool,
+    id: u64,
+    view: WeakEntity<NativeView>,
+}
+
+impl TableData {
+    pub(crate) fn new(props: &Map<String, Value>, id: u64, view: WeakEntity<NativeView>) -> Self {
+        let mut data = Self {
+            columns: vec![],
+            rows: vec![],
+            order: vec![],
+            widths: vec![],
+            sort_types: vec![],
+            sort_column: -1,
+            descending: false,
+            sortable: false,
+            id,
+            view,
+        };
+        data.configure(props);
+        data
+    }
+    fn configure(&mut self, props: &Map<String, Value>) {
+        let p = Props(props);
+        self.columns = p.strings("columns");
+        self.rows = p.rows("rows");
+        self.widths = props["column_widths"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| v.as_f64().unwrap() as f32)
+            .collect();
+        self.sort_types = p.strings("sort_types");
+        self.sort_column = props["sort_column"].as_i64().unwrap();
+        self.descending = p.b("sort_descending");
+        self.sortable = p.b("sortable");
+        let filter = p.s("filter").to_lowercase();
+        self.order = (0..self.rows.len())
+            .filter(|ix| {
+                filter.is_empty()
+                    || self.rows[*ix]
+                        .iter()
+                        .any(|cell| cell.to_lowercase().contains(&filter))
+            })
+            .collect();
+        if self.sort_column >= 0 {
+            let col = self.sort_column as usize;
+            let numeric = self.sort_types[col] == "number";
+            self.order.sort_by(|a, b| {
+                let a = self.rows[*a][col].as_str();
+                let b = self.rows[*b][col].as_str();
+                let compare = if numeric {
+                    let a_number = a.parse::<f64>().ok().filter(|v| v.is_finite());
+                    let b_number = b.parse::<f64>().ok().filter(|v| v.is_finite());
+                    match (a_number, b_number) {
+                        (Some(a), Some(b)) => a.total_cmp(&b),
+                        (Some(_), None) => std::cmp::Ordering::Less,
+                        (None, Some(_)) => std::cmp::Ordering::Greater,
+                        (None, None) => a.cmp(b),
+                    }
+                } else {
+                    a.cmp(b)
+                };
+                if self.descending {
+                    compare.reverse()
+                } else {
+                    compare
+                }
+            });
+        }
+    }
 }
 
 impl c::table::TableDelegate for TableData {
@@ -395,10 +537,43 @@ impl c::table::TableDelegate for TableData {
         self.columns.len()
     }
     fn rows_count(&self, _: &App) -> usize {
-        self.rows.len()
+        self.order.len()
     }
     fn column(&self, ix: usize, _: &App) -> c::table::Column {
-        c::table::Column::new(format!("col-{ix}"), self.columns[ix].clone()).width(px(self.width))
+        let col = c::table::Column::new(format!("col-{ix}"), self.columns[ix].clone())
+            .width(px(self.widths[ix]));
+        if self.sortable {
+            col.sort(if self.sort_column != ix as i64 {
+                c::table::ColumnSort::Default
+            } else if self.descending {
+                c::table::ColumnSort::Descending
+            } else {
+                c::table::ColumnSort::Ascending
+            })
+        } else {
+            col
+        }
+    }
+    fn perform_sort(
+        &mut self,
+        col: usize,
+        sort: c::table::ColumnSort,
+        window: &mut Window,
+        cx: &mut Context<c::table::TableState<Self>>,
+    ) {
+        let id = self.id;
+        let view = self.view.clone();
+        let column = if sort == c::table::ColumnSort::Default {
+            -1
+        } else {
+            col as i64
+        };
+        let descending = sort == c::table::ColumnSort::Descending;
+        window.defer(cx, move |window, cx| {
+            _ = view.update(cx, |view, cx| {
+                view.table_sort(id, column, descending, window, cx)
+            });
+        });
     }
     fn render_td(
         &mut self,
@@ -408,9 +583,10 @@ impl c::table::TableDelegate for TableData {
         _: &mut Context<c::table::TableState<Self>>,
     ) -> impl IntoElement {
         div().child(
-            self.rows
+            self.order
                 .get(row)
-                .and_then(|r| r.get(col))
+                .and_then(|ix| self.rows.get(*ix))
+                .and_then(|row| row.get(col))
                 .cloned()
                 .unwrap_or_default(),
         )
@@ -420,6 +596,10 @@ impl c::table::TableDelegate for TableData {
 impl NativeKit {
     pub(crate) fn value(&self, cx: &App) -> Option<Value> {
         Some(match &self.state {
+            // Confirm/cancel dispatch synchronously while CommandState is leased.
+            // Query callbacks mirror text after that lease releases, so activation
+            // snapshots must use this mirror instead of reading the leased entity.
+            NativeState::Palette(_) => return self.props.get("value").cloned(),
             NativeState::Editor(s) => json!(s.read(cx).value().as_str()),
             NativeState::Tree(s) => json!(
                 s.read(cx)
@@ -439,6 +619,13 @@ impl NativeKit {
                     .selected_value()
                     .map(SharedString::as_str)
                     .unwrap_or("")
+            ),
+            NativeState::Combobox(s) if self.kind == "multi_select" => json!(
+                s.read(cx)
+                    .selected_values()
+                    .iter()
+                    .map(SharedString::as_str)
+                    .collect::<Vec<_>>()
             ),
             NativeState::Combobox(s) => json!(
                 s.read(cx)
@@ -468,6 +655,15 @@ impl NativeKit {
         self.props.insert(property.to_owned(), value);
         let p = Props(&self.props);
         match &self.state {
+            NativeState::Palette(state) if matches!(property, "value" | "loading") => {
+                state.update(cx, |state, cx| {
+                    if property == "value" {
+                        state.set_query(p.s("value"), window, cx);
+                    } else {
+                        state.set_loading(p.b("loading"), window, cx);
+                    }
+                })
+            }
             NativeState::Image(state) if matches!(property, "source" | "_revision") => {
                 state.update(cx, |state, cx| state.reset(&self.props, window, cx));
             }
@@ -492,12 +688,29 @@ impl NativeKit {
             NativeState::Slider(state) if property == "value" => {
                 state.update(cx, |state, cx| state.set_value(p.n("value"), window, cx))
             }
-            NativeState::Select(state) if property == "value" => state.update(cx, |state, cx| {
-                state.set_selected_value(&p.s("value"), window, cx)
-            }),
-            NativeState::Combobox(state) if property == "value" => state.update(cx, |state, cx| {
-                state.set_selected_values(&[p.s("value")], window, cx)
-            }),
+            NativeState::Select(state) if matches!(property, "items" | "value") => {
+                state.update(cx, |state, cx| {
+                    if property == "items" {
+                        state.set_items(p.strings("items"), window, cx);
+                    }
+                    state.set_selected_value(&p.s("value"), window, cx);
+                })
+            }
+            NativeState::Combobox(state) if matches!(property, "items" | "value") => {
+                state.update(cx, |state, cx| {
+                    if property == "items" {
+                        state.set_items(p.strings("items"), window, cx);
+                    }
+                    let values = if self.kind == "multi_select" {
+                        p.strings("value")
+                    } else if p.s("value").is_empty() {
+                        vec![]
+                    } else {
+                        vec![p.s("value")]
+                    };
+                    state.set_selected_values(&values, window, cx);
+                })
+            }
             NativeState::Textarea(state) => state.update(cx, |state, cx| {
                 if property == "value" {
                     state.set_value(p.s("value"), window, cx);
@@ -506,6 +719,18 @@ impl NativeKit {
                 }
             }),
             NativeState::Number(state) => state.update(cx, |state, cx| {
+                match property {
+                    "minimum" => state.set_min(self.props["minimum"].as_f64(), window, cx),
+                    "maximum" => state.set_max(self.props["maximum"].as_f64(), window, cx),
+                    "step" => state.set_step(
+                        Some(c::input::NumberStep::Fixed(
+                            self.props["step"].as_f64().unwrap(),
+                        )),
+                        window,
+                        cx,
+                    ),
+                    _ => (),
+                }
                 if property == "value" {
                     state.set_value(p.s("value"), window, cx);
                 } else if property == "placeholder" {
@@ -535,17 +760,29 @@ impl NativeKit {
             NativeState::Carousel(state) if property == "value" => {
                 state.update(cx, |state, cx| state.set_selected_index(p.ix("value"), cx))
             }
-            NativeState::Table(state) if property == "rows" => state.update(cx, |state, cx| {
-                state.delegate_mut().rows = p.rows("rows");
-                state.clear_selection(cx);
-                state.refresh(cx);
-            }),
-            NativeState::Table(state) if property == "value" => state.update(cx, |state, cx| {
-                if p.ix("value") < state.delegate().rows.len() {
-                    state.set_selected_row(p.ix("value"), cx);
-                }
-            }),
             _ => (),
+        }
+    }
+
+    pub(crate) fn sync_table(&self, cx: &mut Context<NativeView>) {
+        if let NativeState::Table(state) = &self.state {
+            let p = Props(&self.props);
+            state.update(cx, |state, cx| {
+                state.delegate_mut().configure(&self.props);
+                state.refresh(cx);
+                let selected = state
+                    .delegate()
+                    .order
+                    .iter()
+                    .position(|ix| *ix == p.ix("value"));
+                if let Some(selected) = selected {
+                    if state.selected_row() != Some(selected) {
+                        state.set_selected_row(selected, cx);
+                    }
+                } else {
+                    state.clear_selection(cx);
+                }
+            });
         }
     }
 
@@ -554,6 +791,7 @@ impl NativeKit {
         id: u64,
         children: Vec<AnyElement>,
         style: &Map<String, Value>,
+        actions: &crate::commands::Actions,
         cx: &Context<NativeView>,
     ) -> AnyElement {
         let p = Props(&self.props);
@@ -564,6 +802,40 @@ impl NativeKit {
                   _: &mut Window,
                   cx: &mut Context<NativeView>| view.change(id, value.clone(), cx);
         match self.kind.as_str() {
+            "command_palette" => {
+                let NativeState::Palette(state) = &self.state else {
+                    unreachable!()
+                };
+                let commands = actions.borrow();
+                let items = self.props["items"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter_map(|id| commands.get(&id.as_u64().unwrap()))
+                    .map(|command| {
+                        c::command::CommandItem::new()
+                            .label(command.label.clone())
+                            .disabled(!command.enabled)
+                            .checked(command.checked)
+                            .action(Box::new(crate::commands::InvokeCommand { id: command.id }))
+                    })
+                    .collect::<Vec<_>>();
+                let query_view = cx.weak_entity();
+                let cancel_view = query_view.clone();
+                c::command::Command::new(state)
+                    .items(items)
+                    .placeholder(p.s("placeholder"))
+                    .searchable(p.b("searchable"))
+                    .filterable(p.b("filterable"))
+                    .on_query(move |query, _, cx| {
+                        _ = query_view.update(cx, |view, cx| view.change(id, json!(query), cx));
+                    })
+                    .on_cancel(move |_, cx| {
+                        _ = cancel_view
+                            .update(cx, |view, cx| view.event(id, "cancel", Value::Null, cx));
+                    })
+                    .into_any_element()
+            }
             "image" => {
                 let NativeState::Image(state) = &self.state else {
                     unreachable!()
@@ -648,6 +920,7 @@ impl NativeKit {
                     unreachable!()
                 };
                 c::input::Editor::new(state)
+                    .readonly(p.b("read_only"))
                     .disabled(p.b("disabled"))
                     .h_full()
                     .into_any_element()
@@ -798,7 +1071,7 @@ impl NativeKit {
                     .bordered(true)
                     .into_any_element()
             }
-            "combobox" => {
+            "combobox" | "multi_select" => {
                 let NativeState::Combobox(state) = &self.state else {
                     unreachable!()
                 };
@@ -814,6 +1087,7 @@ impl NativeKit {
                 };
                 crate::theme::field(
                     c::input::Textarea::new(state)
+                        .readonly(p.b("read_only"))
                         .disabled(p.b("disabled"))
                         .appearance(!crate::theme::field_frame(cx))
                         .h_full(),

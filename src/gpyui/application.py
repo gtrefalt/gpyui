@@ -263,6 +263,7 @@ class Application:
                 self._schedule_flush()
 
     def _control_commands(self, control: Control) -> Iterator[Command]:
+        yield from getattr(control, "_palette_commands", ())
         if command := getattr(control, "_command", None):
             yield command
         if isinstance(control, DropdownMenu):
@@ -543,7 +544,20 @@ class Application:
                                 cast("TextInput | KitControl", mirrored)._receive_native(value)
                         self._dispatch(command._handler, Event(command, "command"))
                         await asyncio.sleep(0)
-                    elif name in {"click", "change", "release", "resize", "load", "error"}:
+                    elif name in {
+                        "click",
+                        "change",
+                        "release",
+                        "resize",
+                        "load",
+                        "error",
+                        "query",
+                        "submit",
+                        "focus",
+                        "blur",
+                        "sort",
+                        "cancel",
+                    }:
                         control = self._controls.get(event["id"])
                         if control is None:
                             continue
@@ -558,8 +572,13 @@ class Application:
                         for control_id, value in event.get("values", {}).items():
                             if mirrored := self._controls.get(int(control_id)):
                                 cast("TextInput | KitControl", mirrored)._receive_native(value)
-                        if name == "change":
+                        if name in {"change", "query"}:
                             cast("TextInput | KitControl", control)._receive_native(event["value"])
+                        elif name == "sort":
+                            from .widgets import Table
+
+                            if isinstance(control, Table):
+                                control._receive_sort(event["value"])
                         if not control._is_displayed():
                             continue
                         if handler := control._handlers.get(name):

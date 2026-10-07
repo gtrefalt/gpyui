@@ -1,10 +1,10 @@
 # Agent skills
 
 Give your coding agent the context to build native desktop apps with gpyui.
-The skills include the **Python** API for all 75 controls, composition and State
+The skills include the **Python** API for all 77 controls, composition and State
 conventions, native window controls and Classic themes, asyncio/lifecycle guidance, runnable applications and desktop design
 rules. They are inspired by
-[GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/3a142844d3661159964dce9e5512ca9a40286160/skills),
+[GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/c1bda59e67f46266991a230ae94f749af496af2a/skills),
 with guidance adapted to gpyui's actual binding capabilities.
 
 ## Install
@@ -57,11 +57,19 @@ The profile recipe writes `profile.json` in the working directory.
 > app. Bind the fields to State, save asynchronously, show validation and errors,
 > and verify actual editing and button activation on a desktop.
 
-The references target gpyui 0.5.0; agents should verify their installed version.
+The references describe the repository API: gpyui 0.5.0 plus unreleased Image,
+window controls, the exact Kit Classic correction and the Kit 0.7.1 / GPUI 0.3.8
+backend update. Agents should verify their
+installed version before using those additions.
 They cover native themes, Form/Field validation, async submission/retry, runtime switching, and the current one-window limit. Rust Kit documentation is useful background but does not imply a Python
 API exists. The component references are generated from the same source contracts
 and specimens as this site's catalog, and CI checks runnable snippets and recipe
 logic without compiling the native extension.
+
+The bundled coverage reference is generated from
+[coverage and remaining APIs](component-coverage.md), including the pinned
+upstream baseline, supported contracts, missing bindings and roadmap. Agents
+can read it after installing the skill without a repository checkout.
 
 See the [skill installation and maintenance guide](https://github.com/gtrefalt/gpyui/blob/main/skills/README.md)
 for the full package structure.

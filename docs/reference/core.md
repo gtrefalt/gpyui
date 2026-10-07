@@ -43,7 +43,7 @@ See [runtime composition](../guide/layout.md#runtime-children-and-visibility).
 | Field | Value |
 | --- | --- |
 | `sender` | The originating Control, Command, or Application for startup |
-| `name` | `start`, `command`, `click`, `change`, `release` or `resize` |
+| `name` | `start`, `command`, `click`, `change`, `release`, `resize`, `query`, `cancel`, `sort`, `submit`, `focus`, `blur`, `load` or `error` |
 | `value` | Component-specific native value; absent for ordinary click/start/command |
 
 ```python

@@ -15,11 +15,11 @@ Compose selectable native ListItems.
 
 <div class="component-card" markdown>
 
-[![Native Table component](../../screenshots/components/table.png?v=9c4618ea2d84)](../table.md)
+[![Native Table component](../../screenshots/components/table.png?v=e0bd71e875c8)](../table.md)
 
 **[Table](../table.md)**
 
-Native retained table state with string rows.
+Native virtualized table with stable row keys, sorting and filtering.
 
 </div>
 
