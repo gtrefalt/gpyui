@@ -1,7 +1,70 @@
 # Validation
 
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
-GPUI Kit 0.7.0 at the pinned git revision, GPUI snapshot 0.3.7.
+GPUI Kit 0.7.1 at the pinned git revision, GPUI snapshot 0.3.8.
+
+## Tables, inputs and command palette (unreleased)
+
+The combined update passed **299 Python/bridge cases** and **28 native Linux/X11
+cases** against the rebuilt abi3 extension. New real-window acceptance checks
+cover numeric table sorting, keyboard/source-index selection, keyed row
+replacement, hidden domain selection during filtering and native header sort
+callbacks; masked text input submit/focus/blur, read-only editing and numeric
+step/blur bounds; mutable MultiSelect options and keyboard toggling; and command
+search/confirmation/cancel with live enabled state and shared shortcut gating.
+
+The bridge validates complete dependent batches before enqueueing them and
+retains updated options for subsequent validation. Failed option/selection
+updates leave its schema intact. Palette action snapshots use the query mirror
+to avoid reading CommandState during synchronous native action dispatch.
+
+`cargo check --locked`, `cargo fmt --check`, strict Clippy, Ruff, formatting and
+ty pass. Documentation generation verifies **77 controls**; both installable
+skills validate **310 local links** and **95 examples/recipes**. Strict Zensical
+build and link/asset/anchor checks pass across **120 pages**. CommandPalette,
+MultiSelect and Table previews were captured from real native windows and
+reviewed. README, canonical coverage, guides, generated catalog and both skills
+are synchronized; command and data guides now generate their bundled skill
+references as well.
+
+Validation remains local Linux/X11. macOS, Windows and Wayland interaction were
+not rerun for these additions. The package remains 0.5.0 with the new contracts
+marked unreleased; no package release or release tag is part of this change.
+
+## Kit 0.7.1 / GPUI 0.3.8 upgrade (unreleased)
+
+The backend now pins Kit `c1bda59e67f46266991a230ae94f749af496af2a`
+and the exact GPUI 0.3.8 snapshot family, including the matching HTTP client.
+`gpui-pre-0.3.8/Cargo.toml.orig` identifies Zed revision
+`279fe070bb389b79652e52065b2f001edcc0b11b`; the source manifest is recorded in
+[upstream-lock.json](upstream-lock.json). The vendored macOS Classic JSON is
+byte-identical to the upgraded Kit source. Diff/Speech remain unbound and the
+optional Speech/GPUI Fast features are not enabled.
+
+Local upgrade checks passed on Debian 13/x86_64 with Python 3.12.14 and Rust
+1.99.0: `cargo check --locked`, strict Clippy and Rust formatting. Maturin built
+and installed the native abi3 extension in development mode. Its exposed
+dependency identity reports GPUI 0.3.8 and the new Kit revision. The lockfile
+resolves 24 snapshot-family crates at 0.3.8 with one GPUI instance, and bundled
+license notices match the lockfile hash.
+
+The full Python/bridge suite passed **290 cases**; all **24 native Linux/X11
+cases** passed against the rebuilt extension. Native coverage includes editing,
+caret/selection/undo, queued commands and async lifecycle, dynamic trees,
+forms/validation/retry, image sources/animation/retry and cleanup, live theme
+switches and window geometry/title/size actions. This is local Linux validation;
+macOS/Windows release-wheel checks and Wayland interaction have not been rerun
+for this upgrade. The gpyui package version remains 0.5.0 with the update marked
+unreleased.
+
+Markdown/HTML catalog previews were recaptured with the upgraded native renderer
+to reflect upstream's rich-text typography changes. Generated references cover
+77 controls; skill checks validate 310 bundled links and 95 examples/recipes.
+Ruff, formatting, type checks and the strict documentation build pass, including
+links/assets/anchors across 120 built pages.
+
+The milestone results below are historical evidence from their original
+dependency baselines; they do not establish acceptance of this upgrade.
 
 ## Forms and validation (0.5.0)
 

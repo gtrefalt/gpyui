@@ -1,7 +1,7 @@
 """Native Python controls rendered by GPUI Kit."""
 
 from .application import Application, ApplicationClosedError
-from .commands import Command, DropdownMenu, Menu, MenuSeparator
+from .commands import Command, CommandPalette, DropdownMenu, Menu, MenuSeparator
 from .controls import Button, Column, Control, Event, Label, TextInput
 from .forms import Field, Form, ValidationError
 from .images import Image, ImageSource
@@ -42,6 +42,7 @@ from .widgets import (
     Markdown,
     Marker,
     Message,
+    MultiSelect,
     NumberInput,
     OtpInput,
     Pagination,
@@ -67,6 +68,8 @@ from .widgets import (
     Stepper,
     Switch,
     Table,
+    TableColumn,
+    TableRow,
     Tabs,
     Tag,
     TextArea,
@@ -78,6 +81,10 @@ from .widgets import (
 )
 
 __all__ = [
+    "CommandPalette",
+    "MultiSelect",
+    "TableColumn",
+    "TableRow",
     "Image",
     "ImageSource",
     "Field",

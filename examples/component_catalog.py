@@ -14,7 +14,17 @@ class Sample:
 
 GROUPS = {
     "Layout": ("Column", "Row", "Container", "Scroll", "GroupBox", "Toolbar", "StatusBar", "Resizable"),
-    "Text and buttons": ("Label", "Button", "DropdownMenu", "Link", "Clipboard", "Icon", "Kbd", "Separator"),
+    "Text and buttons": (
+        "Label",
+        "Button",
+        "DropdownMenu",
+        "CommandPalette",
+        "Link",
+        "Clipboard",
+        "Icon",
+        "Kbd",
+        "Separator",
+    ),
     "Forms": ("Form", "Field"),
     "Inputs": ("TextInput", "TextArea", "NumberInput", "OtpInput", "Editor"),
     "Selection": (
@@ -25,6 +35,7 @@ GROUPS = {
         "RadioGroup",
         "Select",
         "Combobox",
+        "MultiSelect",
         "Slider",
         "Rating",
     ),
@@ -139,7 +150,7 @@ SAMPLES = {
     "TextInput": Sample(
         "Native single-line text editing.",
         'control = ui.TextInput("Ada Lovelace", placeholder="Your name", on_change=lambda event: print(event.value))',
-        "Programmatic value replacement clears native undo history; native edits are never echoed back through the setter.",
+        "Programmatic value replacement clears native undo history; native edits are never echoed back through the setter. disabled, read_only, password, clearable and string prefix/suffix options are mutable. on_submit, on_focus and on_blur report native events; password only masks display, not values or snapshots.",
     ),
     "TextArea": Sample(
         "Native multiline editing.",
@@ -148,7 +159,7 @@ SAMPLES = {
     "NumberInput": Sample(
         "A native numeric editing buffer with step buttons.",
         'control = ui.NumberInput("42", placeholder="Quantity")',
-        "value is a string, including partially edited input. Step buttons change by one.",
+        "value is a string, including partially edited input. minimum/maximum accept finite numbers or None; step is positive and defaults to one. Native stepping and blur clamp completed numbers to the bounds; partial edits remain strings.",
     ),
     "OtpInput": Sample(
         "Native one-time-code editing.",
@@ -178,12 +189,22 @@ SAMPLES = {
     "Select": Sample(
         "A retained native single-selection dropdown.",
         'control = ui.Select(["Python", "Rust", "GPUI"], value="Python")',
-        'value is a selected string or "". Items are fixed after construction.',
+        'value is a selected string or "". Items are unique nonempty strings. Reassign items to refresh choices; an unavailable selection is cleared atomically.',
     ),
     "Combobox": Sample(
         "Search within native string choices.",
         'control = ui.Combobox(["London", "New York", "Tokyo"], value="London")',
-        'value is a selected string or "". Items are fixed after construction.',
+        'value is one selected string or "". Reassign unique nonempty items to refresh choices; unavailable selection is cleared. Use MultiSelect for multiple values.',
+    ),
+    "MultiSelect": Sample(
+        "Search and select several native choices.",
+        'control = ui.MultiSelect(["Python", "Rust", "GPUI"], value=["Python", "Rust"])',
+        "value is a list of unique selected strings. Reassign items to retain only available selections. Native multi-selection keeps the popover open while choices toggle.",
+    ),
+    "CommandPalette": Sample(
+        "Search and execute shared native commands.",
+        'control = ui.CommandPalette([ui.Command("Save document", lambda: None, shortcut="mod+s"), ui.Command("Open document", lambda: None, shortcut="mod+o"), ui.Command("Export report", lambda: None, enabled=False)])',
+        "commands and query are mutable. Command enabled/checked state and shortcut hints remain shared with buttons and menus. on_query receives changed query strings; on_cancel reports Escape with an empty query. Compose inside Dialog for an overlay. External search can use filterable=False and loading; async providers must discard stale results themselves.",
     ),
     "Slider": Sample(
         "A retained native scalar slider.",
@@ -219,12 +240,12 @@ SAMPLES = {
     "List": Sample(
         "Compose selectable native ListItems.",
         'control = ui.List(["Recent files", "Shared with me", "Archive"], value=1)',
-        "This wrapper composes ListItems. It does not expose virtual ListState/delegate or async search.",
+        "This wrapper renders every ListItem. It does not expose virtual ListState/delegate, scroll-to-item or async search. value is a positional index, not a stable item ID.",
     ),
     "Table": Sample(
-        "Native retained table state with string rows.",
+        "Native virtualized table with stable row keys, sorting and filtering.",
         'control = ui.Table(columns=["Name", "Language", "Status"], rows=[["gpyui", "Python", "Ready"], ["GPUI Kit", "Rust", "Native"]], column_width=185).style(height=160, full_width=True)',
-        "Rows must match the column count. Columns and column_width are fixed. Reassign rows to refresh. value is the selected zero-based row index; native selection initially may be empty while the Python default is zero.",
+        "Columns accept strings or TableColumn(title, width=125, sort_type='text' or 'number'). Rows accept string lists or TableRow(key, cells); use keyed rows throughout a dataset to preserve selected_key across replacement. value is a source row index, including when sorted or filtered. sortable enables header sorting; sort(column, descending=False) controls it programmatically and filter performs case-insensitive substring matching. Hidden selected rows retain their domain selection. Custom cells and load-more remain unbound.",
     ),
     "Tree": Sample(
         "Native tree selection with stable item IDs.",

@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import math
 from collections.abc import Callable, Iterable
+from dataclasses import dataclass
 from datetime import date, time
 from typing import Any, ClassVar, Self
 
@@ -34,6 +35,16 @@ def number(value: Any) -> float:
     if not math.isfinite(value) or abs(value) > 1e9:
         raise ValueError("requires a finite number within ±1e9")
     return float(value)
+
+
+def optional_number(value: Any) -> float | None:
+    return None if value is None else number(value)
+
+
+def numbers(value: Any) -> list[float]:
+    if not isinstance(value, list | tuple) or len(value) > 10_000:
+        raise ValueError("requires up to 10,000 numbers")
+    return [number(v) for v in value]
 
 
 def integer(value: Any) -> int:
@@ -242,6 +253,23 @@ class KitControl(Column):
     def _encode_property(self, name: str, value: Any) -> Any:
         return value
 
+    def _replace_properties(self, **updates: Any) -> None:
+        """Validate a dependent update together before publishing any changes."""
+        self._ensure_alive()
+        validated = {key: self.fields[key][1](copy.deepcopy(value)) for key, value in updates.items()}
+        self._validate({**self._properties["props"], **validated})
+        if self._app:
+            self._app._check_mutation()
+        for key, value in validated.items():
+            if self._properties["props"][key] != value or (
+                key == "value" and ("items" in updates or "rows" in updates)
+            ):
+                self._properties["props"][key] = value
+                if self._app:
+                    self._app._queue(self.id, key, self._encode_property(key, value))
+        if "value" in validated and self._state is not None:
+            self._state.value = validated["value"]
+
     def _spec(self) -> dict[str, Any]:
         spec = super()._spec()
         spec["props"] = {
@@ -250,7 +278,7 @@ class KitControl(Column):
         return spec
 
     def bind_value(self, state: State[Any]) -> Self:
-        if "value" not in self.fields or "change" not in self.events:
+        if "value" not in self.fields or not any(event in self.events for event in ("change", "query")):
             raise TypeError("this control has no bindable value")
         self.unbind()
         self.value = state.value
@@ -373,9 +401,18 @@ class Select(KitControl):
     native = "select"
     fields = {"items": ITEMS, "value": TEXT, "placeholder": ("Choose…", text), "disabled": BOOL}
     events = ("change",)
-    readonly = ("items",)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "items" and "_properties" in self.__dict__:
+            items = strings(value)
+            selected = self.value if self.value in items else ""
+            self._replace_properties(items=items, value=selected)
+        else:
+            super().__setattr__(name, value)
 
     def _validate(self, props: dict[str, Any]) -> None:
+        if len(set(props["items"])) != len(props["items"]) or "" in props["items"]:
+            raise ValueError("select items must be unique, nonempty strings")
         if props["value"] and props["value"] not in props["items"]:
             raise ValueError("value must be an item or the empty string")
 
@@ -493,17 +530,141 @@ class Accordion(KitControl):
             raise ValueError("accordion items are [title, content] pairs")
 
 
+@dataclass(frozen=True)
+class TableColumn:
+    """A fixed table column; numeric sorting compares finite numbers."""
+
+    title: str
+    width: float = 125
+    sort_type: str = "text"
+
+    def __post_init__(self) -> None:
+        text(self.title)
+        if number(self.width) < 24:
+            raise ValueError("column width must be at least 24 pixels")
+        choice("text", "number")(self.sort_type)
+
+
+@dataclass(frozen=True)
+class TableRow:
+    """A stable domain key and display cells for a table row."""
+
+    key: str
+    cells: tuple[str | int | float, ...]
+
+    def __post_init__(self) -> None:
+        if not text(self.key):
+            raise ValueError("row key must be nonempty")
+        if isinstance(self.cells, str) or not isinstance(self.cells, list | tuple):
+            raise TypeError("cells requires a list or tuple")
+        for cell in self.cells:
+            if not isinstance(cell, str):
+                number(cell)
+        object.__setattr__(self, "cells", tuple(self.cells))
+
+
+def sort_index(value: Any) -> int:
+    if value == -1 and isinstance(value, int) and not isinstance(value, bool):
+        return -1
+    return integer(value)
+
+
 class Table(KitControl):
     native = "table"
-    fields = {"columns": ITEMS, "rows": ([], rows), "value": INDEX, "column_width": (125, number)}
-    events = ("change",)
-    readonly = ("columns", "column_width")
+    fields = {
+        "columns": ITEMS,
+        "rows": ([], rows),
+        "value": INDEX,
+        "column_width": (125, number),
+        "row_keys": ITEMS,
+        "column_widths": ([], numbers),
+        "sort_types": ITEMS,
+        "sortable": BOOL,
+        "sort_column": (-1, sort_index),
+        "sort_descending": BOOL,
+        "filter": TEXT,
+    }
+    events = ("change", "sort")
+    readonly = ("columns", "column_width", "column_widths", "sort_types", "row_keys", "sortable")
+
+    def __init__(self, *args: Any, **properties: Any):
+        if args:
+            if len(args) != 1 or "columns" in properties:
+                raise TypeError("specify columns once")
+            properties["columns"] = args[0]
+        if not isinstance(properties.get("columns", []), list | tuple):
+            raise TypeError("columns requires a list or tuple")
+        columns = list(properties.get("columns", []))
+        width = properties.get("column_width", 125)
+        properties["columns"] = [c.title if isinstance(c, TableColumn) else text(c) for c in columns]
+        properties.setdefault(
+            "column_widths", [c.width if isinstance(c, TableColumn) else width for c in columns]
+        )
+        properties.setdefault(
+            "sort_types", [c.sort_type if isinstance(c, TableColumn) else "text" for c in columns]
+        )
+        cells, keys = self._rows(properties.get("rows", []))
+        properties["rows"] = cells
+        properties.setdefault("row_keys", keys)
+        super().__init__(**properties)
+
+    @staticmethod
+    def _rows(value: Any) -> tuple[list[list[str]], list[str]]:
+        if not isinstance(value, list | tuple) or len(value) > 10_000:
+            raise ValueError("requires up to 10,000 rows")
+        if any(isinstance(row, TableRow) for row in value):
+            if not all(isinstance(row, TableRow) for row in value):
+                raise TypeError("use TableRow for every row or use cell lists for every row")
+            return [[str(cell) for cell in row.cells] for row in value], [row.key for row in value]
+        return rows(value), [str(ix) for ix in range(len(value))]
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "rows" and "_properties" in self.__dict__:
+            cells, keys = self._rows(value)
+            selected = self.selected_key
+            index = keys.index(selected) if selected in keys else 0
+            self._replace_properties(rows=cells, row_keys=keys, value=index)
+        else:
+            super().__setattr__(name, value)
+
+    @property
+    def selected_key(self) -> str | None:
+        return self.row_keys[self.value] if self.value < len(self.row_keys) else None
+
+    @selected_key.setter
+    def selected_key(self, key: str) -> None:
+        self.value = self.row_keys.index(text(key))
+
+    def sort(self, column: int = -1, *, descending: bool = False) -> None:
+        """Sort the native view without changing source row order; -1 clears sorting."""
+        self._replace_properties(sort_column=column, sort_descending=descending)
+
+    def _receive_sort(self, value: dict[str, Any]) -> None:
+        self._properties["props"].update(sort_column=value["column"], sort_descending=value["descending"])
 
     def _validate(self, props: dict[str, Any]) -> None:
         if props["column_width"] < 24:
             raise ValueError("column_width must be at least 24 pixels")
         if any(len(row) != len(props["columns"]) for row in props["rows"]):
             raise ValueError("each table row must match the column count")
+        if (
+            len(props["row_keys"]) != len(props["rows"])
+            or len(set(props["row_keys"])) != len(props["row_keys"])
+            or "" in props["row_keys"]
+        ):
+            raise ValueError("table row keys must be unique, nonempty and match rows")
+        if len(props["column_widths"]) != len(props["columns"]) or any(
+            w < 24 for w in props["column_widths"]
+        ):
+            raise ValueError("column widths must match columns and be at least 24 pixels")
+        if len(props["sort_types"]) != len(props["columns"]) or any(
+            s not in ("text", "number") for s in props["sort_types"]
+        ):
+            raise ValueError("sort types must match columns and be text or number")
+        if props["sort_column"] >= len(props["columns"]):
+            raise ValueError("sort column is outside the table")
+        if props["rows"] and props["value"] >= len(props["rows"]):
+            raise ValueError("selected row is outside the table")
 
 
 class LineChart(KitControl):
@@ -597,9 +758,31 @@ class Combobox(Select):
     native = "combobox"
 
 
+class MultiSelect(Combobox):
+    """Searchable native combobox with a set of selected item values."""
+
+    native = "multi_select"
+    fields = {**Select.fields, "value": ITEMS}
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "items" and "_properties" in self.__dict__:
+            items = strings(value)
+            self._replace_properties(items=items, value=[v for v in self.value if v in items])
+        else:
+            KitControl.__setattr__(self, name, value)
+
+    def _validate(self, props: dict[str, Any]) -> None:
+        if len(set(props["items"])) != len(props["items"]) or "" in props["items"]:
+            raise ValueError("select items must be unique, nonempty strings")
+        if len(set(props["value"])) != len(props["value"]) or any(
+            v not in props["items"] for v in props["value"]
+        ):
+            raise ValueError("selected values must be unique items")
+
+
 class TextArea(KitControl):
     native = "textarea"
-    fields = {"value": TEXT, "placeholder": TEXT, "disabled": BOOL}
+    fields = {"value": TEXT, "placeholder": TEXT, "disabled": BOOL, "read_only": BOOL}
     events = ("change",)
 
 
@@ -607,6 +790,24 @@ class NumberInput(TextArea):
     """Native numeric text editing. value is text, including partial edits."""
 
     native = "number_input"
+    fields = {
+        "value": TEXT,
+        "placeholder": TEXT,
+        "disabled": BOOL,
+        "minimum": (None, optional_number),
+        "maximum": (None, optional_number),
+        "step": (1, number),
+    }
+
+    def _validate(self, props: dict[str, Any]) -> None:
+        if props["step"] <= 0:
+            raise ValueError("number input step must be positive")
+        if (
+            props["minimum"] is not None
+            and props["maximum"] is not None
+            and props["minimum"] > props["maximum"]
+        ):
+            raise ValueError("minimum must not exceed maximum")
 
 
 class OtpInput(TextArea):

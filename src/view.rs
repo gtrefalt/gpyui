@@ -5,6 +5,7 @@ use crate::{
     protocol::{Command, Control, Node, Patch},
 };
 use async_channel::Receiver;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
     component::{
         ActiveTheme,
@@ -25,7 +26,7 @@ use std::{
 enum NativeControl {
     Column(Vec<u64>),
     Label(SharedString),
-    Input(Entity<InputState>),
+    Input(Entity<InputState>, serde_json::Map<String, Value>),
     DropdownMenu {
         text: SharedString,
         items: Vec<MenuEntry>,
@@ -51,7 +52,7 @@ pub(crate) struct NativeView {
     attached: HashSet<u64>,
     displayed: HashSet<u64>,
     opened: HashMap<String, u64>,
-    actions: Actions,
+    pub(crate) actions: Actions,
     bound_actions: HashSet<u64>,
     menus: Vec<MenuEntry>,
     menus_dirty: bool,
@@ -168,18 +169,34 @@ impl NativeView {
                     variant,
                     icon: icon.into(),
                 },
-                Control::Input { value, placeholder } => {
+                Control::Input {
+                    value,
+                    placeholder,
+                    disabled,
+                    read_only,
+                    password,
+                    clearable,
+                    prefix,
+                    suffix,
+                } => {
+                    let options = json!({"disabled":disabled,"read_only":read_only,"password":password,"clearable":clearable,"prefix":prefix,"suffix":suffix}).as_object().unwrap().clone();
                     let input = cx.new(|cx| {
                         InputState::new(window, cx)
                             .default_value(value)
                             .placeholder(placeholder)
+                            .masked(password)
                     });
                     let id = node.id;
                     subscriptions.push(cx.subscribe_in(&input, window, move |view, input, event, _, cx| {
-                        if view.displayed.contains(&id) && matches!(event, InputEvent::Change)
-                            && !view.transport.emit(json!({"event":"change", "id":id, "value":input.read(cx).value().as_str()})) { cx.quit(); }
+                        let name = match event {
+                            InputEvent::Change => "change",
+                            InputEvent::PressEnter { .. } => "submit",
+                            InputEvent::Focus => "focus",
+                            InputEvent::Blur => "blur",
+                        };
+                        if view.displayed.contains(&id) && !view.transport.emit(json!({"event":name, "id":id, "value":input.read(cx).value().as_str(), "values":view.values(cx)})) { cx.quit(); }
                     }));
-                    NativeControl::Input(input)
+                    NativeControl::Input(input, options)
                 }
                 Control::Kit {
                     kind,
@@ -241,41 +258,69 @@ impl NativeView {
                             ));
                             NativeState::Select(state)
                         }
+                        "command_palette" => {
+                            let state = cx.new(|cx| {
+                                gpui_kit::component::command::CommandState::new(window, cx)
+                            });
+                            state.update(cx, |state, cx| {
+                                state.set_query(p.s("value"), window, cx);
+                                state.set_loading(p.b("loading"), window, cx);
+                            });
+                            NativeState::Palette(state)
+                        }
                         "table" => {
                             use gpui_kit::component::table::{TableEvent, TableState};
+                            let view = cx.weak_entity();
                             let state = cx.new(|cx| {
-                                TableState::new(
-                                    TableData {
-                                        columns: p.strings("columns"),
-                                        rows: p.rows("rows"),
-                                        width: p.n("column_width"),
-                                    },
-                                    window,
-                                    cx,
-                                )
-                                .sortable(false)
-                                .col_movable(false)
+                                TableState::new(TableData::new(&props, id, view), window, cx)
+                                    .sortable(p.b("sortable"))
+                                    .col_movable(false)
+                            });
+                            state.update(cx, |state, cx| {
+                                if let Some(row) = state
+                                    .delegate()
+                                    .order
+                                    .iter()
+                                    .position(|ix| *ix == p.ix("value"))
+                                {
+                                    state.set_selected_row(row, cx);
+                                }
                             });
                             subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
-                                move |view, _, event, _, cx| {
-                                    if let TableEvent::SelectRow(value) = event {
-                                        view.change(id, json!(value), cx);
+                                move |view, state, event, _, cx| {
+                                    if let TableEvent::SelectRow(row) = event
+                                        && let Some(index) =
+                                            state.read(cx).delegate().order.get(*row)
+                                    {
+                                        view.change(id, json!(index), cx);
                                     }
                                 },
                             ));
                             NativeState::Table(state)
                         }
-                        "combobox" => {
+                        "combobox" | "multi_select" => {
                             use gpui_kit::component::combobox::{ComboboxEvent, ComboboxState};
                             let state = cx.new(|cx| {
                                 ComboboxState::new(p.strings("items"), vec![], window, cx)
                                     .searchable(true)
+                                    .multiple(kind == "multi_select")
                             });
                             state.update(cx, |state, cx| {
-                                state.set_selected_values(&[p.s("value")], window, cx)
+                                state.set_selected_values(
+                                    &if kind == "multi_select" {
+                                        p.strings("value")
+                                    } else if p.s("value").is_empty() {
+                                        vec![]
+                                    } else {
+                                        vec![p.s("value")]
+                                    },
+                                    window,
+                                    cx,
+                                )
                             });
+                            let multiple = kind == "multi_select";
                             subscriptions.push(cx.subscribe_in(
                                 &state,
                                 window,
@@ -283,12 +328,21 @@ impl NativeView {
                                     if let ComboboxEvent::Change(values) = event {
                                         view.change(
                                             id,
-                                            json!(
-                                                values
-                                                    .first()
-                                                    .map(SharedString::as_str)
-                                                    .unwrap_or("")
-                                            ),
+                                            if multiple {
+                                                json!(
+                                                    values
+                                                        .iter()
+                                                        .map(SharedString::as_str)
+                                                        .collect::<Vec<_>>()
+                                                )
+                                            } else {
+                                                json!(
+                                                    values
+                                                        .first()
+                                                        .map(SharedString::as_str)
+                                                        .unwrap_or("")
+                                                )
+                                            },
                                             cx,
                                         );
                                     }
@@ -316,10 +370,17 @@ impl NativeView {
                         }
                         "number_input" => {
                             let state = cx.new(|cx| {
-                                InputState::new(window, cx)
+                                let mut state = InputState::new(window, cx)
                                     .default_value(p.s("value"))
                                     .placeholder(p.s("placeholder"))
-                                    .step(1.)
+                                    .step(props["step"].as_f64().unwrap());
+                                if let Some(min) = props["minimum"].as_f64() {
+                                    state = state.min(min);
+                                }
+                                if let Some(max) = props["maximum"].as_f64() {
+                                    state = state.max(max);
+                                }
+                                state
                             });
                             subscriptions.push(cx.subscribe_in(
                                 &state,
@@ -528,7 +589,7 @@ impl NativeView {
         self.controls
             .iter()
             .filter_map(|(id, control)| {
-                if let NativeControl::Input(input) = control {
+                if let NativeControl::Input(input, _) = control {
                     Some((*id, json!(input.read(cx).value().as_str())))
                 } else if let NativeControl::Kit(kit) = control {
                     kit.value(cx).map(|value| (*id, value))
@@ -547,8 +608,11 @@ impl NativeView {
                         json!({"type":"column", "children":children})
                     }
                     NativeControl::Label(text) => json!({"type":"label", "text":text.as_str()}),
-                    NativeControl::Input(input) => {
-                        json!({"type":"input", "value":input.read(cx).value().as_str()})
+                    NativeControl::Input(input, options) => {
+                        let mut value = options.clone();
+                        value.insert("type".into(),json!("input"));
+                        value.insert("value".into(),json!(input.read(cx).value().as_str()));
+                        Value::Object(value)
                     }
                     NativeControl::Button { text, disabled, command, .. } => {
                         json!({"type":"button", "text":text.as_str(), "disabled":*disabled || command.is_some_and(|id| !self.actions.borrow()[&id].enabled), "command":command})
@@ -680,6 +744,7 @@ impl NativeView {
         }
     }
     fn apply_patches(&mut self, patches: Vec<Patch>, window: &mut Window, cx: &mut Context<Self>) {
+        let table_ids: HashSet<_> = patches.iter().filter_map(|patch| matches!(self.controls.get(&patch.id),Some(NativeControl::Kit(kit)) if kit.kind == "table").then_some(patch.id)).collect();
         for Patch {
             id,
             property,
@@ -729,14 +794,19 @@ impl NativeView {
                         *disabled = value.as_bool().expect("validated bool");
                     }
                 }
-                NativeControl::Input(input) => input.update(cx, |input, cx| {
-                    let text = value.as_str().expect("validated string").to_owned();
-                    if property == "value" {
-                        input.set_value(text, window, cx);
-                    } else {
-                        input.set_placeholder(text, window, cx);
+                NativeControl::Input(input, options) => {
+                    if property != "value" && property != "placeholder" {
+                        options.insert(property.clone(), value.clone());
                     }
-                }),
+                    input.update(cx, |input, cx| match property.as_str() {
+                        "value" => input.set_value(value.as_str().unwrap().to_owned(), window, cx),
+                        "placeholder" => {
+                            input.set_placeholder(value.as_str().unwrap().to_owned(), window, cx)
+                        }
+                        "password" => input.set_masked(value.as_bool().unwrap(), window, cx),
+                        _ => (),
+                    });
+                }
                 NativeControl::DropdownMenu {
                     text,
                     items,
@@ -753,6 +823,11 @@ impl NativeView {
                 }
                 NativeControl::Column(_) => unreachable!("columns have no component properties"),
                 NativeControl::Kit(kit) => kit.apply(&property, value, window, cx),
+            }
+        }
+        for id in table_ids {
+            if let Some(NativeControl::Kit(kit)) = self.controls.get(&id) {
+                kit.sync_table(cx);
             }
         }
     }
@@ -898,8 +973,9 @@ impl NativeView {
     fn focused_control(&self, window: &Window, cx: &App) -> Option<u64> {
         self.controls.iter().find_map(|(id, control)| {
             let focus = match control {
-                NativeControl::Input(state) => Some(state.read(cx).focus_handle(cx)),
+                NativeControl::Input(state, _) => Some(state.read(cx).focus_handle(cx)),
                 NativeControl::Kit(kit) => match &kit.state {
+                    NativeState::Palette(state) => Some(state.read(cx).focus_handle(cx)),
                     NativeState::Textarea(state) => Some(state.read(cx).focus_handle(cx)),
                     NativeState::Number(state) => Some(state.read(cx).focus_handle(cx)),
                     NativeState::Otp(state) => Some(state.read(cx).focus_handle(cx)),
@@ -1003,15 +1079,45 @@ impl NativeView {
             }
         }
     }
+    pub(crate) fn table_sort(
+        &mut self,
+        id: u64,
+        column: i64,
+        descending: bool,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        if !self.displayed.contains(&id) {
+            return;
+        }
+        if let Some(NativeControl::Kit(kit)) = self.controls.get_mut(&id) {
+            kit.props
+                .insert("sort_descending".into(), json!(descending));
+            kit.apply("sort_column", json!(column), window, cx);
+            kit.sync_table(cx);
+            self.event(
+                id,
+                "sort",
+                json!({"column":column,"descending":descending}),
+                cx,
+            );
+            cx.notify();
+        }
+    }
     pub(crate) fn change(&mut self, id: u64, value: Value, cx: &mut Context<Self>) {
         if let Some(NativeControl::Kit(kit)) = self.controls.get_mut(&id) {
             if kit.props.get("value") == Some(&value) {
                 return;
             }
+            let event = if kit.kind == "command_palette" {
+                "query"
+            } else {
+                "change"
+            };
             kit.props.insert("value".into(), value.clone());
             if !self
                 .transport
-                .emit(json!({"event":"change", "id":id, "value":value, "values":self.values(cx)}))
+                .emit(json!({"event":event, "id":id, "value":value, "values":self.values(cx)}))
             {
                 cx.quit();
             }
@@ -1109,7 +1215,7 @@ impl NativeView {
     }
     fn context_inputs(&self, id: u64, inputs: &mut Vec<AnyInputState>) {
         match &self.controls[&id] {
-            NativeControl::Input(input) => inputs.push(AnyInputState::Input(input.clone())),
+            NativeControl::Input(input, _) => inputs.push(AnyInputState::Input(input.clone())),
             NativeControl::Column(children) => {
                 for id in children {
                     self.context_inputs(*id, inputs);
@@ -1150,13 +1256,22 @@ impl NativeView {
                 .id(("label", id))
                 .child(Label::new(text.clone()))
                 .into_any_element(),
-            NativeControl::Input(input) => crate::theme::field(
+            NativeControl::Input(input, options) => crate::theme::field(
                 Input::new(input)
                     .id(("input", id))
+                    .disabled(Props(options).b("disabled"))
+                    .readonly(Props(options).b("read_only"))
+                    .cleanable(Props(options).b("clearable"))
+                    .when(!Props(options).s("prefix").is_empty(), |input| {
+                        input.prefix(Props(options).s("prefix"))
+                    })
+                    .when(!Props(options).s("suffix").is_empty(), |input| {
+                        input.suffix(Props(options).s("suffix"))
+                    })
                     .w_full()
                     .appearance(!crate::theme::field_frame(cx)),
                 input.focus_handle(cx),
-                false,
+                Props(options).b("disabled"),
                 false,
                 &self.styles[&id],
                 cx,
@@ -1266,6 +1381,7 @@ impl NativeView {
                     .map(|id| self.render_control(*id, cx))
                     .collect(),
                 &self.styles[&id],
+                &self.actions,
                 cx,
             ),
         };

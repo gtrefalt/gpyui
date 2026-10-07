@@ -35,6 +35,16 @@ A Kit button with nested commands, checks and shortcut hints.
 
 <div class="component-card" markdown>
 
+[![Native CommandPalette component](../../screenshots/components/command-palette.png?v=5d916acdbec2)](../command-palette.md)
+
+**[CommandPalette](../command-palette.md)**
+
+Search and execute shared native commands.
+
+</div>
+
+<div class="component-card" markdown>
+
 [![Native Link component](../../screenshots/components/link.png?v=a5d439863218)](../link.md)
 
 **[Link](../link.md)**

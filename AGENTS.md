@@ -28,3 +28,11 @@ Keep generated skill component references in sync with the docs using
 `just docs-generate`. Run `just skills-check` and `just docs-check` after changes
 to skills or public component contracts. Docs/skills-only changes do not need
 a version bump, native wheel build, or release tag.
+
+Keep README status, documentation and both skills aligned when changing public
+capabilities or the roadmap. `docs/component-coverage.md` is the shared coverage
+source; generation bundles it as `skills/gpyui/references/coverage.md`. The command and
+data/input guides also generate their bundled skill references; edit the docs
+sources and regenerate rather than changing those generated skill files. State
+which APIs are released versus only implemented on main, and distinguish gaps
+against the pinned Kit revision from additions in newer upstream source.

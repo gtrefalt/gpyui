@@ -1,8 +1,20 @@
-# gpyui architecture and first milestone
+# gpyui architecture
 
-Status: source inspection completed before implementation, 2026-10-01.
-`gpyui` replaces the working name Glint. Package-name availability has **not**
-been checked. This is a desktop library, not a server, browser, or Flutter client.
+gpyui is a published native desktop Python library. The initial source inspection
+was completed on 2026-10-01; the current API includes 77 controls and the release
+version is 0.5.0, with Image/window/Classic-theme work and richer tables, inputs
+and command search on `main` still unreleased.
+The unreleased backend update pins GPUI Kit 0.7.1 / GPUI 0.3.8. See
+[coverage and remaining APIs](component-coverage.md) for the source-reviewed
+baseline, release distinction and roadmap. The first-milestone analysis below
+records the bridge's original design decisions.
+
+The data/input milestone retains native TableState and source-index selection,
+with separate visible indices for sorting/filtering and Python TableRow keys
+for domain selection across data replacement. Dependent options/selection updates
+are validated as one batch against the latest bridge schema. CommandPalette
+retains Kit CommandState, uses the same registered native actions as menus and
+buttons, and mirrors queries before Python callbacks and action snapshots.
 
 ## Product goal
 
@@ -86,11 +98,11 @@ applied surface/switch/slider colors. Layout composition stays Python-owned.
 ## Commands and menus in 0.3.0
 
 The implementation retains the pinned upstream baseline below. Before adding
-menus we inspected [DropdownMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/dropdown_menu.rs),
-[ContextMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/context_menu.rs),
-[PopupMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/popup_menu.rs),
-[AppMenuBar](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/menu/app_menu_bar.rs)
-and [NativeMenu](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/native_menu/mod.rs).
+menus we inspected [DropdownMenu](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/menu/dropdown_menu.rs),
+[ContextMenu](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/menu/context_menu.rs),
+[PopupMenu](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/menu/popup_menu.rs),
+[AppMenuBar](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/menu/app_menu_bar.rs)
+and [NativeMenu](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/native_menu/mod.rs).
 The actual NativeMenu conversion is `From<gpui::Menu>`; its doc comment's
 `from_menu_items` method does not exist in the pinned implementation.
 
@@ -140,7 +152,7 @@ subscriptions are reused. Only children lists change; mutable tree-description
 values are never replayed into existing editors. That distinction preserves
 native edits that have not reached the Python mirror, caret, selection and undo
 history. It follows Kit's retained `Entity<InputState>` contract and
-[semantic undo transaction boundaries](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/base/src/input/base/undo_manager.rs).
+[semantic undo transaction boundaries](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/base/src/input/base/undo_manager.rs).
 
 Visibility removes the control from layout without destroying its state. Removal
 detaches but keeps ownership and bindings, allowing reattachment. Explicit
@@ -161,19 +173,21 @@ this section describes the current runtime contract.
 
 ## Reproducible upstream baseline
 
-All four repositories were cloned into `/workspace/upstream`. Exact inspected
-revisions are recorded in [upstream-lock.json](upstream-lock.json).
+The original investigation compared four repositories. The current backend
+snapshot and comparison revisions are recorded in
+[upstream-lock.json](upstream-lock.json).
 
-* GPUI Kit: `3a142844d3661159964dce9e5512ca9a40286160` (0.7.0).
-* Zed/GPUI: `1a28cff4b409169bac058bca40dfbfeb7621d19b`.
+* GPUI Kit: `c1bda59e67f46266991a230ae94f749af496af2a` (0.7.1).
+* Zed/GPUI: `279fe070bb389b79652e52065b2f001edcc0b11b`.
 * NiceGUI: `d0323a34fd87c51323e4fda60f6805d6fe8e329d`.
 * Flet: `0ec63ca849386be77831241f21b82a0cc8c13942`.
 
 Zed was initially cloned at `95cd535a5fad96d649513f96c5784ceefd379e47`.
-GPUI Kit's workspace manifest pins the `gpui-pre-*` family to **exactly 0.3.7**.
+GPUI Kit's workspace manifest pins the `gpui-pre-*` family to **exactly 0.3.8**.
 The downloaded GPUI manifest's `[package.metadata.gpui-pre]` identifies the Zed
-revision above. We fetched and checked out that revision to verify the actual
-runtime being consumed. Do not add a second, git-head GPUI dependency: its types
+revision above as the source of the current snapshot. The unreleased backend
+upgrade also aligns `gpui-pre-reqwest-client` to 0.3.8. Do not add a second,
+git-head GPUI dependency: its types
 would differ from Kit's. Depend on the pinned `gpui-kit` git revision and use its
 facade. `Cargo.lock` pins registry versions, checksums, and git sources; the Rust
 toolchain and PyO3 versions are explicit. No upstream repository is modified.
@@ -198,24 +212,24 @@ than tutorials. The local clones contain the same paths.
 
 ## Verified native seam
 
-* [Kit facade and open_window](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/kit/src/lib.rs):
+* [Kit facade and open_window](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/kit/src/lib.rs):
   `application`, `init`, `open_window` return the window and application entity;
   the helper installs Base Root. Component initialization registers window state.
-* [hello_world](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/examples/hello_world/src/main.rs):
+* [hello_world](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/examples/hello_world/src/main.rs):
   Button is a lightweight builder, re-created during Rust render, with stable ID.
-* [input example](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/examples/input/src/main.rs):
+* [input example](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/examples/input/src/main.rs):
   retained `Entity<InputState>` and retained `Subscription` handles; rendering
   uses `Input::new(&state)` instead of creating an editor every frame.
-* [editing state](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/base/src/input/base/state.rs):
+* [editing state](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/base/src/input/base/state.rs):
   InputEvent::Change, value(), default_value(), set_value(). Programmatic
   `set_value` emits **no** Change and clears undo history; gpyui documents this
   distinction and never re-sends native edits to Rust through the value setter.
-* [GPUI Context](https://github.com/zed-industries/zed/blob/1a28cff4b409169bac058bca40dfbfeb7621d19b/crates/gpui/src/app/context.rs):
+* [GPUI Context](https://github.com/zed-industries/zed/blob/279fe070bb389b79652e52065b2f001edcc0b11b/crates/gpui/src/app/context.rs):
   `spawn_in` schedules a main-thread future with WeakEntity and
   AsyncWindowContext; `update_in` provides short-lived mutable contexts. Retain
   its Task on the root so close cancels it. Never move entities/windows across
   the Python boundary or call Python from `render`.
-* [GPUI Application](https://github.com/zed-industries/zed/blob/1a28cff4b409169bac058bca40dfbfeb7621d19b/crates/gpui/src/app.rs):
+* [GPUI Application](https://github.com/zed-industries/zed/blob/279fe070bb389b79652e52065b2f001edcc0b11b/crates/gpui/src/app.rs):
   native platform.run owns the event loop; quit and window-close subscriptions
   belong to the application. Main-thread platform initialization is required.
 
@@ -277,7 +291,7 @@ also builds Linux ARM64, Windows x64/ARM64 and macOS Intel/Apple Silicon.
 Windows and macOS use the pinned upstream platform backends and have native
 window smoke tests, with OS mouse/keyboard interaction still to validate. Upstream
 native libraries, GPU/display drivers, assets, and dependency licenses require
-review before distributing wheels. Name availability remains unchecked.
+review before distributing wheels. The package is now published on PyPI as gpyui.
 
 ## Expanded Kit catalog: verified implementation
 
@@ -288,27 +302,27 @@ implemented inventory and remaining catalog work.
 
 The following upstream contracts were inspected before writing their wrappers:
 
-* [SliderState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/slider.rs),
-  [SelectState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/select.rs)
-  and [ComboboxState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/combobox.rs)
+* [SliderState](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/slider.rs),
+  [SelectState](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/select.rs)
+  and [ComboboxState](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/combobox.rs)
   are retained entities with native event subscriptions. The wrappers mount each
   entity once, read it for snapshots and render builders referencing it.
-* [TableState and TableDelegate](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/table/data_table.rs)
+* [TableState and TableDelegate](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/table/data_table.rs)
   retain native selection and scrolling. Python supplies string columns/rows;
   Rust owns the delegate. Assigning rows refreshes the native table.
-* [TreeState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/tree.rs),
-  [ResizableState](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/resizable.rs)
+* [TreeState](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/tree.rs),
+  [ResizableState](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/resizable.rs)
   and native input/calendar/color entities follow that same ownership rule.
   Tree selection maps to stable Python item IDs; resize events carry native sizes.
-* [WindowExt](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/window_ext.rs)
+* [WindowExt](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/window_ext.rs)
   provides dialog, sheet and notification operations through the installed Root.
   Python open/close commands execute on the foreground task; native dismissal
   emits a change event back to Python. Overlay content is the existing Python
   control tree rendered in Rust, with one dialog and one sheet per window.
-* [TextView](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/text/compat.rs)
+* [TextView](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/text/compat.rs)
   renders Markdown/HTML natively. Editor keeps an InputState editing buffer.
   Python never supplies a per-frame render callback.
-* [Chart builders](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/chart/mod.rs)
+* [Chart builders](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/chart/mod.rs)
   consume Rust-owned point data. Python can replace datasets through the same
   coalesced property queue. Plot rendering and hover behavior stay native.
 

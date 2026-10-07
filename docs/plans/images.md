@@ -2,20 +2,22 @@
 
 ## Compatibility
 
-The dependency baseline remains Kit revision
-`3a142844d3661159964dce9e5512ca9a40286160` and GPUI `0.3.7`.
-Kit [re-exports GPUI](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/kit/src/lib.rs).
+The current dependency baseline is Kit 0.7.1 at revision
+`c1bda59e67f46266991a230ae94f749af496af2a` and GPUI `0.3.8`.
+The original image implementation used Kit 0.7.0 / GPUI 0.3.7; see
+[validation](../validation.md) for dependency-upgrade checks.
+Kit [re-exports GPUI](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/kit/src/lib.rs).
 Image is the native `img()` element, not a separate themed Kit component class.
-The pinned [Images guide](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/website/docs/image.md)
-and [Image patterns](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/website/component/image.md)
-were checked against `gpui-pre 0.3.7/src/elements/img.rs`, rather than assuming
+The pinned [Images guide](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/website/docs/image.md)
+and [Image patterns](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/website/component/image.md)
+match `gpui-pre 0.3.8/src/elements/img.rs`, rather than assuming
 the live site's newer release matches the pin.
 
 Verified native APIs: `ImageSource`, `Resource::{Path, Uri, Embedded}`,
 `ImageAssetLoader::load`, `img`, `StyledImage::{object_fit, grayscale,
 with_loading, with_fallback}`, stable element IDs and `RenderImage` frame data.
 The native application has no working HTTP client by default. We add the matching
-`gpui-pre-reqwest-client = 0.3.7` and install it before starting the window;
+`gpui-pre-reqwest-client = 0.3.8` and install it before starting the window;
 base64 `0.22.1` is pinned for the existing JSON transport. Cargo.lock records
 their resolved dependency graph.
 

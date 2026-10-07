@@ -26,6 +26,9 @@ Run this in a fresh Python process on a desktop with the native build installed.
 | `value` | `""` | str | Assignment |
 | `placeholder` | `""` | str | Assignment |
 | `disabled` | `false` | bool | Assignment |
+| `minimum` | `null` | finite number or None | Assignment |
+| `maximum` | `null` | finite number or None | Assignment |
+| `step` | `1` | finite number | Assignment |
 
 All controls support `visible` and `dispose()`. Hiding or detaching retains native state; disposal permanently releases it. See [Control](../reference/core.md).
 
@@ -39,8 +42,8 @@ Handlers can take zero arguments or one `Event`, and can be synchronous or async
 
 ## Contract and limits
 
-value is a string, including partially edited input. Step buttons change by one.
+value is a string, including partially edited input. minimum/maximum accept finite numbers or None; step is positive and defaults to one. Native stepping and blur clamp completed numbers to the bounds; partial edits remain strings.
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L606) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L789) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

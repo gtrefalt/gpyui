@@ -137,24 +137,18 @@ native editing shortcuts.
 
 Choose Table when users compare aligned attributes, List for a flat choice,
 Tree for stable hierarchy, and DescriptionList for a small detail inspector.
-Use clear column names and units. Table column definitions and column_width are
-fixed, and rows must match column count. List and Table report positional
-selection; map that to domain identity before acting. Tree reports stable IDs
-but its item topology is fixed. Do not promise sorting, custom cell editors,
-virtualization or delegates merely because upstream Kit supports them.
-
-Charts should answer a question. Put a concise title, units and a current summary
-near the plot. Keep a usable table or text summary where exact values matter.
-Line/Area/Bar/Pie data points are `[label, value]`; CandlestickChart points are
-`[label, open, high, low, close]`. Python multi-series formatting and custom axes
-are not exposed. Pie values must be nonnegative.
-
-For a stream, bound retained history (for example 60 points), update at a useful
-human rate and batch related synchronous property assignments. Reassign chart
-data and table rows; modifying returned copies will not update the screen.
-Label simulated data explicitly, as in the bundled dashboard recipe. Show stream
-status and provide an applicable stop/close action. Avoid fake precision or
-animated values unrelated to the user's task.
+Use clear column names and units. Table columns are fixed; use TableColumn for
+widths and text/numeric sorting. TableRow keys preserve selected_key when rows
+are replaced. Table.value always indexes source rows, including when sorted or
+filtered. A hidden selected row retains domain selection; decide whether the
+application should allow actions on it and make that state clear.
+Table uses native virtualization; List renders all items and reports positional
+selection. Tree uses stable IDs but its topology is fixed. Select/Combobox support
+mutable string choices, and MultiSelect exposes multiple selected strings.
+Custom cell editors, typed choice metadata and managed async delegates remain
+unbound. Check release status and data contracts before designing large datasets.
+Offer CommandPalette as an additional path to shared commands, with clear labels
+and consistent enabled state. Keep important actions visible as buttons or menus.
 
 ## Design image previews
 

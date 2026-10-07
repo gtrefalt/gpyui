@@ -2,7 +2,7 @@
 
 Native rich text from supported HTML.
 
-![Native Html preview](../screenshots/components/html.png?v=849cf4789ff8)
+![Native Html preview](../screenshots/components/html.png?v=da727c71e423)
 
 A real Linux/X11 native capture in light appearance. The same control also supports the initial dark theme.
 
@@ -37,4 +37,4 @@ This is Kit's native TextView HTML support, not an embedded browser or arbitrary
 
 All controls accept [pixel layout and semantic theme styling](../guide/styling.md) through `.style(...)`. Collections are copied on assignment/read: reassign them to submit updates.
 
-[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L694) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)
+[Python implementation](https://github.com/gtrefalt/gpyui/blob/main/src/gpyui/widgets.py#L895) · [Native builders](https://github.com/gtrefalt/gpyui/blob/main/src/kit.rs) · [Full coverage and remaining Kit APIs](../component-coverage.md)

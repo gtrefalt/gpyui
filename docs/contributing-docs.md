@@ -41,6 +41,16 @@ Commit generated component pages and `zensical.toml`. `--check` rejects stale
 references, missing screenshots or a mismatch between documented controls and
 the public catalog. All examples can construct their trees without loading Rust.
 
+The same generator writes the installable technical skill's component references
+and `skills/gpyui/references/coverage.md`, using `docs/component-coverage.md` as
+the coverage source. Commit those generated files too. Keep README status,
+documentation entry pages and both skills aligned when capabilities or priorities
+change; distinguish released APIs, unreleased work on `main`, gaps against the
+pinned upstream revision and features added after that pin.
+
+Run `just docs-generate`, `just skills-check` and `just docs-check` to regenerate
+and validate the documentation and bundled skills without a native build.
+
 ## Capture native components
 
 Captures require the installed native extension and Linux/X11 tooling:

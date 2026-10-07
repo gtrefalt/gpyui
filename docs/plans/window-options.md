@@ -1,38 +1,39 @@
 # Window options and macOS Classic source evidence
 
-Verified against GPUI Kit `3a142844d3661159964dce9e5512ca9a40286160`
-and GPUI `0.3.7`. Dependency revisions stay pinned; no upgrade is required.
+Originally implemented against Kit 0.7.0 / GPUI 0.3.7. The current source
+references follow Kit 0.7.1 at `c1bda59e67f46266991a230ae94f749af496af2a`
+and GPUI 0.3.8; see [validation](../validation.md) for upgrade acceptance checks.
 This milestone follows the published 0.5.0 release.
 
 ## Verified native contracts
 
-- [Kit open_window](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/kit/src/lib.rs)
+- [Kit open_window](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/kit/src/lib.rs)
   forwards GPUI WindowOptions and wraps the Python root view with Kit’s native Root.
 - GPUI `platform.rs` WindowOptions/WindowBounds: initial windowed/maximized/fullscreen
   bounds, minimum size, user resize/movement/minimize flags and system title bar.
 - GPUI `window.rs`: `resize`, `set_window_title`, `activate_window`,
   `minimize_window`, `zoom_window`, `toggle_fullscreen`, `viewport_size`,
   `bounds`, capability/state queries, and native bounds observers.
-- `gpui-pre-macos 0.3.7/src/window.rs` uses the resize/minimize flags in NSWindow
+- `gpui-pre-macos 0.3.8/src/window.rs` uses the resize/minimize flags in NSWindow
   styles and movement/minimums in native setters. `gpui-pre-windows` uses window
   style flags, minimum size and guarded hit testing.
-- `gpui-pre-linux 0.3.7/src/linux/x11/window.rs` publishes minimum hints and a
+- `gpui-pre-linux 0.3.8/src/linux/x11/window.rs` publishes minimum hints and a
   GPU texture maximum, without using `is_resizable` to fix native maximum size.
   Wayland sets minimum size and leaves placement to the compositor. GPUI guards
   its own `start_window_resize`; the pinned Linux backends do not enforce movement
   or minimization flags in desktop decorations.
-- [`macos-classic.json`](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/themes/macos-classic.json)
+- [`macos-classic.json`](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/themes/macos-classic.json)
   defines Classic Light/Dark, 36 colors each, syntax highlighting and shadow=False.
   It does not specify custom typography or radius. Kit defaults are system font,
   16 px body, 13 px mono, 6/8 px radius and standard component geometry.
-- [Kit ThemeConfig schema](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/theme/schema.rs)
+- [Kit ThemeConfig schema](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/theme/schema.rs)
   resets omitted colors through mode defaults but leaves omitted scalar values
-  unchanged. [Highlight parser](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/crates/component/src/highlighter/registry.rs)
+  unchanged. [Highlight parser](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/crates/component/src/highlighter/registry.rs)
   consumes known syntax styles. Some dotted source editor keys and `comment.doc`
   are ignored by this pinned parser; gpyui uses identical parser behavior.
 
 GPUI sources are the locked published crates, also available on
-[docs.rs](https://docs.rs/gpui-pre/0.3.7/gpui/struct.WindowOptions.html).
+[docs.rs](https://docs.rs/gpui-pre/0.3.8/gpui/struct.WindowOptions.html).
 
 ## Implementation
 

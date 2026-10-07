@@ -14,8 +14,8 @@ fn _core(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_class::<bridge::Bridge>()?;
     module.add(
         "GPUI_KIT_REVISION",
-        "3a142844d3661159964dce9e5512ca9a40286160",
+        "c1bda59e67f46266991a230ae94f749af496af2a",
     )?;
-    module.add("GPUI_VERSION", "0.3.7")?;
+    module.add("GPUI_VERSION", "0.3.8")?;
     Ok(())
 }

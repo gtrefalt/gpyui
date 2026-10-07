@@ -31,7 +31,7 @@ appearance. Existing `theme="light"` and `theme="dark"` select Kit's default the
 | `shadcn-blue` | Zinc surfaces with a blue primary action | 16 px | 6 / 8 px |
 
 The unreleased `macos` correction loads the unchanged
-[upstream macOS Classic file](https://github.com/longbridge/gpui-kit/blob/3a142844d3661159964dce9e5512ca9a40286160/themes/macos-classic.json)
+[upstream macOS Classic file](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/themes/macos-classic.json)
 from the pinned Kit revision. It preserves all 36 color entries in each mode and
 passes its highlight section through Kit’s own schema. Kit defaults supply
 16 px system text, 6 / 8 px corners and normal component sizing; both Classic

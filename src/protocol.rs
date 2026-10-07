@@ -28,6 +28,18 @@ pub(crate) enum Control {
     Input {
         value: String,
         placeholder: String,
+        #[serde(default)]
+        disabled: bool,
+        #[serde(default)]
+        read_only: bool,
+        #[serde(default)]
+        password: bool,
+        #[serde(default)]
+        clearable: bool,
+        #[serde(default)]
+        prefix: String,
+        #[serde(default)]
+        suffix: String,
     },
     DropdownMenu {
         text: String,
@@ -74,7 +86,7 @@ pub(crate) enum ControlType {
     Kit(String, serde_json::Map<String, Value>),
 }
 
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Patch {
     pub(crate) id: u64,
@@ -261,6 +273,8 @@ pub(crate) fn validate_batch(
     if patches.len() > 10_000 {
         return Err("batch exceeds 10,000 updates".into());
     }
+    let mut final_schema = schema.clone();
+    apply_schema_patches(patches, &mut final_schema);
     for patch in patches {
         let control = schema
             .get(&patch.id)
@@ -281,7 +295,12 @@ pub(crate) fn validate_batch(
         } else {
             match (control, patch.property.as_str()) {
                 (ControlType::Label | ControlType::Button { .. }, "text")
-                | (ControlType::Input, "value" | "placeholder") => patch.value.is_string(),
+                | (ControlType::Input, "value" | "placeholder" | "prefix" | "suffix") => {
+                    patch.value.is_string()
+                }
+                (ControlType::Input, "disabled" | "read_only" | "password" | "clearable") => {
+                    patch.value.is_boolean()
+                }
                 (ControlType::Button { .. } | ControlType::DropdownMenu, "disabled") => {
                     patch.value.is_boolean()
                 }
@@ -303,5 +322,49 @@ pub(crate) fn validate_batch(
             ));
         }
     }
+    for id in patches.iter().map(|patch| patch.id).collect::<HashSet<_>>() {
+        if let Some(ControlType::Kit(kind, props)) = final_schema.get(&id) {
+            crate::kit::validate(kind, props)
+                .map_err(|error| format!("invalid property batch for {id}: {error}"))?;
+            if kind == "command_palette" {
+                validate_palette(props, &final_schema)?;
+            }
+        }
+    }
     Ok(())
+}
+
+fn validate_palette(
+    props: &serde_json::Map<String, Value>,
+    schema: &HashMap<u64, ControlType>,
+) -> Result<(), String> {
+    let mut seen = HashSet::new();
+    for item in props["items"].as_array().unwrap() {
+        let id = item.as_u64().unwrap();
+        if !seen.insert(id) || !matches!(schema.get(&id), Some(ControlType::Action { .. })) {
+            return Err("palette requires unique registered command IDs".into());
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_palettes(schema: &HashMap<u64, ControlType>) -> Result<(), String> {
+    for control in schema.values() {
+        if let ControlType::Kit(kind, props) = control
+            && kind == "command_palette"
+        {
+            validate_palette(props, schema)?;
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn apply_schema_patches(patches: &[Patch], schema: &mut HashMap<u64, ControlType>) {
+    for patch in patches {
+        if let Some(ControlType::Kit(_, props)) = schema.get_mut(&patch.id)
+            && props.contains_key(&patch.property)
+        {
+            props.insert(patch.property.clone(), patch.value.clone());
+        }
+    }
 }

@@ -9,8 +9,8 @@ from gpyui._core import GPUI_KIT_REVISION, GPUI_VERSION, Bridge
 
 
 def test_dependency_identity():
-    assert GPUI_VERSION == "0.3.7"
-    assert GPUI_KIT_REVISION == "3a142844d3661159964dce9e5512ca9a40286160"
+    assert GPUI_VERSION == "0.3.8"
+    assert GPUI_KIT_REVISION == "c1bda59e67f46266991a230ae94f749af496af2a"
 
 
 @pytest.mark.parametrize(

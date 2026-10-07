@@ -1,5 +1,15 @@
 # Setup and runtime
 
+## Version and coverage
+
+These references describe gpyui 0.5.0 plus the repository's unreleased Image,
+window controls, exact macOS Classic correction and dependency update. Installing the 0.5.0 release
+does not include those additions. Check the installed API before using them.
+The unreleased backend update pins GPUI Kit 0.7.1 / GPUI 0.3.8; the 0.5.0
+release used Kit 0.7.0 / GPUI 0.3.7. Rust APIs do not imply Python bindings.
+Diff/Speech remain unbound; optional Speech and GPUI Fast are not enabled.
+See [coverage and remaining APIs](coverage.md) for the shared roadmap.
+
 ## Install for an application
 
 Use CPython 3.12+ (Windows ARM64 is tested with 3.13+). On macOS 12+ and Windows:
