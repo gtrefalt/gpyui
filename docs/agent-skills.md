@@ -57,7 +57,7 @@ The profile recipe writes `profile.json` in the working directory.
 > app. Bind the fields to State, save asynchronously, show validation and errors,
 > and verify actual editing and button activation on a desktop.
 
-The references describe gpyui 0.6.0, including Image, expanded window controls,
+The references describe gpyui 0.6.1, including Image, expanded window controls,
 exact macOS Classic themes, keyed tables, richer inputs, MultiSelect,
 CommandPalette and the Kit 0.7.1 / GPUI 0.3.8 backend. Agents should verify their
 installed version before using these additions.

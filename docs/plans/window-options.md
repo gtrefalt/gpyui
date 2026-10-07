@@ -3,7 +3,7 @@
 Originally implemented against Kit 0.7.0 / GPUI 0.3.7. The current source
 references follow Kit 0.7.1 at `c1bda59e67f46266991a230ae94f749af496af2a`
 and GPUI 0.3.8; see [validation](../validation.md) for upgrade acceptance checks.
-This milestone follows 0.5.0 and is included in 0.6.0.
+This milestone follows 0.5.0 and is included in 0.6.1.
 
 ## Verified native contracts
 
@@ -54,7 +54,7 @@ GPUI sources are the locked published crates, also available on
    palette, compact control wrappers, green switch substitution and font matching.
    Reset default highlighting when switching to a theme with no highlight config.
 5. Update native previews, public references, README and app-building skills.
-   Release these changes in 0.6.0; only a new version tag builds release wheels.
+   Release these changes in 0.6.1; only a new version tag builds release wheels.
 
 ## Acceptance
 

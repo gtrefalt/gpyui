@@ -1,0 +1,2 @@
+# Preserve the upstream theme bytes used by the native build and checksum test.
+src/themes/macos-classic.json text eol=lf

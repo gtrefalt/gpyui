@@ -2,7 +2,7 @@
 
 `Application` owns one native GPUI window. Kit opens it using GPUI's
 `WindowOptions`; the Python API now exposes the everyday options.
-These additions are available from gpyui 0.6.0.
+These additions are available from gpyui 0.6.1.
 
 ## Fixed size and minimum dimensions
 

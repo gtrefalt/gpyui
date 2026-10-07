@@ -49,7 +49,7 @@ Python example. The documentation search indexes all component names.
 !!! note "Current scope"
 
     gpyui is in early development with 77 controls on `main` and native notifications.
-    Version 0.6.0 includes Image, expanded window controls, exact macOS Classic
+    Version 0.6.1 includes Image, expanded window controls, exact macOS Classic
     themes, keyed tables, richer inputs, MultiSelect and CommandPalette.
     Basic catalog coverage does not imply full Kit parity. The backend uses
     Kit 0.7.1 / GPUI 0.3.8.

@@ -2,9 +2,9 @@
 
 ## Version and coverage
 
-These references describe gpyui 0.6.0, including Image, expanded window controls,
+These references describe gpyui 0.6.1, including Image, expanded window controls,
 exact macOS Classic themes, keyed tables, richer inputs, MultiSelect and
-CommandPalette. Version 0.6.0 pins GPUI Kit 0.7.1 / GPUI 0.3.8; 0.5.0 used
+CommandPalette. Version 0.6.1 pins GPUI Kit 0.7.1 / GPUI 0.3.8; 0.5.0 used
 Kit 0.7.0 / GPUI 0.3.7. Rust APIs do not imply Python bindings.
 Diff/Speech remain unbound; optional Speech and GPUI Fast are not enabled.
 See [coverage and remaining APIs](coverage.md) for the shared roadmap.
@@ -25,7 +25,7 @@ Download the correct architecture (`linux_x86_64` or `linux_aarch64`) and use,
 from your uv project:
 
 ```bash
-uv add /path/to/gpyui-0.6.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.6.1-cp312-abi3-linux_x86_64.whl
 ```
 
 Alternatively, use `pip install gpyui` or `pip install /path/to/wheel.whl` in a

@@ -2,10 +2,13 @@
 
 ## Unreleased
 
-## 0.6.0 — 2026-10-07
+## 0.6.1 — 2026-10-07
 
-- Add native Image sources, fit modes, GIF/WebP animation, load/error callbacks,
-  source-scoped retry and bundled-asset support.
+The 0.6.0 tag failed validation and was not published. This release includes its
+planned changes and the Windows checkout correction below.
+
+- Preserve LF line endings for the bundled upstream macOS Classic theme on
+  Windows so its native build input and exact checksum match on every platform.
 
 - Add keyed TableRow/TableColumn models, native text/numeric sorting and filtering,
   preserved domain selection across row replacement, and source-index callbacks.

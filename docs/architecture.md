@@ -2,7 +2,7 @@
 
 gpyui is a published native desktop Python library. The initial source inspection
 was completed on 2026-10-01; the current API includes 77 controls and the release
-version is 0.6.0, including Image, expanded window controls, exact macOS Classic
+version is 0.6.1, including Image, expanded window controls, exact macOS Classic
 themes, richer tables/inputs and command search. The backend pins
 GPUI Kit 0.7.1 / GPUI 0.3.8. See
 [coverage and remaining APIs](component-coverage.md) for the source-reviewed
@@ -30,7 +30,7 @@ actual GPUI Kit component coverage and make layout, styling, events, state and
 application lifecycle accessible through Python. Document implemented capabilities
 separately from planned coverage, and verify each wrapper against pinned sources.
 
-## Images (0.6.0)
+## Images (0.6.1)
 
 Image binds the actual GPUI `img()` exported by Kit. Each retained native image
 entity runs GPUI's decoder on the background executor and owns one current
@@ -58,7 +58,7 @@ never replaces editor text, caret, selection or undo history. See
 [implementation evidence and acceptance](plans/forms-validation.md) and the
 [forms guide](guide/forms.md).
 
-## Window controls and exact macOS Classic (0.6.0)
+## Window controls and exact macOS Classic (0.6.1)
 
 Application now exposes native creation flags, minimum content dimensions,
 position and initial state. Queued title/size/focus/minimize/maximize/fullscreen
@@ -185,7 +185,7 @@ snapshot and comparison revisions are recorded in
 Zed was initially cloned at `95cd535a5fad96d649513f96c5784ceefd379e47`.
 GPUI Kit's workspace manifest pins the `gpui-pre-*` family to **exactly 0.3.8**.
 The downloaded GPUI manifest's `[package.metadata.gpui-pre]` identifies the Zed
-revision above as the source of the current snapshot. The 0.6.0 backend
+revision above as the source of the current snapshot. The 0.6.1 backend
 upgrade also aligns `gpui-pre-reqwest-client` to 0.3.8. Do not add a second,
 git-head GPUI dependency: its types
 would differ from Kit's. Depend on the pinned `gpui-kit` git revision and use its

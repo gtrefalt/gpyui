@@ -52,7 +52,7 @@ matching your operating system and architecture:
 ```bash
 uv init my-app
 cd my-app
-uv add /path/to/gpyui-0.6.0-cp312-abi3-linux_x86_64.whl
+uv add /path/to/gpyui-0.6.1-cp312-abi3-linux_x86_64.whl
 ```
 
 For an existing uv project, only the `uv add` command is needed.
@@ -68,7 +68,7 @@ dependencies as well as packages compiled into the binary.
 
 ## GitHub releases
 
-Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.6.0`.
+Push a tag matching `v` plus the version in `pyproject.toml`, such as `v0.6.1`.
 After all six builds and all installed-wheel test jobs pass, the workflow creates
 a GitHub prerelease, attaches the six wheels, source archive and `SHA256SUMS`,
 and publishes it. Release notes list the download size of each distribution.

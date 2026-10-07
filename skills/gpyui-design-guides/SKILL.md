@@ -11,7 +11,7 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.6.0 with Image, expanded window controls,
+GPUI Kit. It describes gpyui 0.6.1 with Image, expanded window controls,
 exact macOS Classic themes, keyed tables, richer inputs, MultiSelect and
 CommandPalette, backed by Kit 0.7.1 / GPUI 0.3.8. Verify the installed API before
 designing around these additions. Native themes, Form/Field validation, runtime
