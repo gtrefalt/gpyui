@@ -64,7 +64,7 @@ use `app.call_soon(lambda: setattr(label, "text", result))`.
 
 ## Window
 
-The unreleased window additions expose GPUI's real window options. Assign
+The 0.6.0 window additions expose GPUI's real window options. Assign
 `app.title` or call `app.resize(width, height)` before startup or from the running
 callback loop. `width` and `height` report the last requested size; other creation
 options are read-only. Native operations `activate()`, `minimize()`,

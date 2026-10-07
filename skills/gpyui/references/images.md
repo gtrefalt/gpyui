@@ -1,6 +1,6 @@
-# Images (unreleased)
+# Images (0.6.0)
 
-This binding is in the repository and is not in the published gpyui 0.5.0 wheel.
+This binding is available from gpyui 0.6.0.
 Image uses Kit's actual GPUI `img()`, with native loading/decoding/rendering.
 
 ```python

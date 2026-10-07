@@ -3,7 +3,7 @@
 Validation target: Debian 13, x86_64 Linux, Python 3.12.14, Rust 1.99.0,
 GPUI Kit 0.7.1 at the pinned git revision, GPUI snapshot 0.3.8.
 
-## Tables, inputs and command palette (unreleased)
+## Tables, inputs and command palette (0.6.0)
 
 The combined update passed **299 Python/bridge cases** and **28 native Linux/X11
 cases** against the rebuilt abi3 extension. New real-window acceptance checks
@@ -28,10 +28,12 @@ are synchronized; command and data guides now generate their bundled skill
 references as well.
 
 Validation remains local Linux/X11. macOS, Windows and Wayland interaction were
-not rerun for these additions. The package remains 0.5.0 with the new contracts
-marked unreleased; no package release or release tag is part of this change.
+not rerun during implementation. These additions are included in 0.6.0. The
+tagged release workflow builds six wheels and runs 17 installed-wheel jobs,
+including Linux/X11 interaction and macOS/Windows native smoke tests, before
+publishing GitHub assets and the PyPI-compatible distributions.
 
-## Kit 0.7.1 / GPUI 0.3.8 upgrade (unreleased)
+## Kit 0.7.1 / GPUI 0.3.8 upgrade (0.6.0)
 
 The backend now pins Kit `c1bda59e67f46266991a230ae94f749af496af2a`
 and the exact GPUI 0.3.8 snapshot family, including the matching HTTP client.
@@ -54,8 +56,8 @@ caret/selection/undo, queued commands and async lifecycle, dynamic trees,
 forms/validation/retry, image sources/animation/retry and cleanup, live theme
 switches and window geometry/title/size actions. This is local Linux validation;
 macOS/Windows release-wheel checks and Wayland interaction have not been rerun
-for this upgrade. The gpyui package version remains 0.5.0 with the update marked
-unreleased.
+during local upgrade validation. Version 0.6.0 includes this dependency update;
+the tagged workflow supplies the platform wheel checks before publication.
 
 Markdown/HTML catalog previews were recaptured with the upgraded native renderer
 to reflect upstream's rich-text typography changes. Generated references cover

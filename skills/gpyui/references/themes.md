@@ -23,7 +23,7 @@ app.run()
 Presets: `default`, `macos`, `windows`, `shadcn-zinc`, `shadcn-blue`. Every preset
 accepts `mode="light" | "dark"`; default light. `Application(theme="macos")` selects
 the light preset; `theme="light" | "dark"` selects the Kit default.
-The unreleased `macos` preset uses Kit’s exact macOS Classic Light/Dark file
+The 0.6.0 `macos` preset uses Kit’s exact macOS Classic Light/Dark file
 at [the pinned revision](https://github.com/longbridge/gpui-kit/blob/c1bda59e67f46266991a230ae94f749af496af2a/themes/macos-classic.json), including
 36 color entries per mode and the highlight section through Kit’s unchanged schema.
 It uses Kit’s default 16 px system font, 6/8 px radius and normal control sizing;

@@ -11,10 +11,11 @@ For a new app or redesign, read the whole guide. For a small change, read
 
 Use the `gpyui` skill's component references when implementing the design.
 This skill is self-contained design guidance; it does not require a checkout of
-GPUI Kit. It describes gpyui 0.5.0 plus unreleased Image/window bindings and the
-exact Kit Classic correction. Verify the installed API before designing around
-those additions and the unreleased Kit 0.7.1 / GPUI 0.3.8 backend update. It includes native themes,
-Form/Field validation, runtime switching and the current one-window limit.
+GPUI Kit. It describes gpyui 0.6.0 with Image, expanded window controls,
+exact macOS Classic themes, keyed tables, richer inputs, MultiSelect and
+CommandPalette, backed by Kit 0.7.1 / GPUI 0.3.8. Verify the installed API before
+designing around these additions. Native themes, Form/Field validation, runtime
+switching and the current one-window limit remain covered.
 
 ## Reading map
 
@@ -44,7 +45,7 @@ Form/Field validation, runtime switching and the current one-window limit.
 - Table uses native virtualization and keyed TableRow models preserve domain selection;
   its value remains a source index when sorted/filtered. List renders all items.
   Tree selects stable IDs, Select/Combobox one string, and MultiSelect a string list.
-  CommandPalette shares existing Commands. Check unreleased API status before use.
+  CommandPalette shares existing Commands. Check the installed version before use.
 
 ## Inspiration
 

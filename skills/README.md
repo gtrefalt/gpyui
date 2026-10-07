@@ -9,10 +9,10 @@ through **gpyui's Python API**, with actual GPUI Kit controls:
 | [gpyui-design-guides](gpyui-design-guides/SKILL.md) | Desktop task hierarchy, panes, forms, spacing, semantic colors, data views, interaction states, copy and design review |
 
 They are inspired by [GPUI Kit's skills](https://github.com/longbridge/gpui-kit/tree/c1bda59e67f46266991a230ae94f749af496af2a/skills),
-with original guidance adapted to the Python binding. They target gpyui 0.5.0,
-plus unreleased Image/window bindings, exact Kit Classic themes and the Kit 0.7.1 /
-GPUI 0.3.8 backend update, and clearly
-distinguish Python support from unbound upstream capabilities.
+with original guidance adapted to the Python binding. They target gpyui 0.6.0,
+including Image, expanded window controls, exact macOS Classic themes, keyed
+tables, richer inputs, MultiSelect, CommandPalette and Kit 0.7.1 / GPUI 0.3.8.
+They distinguish Python support from unbound upstream capabilities.
 
 ## Install with the skills CLI
 

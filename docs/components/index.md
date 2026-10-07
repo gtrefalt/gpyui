@@ -4,7 +4,7 @@ Browse all **77 Python controls**. Each page includes a native preview, an execu
 
 Use the site search to find a control by name. [Coverage and remaining APIs](../component-coverage.md) distinguishes the initial wrappers from full Kit parity.
 
-The catalog follows `main`, including unreleased contracts. Check the coverage page's release status against your installed version before using an example.
+The catalog follows the repository manifest. Check the coverage page's release status against your installed version before using an example.
 
 ## Layout
 

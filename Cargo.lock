@@ -2932,7 +2932,7 @@ checksum = "d337c9acf058238e45ce0570d8a5958439242889492f91ae2d8e324211a61ccd"
 
 [[package]]
 name = "gpyui"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "async-channel",
  "base64 0.22.1",

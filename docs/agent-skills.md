@@ -57,10 +57,10 @@ The profile recipe writes `profile.json` in the working directory.
 > app. Bind the fields to State, save asynchronously, show validation and errors,
 > and verify actual editing and button activation on a desktop.
 
-The references describe the repository API: gpyui 0.5.0 plus unreleased Image,
-window controls, the exact Kit Classic correction and the Kit 0.7.1 / GPUI 0.3.8
-backend update. Agents should verify their
-installed version before using those additions.
+The references describe gpyui 0.6.0, including Image, expanded window controls,
+exact macOS Classic themes, keyed tables, richer inputs, MultiSelect,
+CommandPalette and the Kit 0.7.1 / GPUI 0.3.8 backend. Agents should verify their
+installed version before using these additions.
 They cover native themes, Form/Field validation, async submission/retry, runtime switching, and the current one-window limit. Rust Kit documentation is useful background but does not imply a Python
 API exists. The component references are generated from the same source contracts
 and specimens as this site's catalog, and CI checks runnable snippets and recipe
